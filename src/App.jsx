@@ -1,15 +1,13 @@
-
-
-import './App.css'
+import React from 'react'
+import './App.css';
+import SignInOutContainer from './container';
 
 function App() {
-  
-
   return (
-    <>
-      <p>hi Amit</p>
-    </>
-  )
+    <div className="App">
+      <SignInOutContainer/>
+    </div>
+  );
 }
 
-export default App
+export default App;

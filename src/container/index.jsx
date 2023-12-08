@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {Paper,Tabs,Tab, Typography, Box} from '@mui/material';
-import Login from '../components/login'
-import Signup from '../components/signup' 
+import Login from '../pages/login'
+import Signup from '../pages/signup' 
 const SignInOutContainer=()=>{
 const [value,setValue]=useState(0)
 const handleChange = (event, newValue) => {

@@ -27,6 +27,10 @@ const Header = () => {
                             Profile
                         </Link>
 
+                        {/* <Link to="/employees" className="header--link">
+                            Employees
+                        </Link> */}
+
                         <button onClick={logoutUser} className="btn">
                             Logout
                         </button>

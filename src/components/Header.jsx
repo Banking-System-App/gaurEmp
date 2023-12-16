@@ -27,9 +27,9 @@ const Header = () => {
                             Profile
                         </Link>
 
-                        {/* <Link to="/employees" className="header--link">
-                            Employees
-                        </Link> */}
+                        <Link to="/genpdf/:compName" className="header--link">
+                            Generate Pdf
+                        </Link>
 
                         <button onClick={logoutUser} className="btn">
                             Logout

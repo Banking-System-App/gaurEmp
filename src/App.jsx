@@ -12,6 +12,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Addemp from './pages/Addemp';
 import { AuthProvider } from './utils/AuthContext';
+import SalSheet from './pdfs/SalSheet';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />}/>
             <Route path="/employees/:compName" element={<Addemp />} />
+            <Route path="/genpdf/:compName" element = {<SalSheet/>}/>
           </Route>
         </Routes>
       </AuthProvider>

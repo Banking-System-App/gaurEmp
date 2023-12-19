@@ -1,50 +1,57 @@
-import React, { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../utils/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../utils/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { databaseApi } from "../database/databaseApi";
 
 const Register = () => {
-  const registerForm = useRef(null)
+  const registerForm = useRef(null);
 
-  const { user, registerUser } = useAuth()
+  const { user, registerUser } = useAuth();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      navigate('/')
+      console.log("userDetail", user, user.$id, user.name);
+
+      addUser(user.name, user.email, user.$id);
+      navigate("/");
     }
-  })
+  });
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const name = registerForm.current.name.value
-    const email = registerForm.current.email.value
-    const password = registerForm.current.password1.value
-    const password2 = registerForm.current.password2.value
+    e.preventDefault();
+    const name = registerForm.current.name.value;
+    const email = registerForm.current.email.value;
+    const password = registerForm.current.password1.value;
+    const password2 = registerForm.current.password2.value;
 
     if (password !== password2) {
-      alert('Passwords do not match')
-      return
+      alert("Passwords do not match");
+      return;
     }
-    const userInfo = { name, email, password, password2 }
-    registerUser(userInfo)
+    const userInfo = { name, email, password, password2 };
+    registerUser(userInfo);
+  };
 
-  }
+  const addUser = async (name, email, uniqueID) => {
+    try {
+      var resp = await databaseApi.createUser(name, email, uniqueID);
+      console.log(resp);
+      alert("user Added successfully");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="container">
       <div className="login-register-container">
         <form ref={registerForm} onSubmit={handleSubmit}>
-
           <div className="form-field-wrapper">
             <label>Name:</label>
-            <input
-              required
-              type="text"
-              name="name"
-              placeholder="Enter name"
-            />
+            <input required type="text" name="name" placeholder="Enter name" />
           </div>
 
           <div className="form-field-wrapper">
@@ -75,45 +82,20 @@ const Register = () => {
             />
           </div>
 
-
           <div className="form-field-wrapper">
-
-            <input
-              type="submit"
-              value="Register"
-              className="btn"
-            />
-
+            <input type="submit" value="Register" className="btn" />
           </div>
-
         </form>
 
-        <p>Already have an account? <Link to="/login">Login</Link></p>
-
+        <p>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default Register;
 
 // import React from 'react';
 // import { Formik, Field, Form, ErrorMessage } from 'formik';

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { account ,ID } from "../appWrite/appwrite";
+import { userApi } from "../pages/userApi";
 
 const AuthContext = createContext()
 
@@ -52,12 +53,15 @@ export const AuthProvider = ({ children }) => {
             let accountDetails = await account.get()
             setUser(accountDetails)
 
+            await userApi.addUser(userInfo.name, userInfo.email, accountDetails.$id);
+
         }catch(error) {
             console.error(error)
         }
 
         setLoading(false)
     }
+
 
     //logic to check the status of the user
     const checkUserStatus = async() => {

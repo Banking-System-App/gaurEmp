@@ -2,12 +2,13 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { databaseApi } from "../database/databaseApi";
+
 
 const Register = () => {
   const registerForm = useRef(null);
 
   const { user, registerUser } = useAuth();
+
 
   const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ const Register = () => {
     if (user) {
       console.log("userDetail", user, user.$id, user.name);
 
-      addUser(user.name, user.email, user.$id);
+      //addUser(user.name, user.email, user.$id);
       navigate("/");
     }
   });
@@ -35,15 +36,7 @@ const Register = () => {
     registerUser(userInfo);
   };
 
-  const addUser = async (name, email, uniqueID) => {
-    try {
-      var resp = await databaseApi.createUser(name, email, uniqueID);
-      console.log(resp);
-      alert("user Added successfully");
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+
 
   return (
     <div className="container">

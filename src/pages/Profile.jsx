@@ -71,6 +71,7 @@ const Profile = () => {
     const fetchCompanies = async () => {
       try {
         const allCompanies = await databaseApi.getAllCompanies();
+        
         setCompanies(allCompanies);
         console.log('All Companies = ', allCompanies)
       } catch (error) {

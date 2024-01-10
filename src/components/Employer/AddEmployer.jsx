@@ -7,7 +7,7 @@ import {
   MDBInput,
 } from 'mdb-react-ui-kit';
 
-export default function AddEmployerForm() {
+const AddEmployerForm = () => {
   const [employerInfo, setEmployerInfo] = useState({
     id: '',
     name: '',
@@ -228,3 +228,5 @@ export default function AddEmployerForm() {
     </section>
   );
 }
+
+export default AddEmployerForm

@@ -11,6 +11,14 @@ import { AuthProvider } from '../utils/AuthContext';
 import SalSheet from '../pdfs/SalSheet';
 import EmployerList from '../components/Employer/EmployerList';
 import Contact from './Contact';
+import AddEmployeeForm from '../components/Employee/AddEmployee';
+import AddEmployerForm from '../components/Employer/AddEmployer';
+import EmployerProfile from '../components/Employer/EmployerProfile';
+import EmployeesList from '../components/Employee/EmployeesList';
+import EmployeeProfile from '../components/Employee/EmployeesProfile';
+import EmpSalary from '../components/Salary/SalaryStructure';
+import SalaryProcessEdit from '../components/Salary/SalaryProcessEdit';
+
 
 const Routess = () => {
 
@@ -26,6 +34,18 @@ const Routess = () => {
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Home />} />
             <Route path="/getcompany" element={<EmployerList/>}/>
+            <Route path="/employerprofile" element={<EmployerProfile/>}/>
+            <Route path="/addemployee" element={<AddEmployeeForm/>}/>
+            <Route path="/viewemployees" element={<EmployeesList/>}/>
+            <Route path="/employeeprofile" element={<EmployeeProfile/>}/>
+      
+
+            <Route path="/addemployer" element={<AddEmployerForm/>}/>
+           
+            <Route path="/salarystructure" element={<EmpSalary/>}/>
+            <Route path="/salaryprocess" element={<SalaryProcessEdit/>}/>
+            <Route path="/generateslippdf" element={<SalSheet/>}/>
+
             {/* <Route path="/profile" element={<Profile />}/>
             <Route path="/employees/:compName" element={<Addemp />} /> */}
             <Route path="/genpdf/:compName" element = {<SalSheet/>}/>

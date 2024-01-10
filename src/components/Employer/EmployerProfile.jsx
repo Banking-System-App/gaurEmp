@@ -12,8 +12,21 @@ import {
     MDBBreadcrumbItem,
   } from 'mdb-react-ui-kit';  
   import { useState } from 'react';
+  import { useNavigate } from 'react-router-dom';
   
   export default function EmployerProfile() {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+      navigate('/addemployee');
+      alert("Button clicked");
+    }
+    
+    const handleViewEmployees = () => {
+      navigate('/viewemployees');
+      alert("Button clicked");
+    }
+    
   
     // const sampleData = [
     //   { label: 'Company ID', value: '1' },
@@ -72,7 +85,8 @@ import {
       console.log('Edited Data:', editableData);
       setIsEditMode(false);
     };
-  
+    
+
     const handleEditClick = () => {
       setIsEditMode(true);
       console.log("button clickeed",isEditMode);
@@ -187,11 +201,11 @@ import {
             </MDBCol>
           </MDBRow>
           <div className="d-flex justify-content-center mb-3">
-    <MDBBtn className='me-8 m-3' color='success' size='lg'>
-      View Employeer
+    <MDBBtn className='me-8 m-3' color='success' size='lg'onClick={handleViewEmployees}>
+      View Employees
     </MDBBtn>
-    <MDBBtn className='me-8 m-3' color='success' size='lg'>
-      Add Employeer
+    <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={handleClick}>
+      Add Employee
     </MDBBtn>
     <MDBBtn  className ="me-8 m-3"color='success' onClick={handleEditClick} size='lg'>
       Edit Details

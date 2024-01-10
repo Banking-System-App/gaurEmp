@@ -12,8 +12,20 @@ import {
   MDBBreadcrumbItem,
 } from 'mdb-react-ui-kit';  
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function EmployeeProfile() {
+const navigate = useNavigate()
+
+const handleClick = () => {
+  navigate('/salarystructure');
+  alert('button loda');
+}
+
+const handleSalaryProcess = () => {
+  navigate('/salaryprocess');
+  alert('button ch*t');
+}
 
 //call api call and set into intial data
 
@@ -57,7 +69,7 @@ export default function EmployeeProfile() {
       <MDBRow>
   <MDBCol>
     <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
-      <MDBBtn className="ms-auto m-3" color='success' size='lg'>
+      <MDBBtn className="ms-auto m-3" color='success' size='lg' onClick={handleSalaryProcess}>
        Salary Process Edit 
       </MDBBtn>
       <MDBBreadcrumbItem>
@@ -155,11 +167,9 @@ export default function EmployeeProfile() {
           </MDBCol>
         </MDBRow>
         <div className="d-flex justify-content-center mb-3">
-  <MDBBtn className='me-8 m-3' color='success' size='lg'>
-    View Employee
-  </MDBBtn>
-  <MDBBtn className='me-8 m-3' color='success' size='lg'>
-    Add Employee
+  
+  <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={handleClick}>
+    Salary Structure
   </MDBBtn>
   <MDBBtn  className ="me-8 m-3"color='success' onClick={handleEditClick} size='lg'>
     Edit Details

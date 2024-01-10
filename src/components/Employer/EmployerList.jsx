@@ -1,22 +1,34 @@
 import React from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
-
+import { useNavigate } from 'react-router-dom';
 export default function EmployerList() {
     const data=[
         {
-        "Company":"Abhishek",
+        "Company":"Abhi ka Dhaba",
         "Address":"Mumbai",
         "PAN":"ABH1234",
         "EMPCount":"50"
         },
         {
-        "Company":"hrituraj",
-        "Address":"Mumbai",
-        "PAN":"ABH1234",
+        "Company":"Pragati.AI",
+        "Address":"Allahabad",
+        "PAN":"Hritu@123",
         "EMPCount":"50"
-        }
+        },
+        {
+          "Company":"HrituRaj VLSI",
+          "Address":"Allahabad",
+          "PAN":"Birji@123",
+          "EMPCount":"50"
+          }
     ]
     
+    const navigate = useNavigate();
+
+    const handleClick1 = () => {
+      navigate('/employerprofile');
+      alert("Clicked");
+    }
     
   return (
     <MDBTable align='middle' hover>
@@ -30,8 +42,8 @@ export default function EmployerList() {
       </MDBTableHead>
       <MDBTableBody>
       {data.map((company, index) => (
-        
-          <tr key={index}>
+
+          <tr key={index} onClick={handleClick1}>
           <td>
             <div className='d-flex align-items-center'>
               <img

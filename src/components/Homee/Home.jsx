@@ -18,7 +18,7 @@ export default function Home() {
   const navigate = useNavigate()
   const addCompany = () => {
       alert("Button Clicked");
-      navigate('/addcompany');
+      navigate('/addemployer');
   }
 
   const getCompany = () => {

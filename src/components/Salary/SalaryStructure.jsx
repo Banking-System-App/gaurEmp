@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import {
   MDBContainer,
   MDBRow,
@@ -14,57 +14,65 @@ import {
 export default function EmpSalary() {
   const [selectedMonth, setSelectedMonth] = useState('Jan');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedDate, setSelectedDate] = useState(1);
   const [salaryDetails, setSalaryDetails] = useState(null);
   const [viewSalaryClicked, setViewSalaryClicked] = useState(false);
   const [editDetailsClicked, setEditDetailsClicked] = useState(false);
 
+  const fetchedSalaryDetails = {
+    month: selectedMonth,
+    basicSalary: 15000,
+    salaryType: 'XYZ',
+    hra: 1500,
+    da: 8266,
+    dateOfSlip: '12/10/2020',
+    tax: '10%',
+  };
+
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
-    const daysInMonth = getDaysInMonth(event.target.value, selectedYear);
-    if (selectedDate > daysInMonth) {
-      setSelectedDate(daysInMonth);
-    }
   };
 
   const handleYearChange = (event) => {
     setSelectedYear(parseInt(event.target.value, 10));
   };
 
-  const handleDateChange = (event) => {
-    setSelectedDate(parseInt(event.target.value, 10));
-  };
-
   const handleViewSalary = () => {
     setViewSalaryClicked(true);
-    // Fetch and set the salary structure based on selectedMonth, selectedYear, and selectedDate
+    // Fetch and set the salary structure based on selectedMonth and selectedYear
     // Replace the following example with your actual API call or data fetching logic
-    const fetchedSalaryDetails = {
-      month: selectedMonth,
-      basicSalary: 15000,
-      salaryType: 'XYZ',
-      hra: 1500,
-      da: 8266,
-      dateOfSlip: '12/10/2020',
-      tax: '10%',
-    };
+    
     setSalaryDetails(fetchedSalaryDetails);
   };
+  const [editableData,setEditableData]=useState({ ...fetchedSalaryDetails});
+  const [isEditMode,setIsEditMode]=useState(false);
 
-  // Function to get the number of days in a month
-  const getDaysInMonth = (month, year) => {
-    const leapYear = (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
-    const daysInMonthMap = {
-      Jan: 31, Feb: (leapYear ? 29 : 28), Mar: 31, Apr: 30,
-      May: 31, Jun: 30, Jul: 31, Aug: 31,
-      Sep: 30, Oct: 31, Nov: 30, Dec: 31,
-    };
-    return daysInMonthMap[month];
-  };
+
 
   const handleEditDetails = () => {
     setEditDetailsClicked(true);
+    setIsEditMode(true);
     // Implement logic to navigate to the edit details page or show an edit modal
+  };
+const handleInputChange = (label, value) => {
+    setEditableData((prevData) => ({
+      ...prevData,
+      [label]: value,
+    }));
+  };
+  const handleSave = () => {
+    // Implement logic to save the edited data (e.g., send to backend)
+    console.log('Edited Data:', editableData);
+    setIsEditMode(false);
+  };
+
+  const handleEditClick = () => {
+    setIsEditMode(true);
+    console.log("button clickeed",isEditMode);
+ 
+  };
+  const handleCancelEdit = () => {
+    setEditableData({ ...fetchedSalaryDetails });
+    setIsEditMode(false);
   };
 
   return (
@@ -80,7 +88,7 @@ export default function EmpSalary() {
           </MDBCol>
         </MDBRow>
 
-        {/* Dropdown for Month, Year, and Date */}
+        {/* Dropdown for Month and Year */}
         <MDBRow className="d-flex justify-content-center mb-4">
           <MDBCol md="2">
             <select
@@ -114,92 +122,52 @@ export default function EmpSalary() {
               ))}
             </select>
           </MDBCol>
-
-          <MDBCol md="2">
-            <select
-              className="form-select"
-              value={selectedDate}
-              onChange={handleDateChange}
-            >
-              {/* Options for all dates (1 to getDaysInMonth(selectedMonth)) */}
-              {[...Array(getDaysInMonth(selectedMonth, selectedYear))].map((_, index) => (
-                <option key={index + 1} value={index + 1}>
-                  {index + 1}
-                </option>
-              ))}
-            </select>
-          </MDBCol>
         </MDBRow>
 
-        {/* Display the salary structure based on selectedMonth, selectedYear, and selectedDate */}
+        {/* Display the salary structure based on selectedMonth and selectedYear */}
         <MDBRow className="d-flex justify-content-center">
           <MDBCol lg="8">
             {viewSalaryClicked && (
               <MDBCard className="mb-4">
-                <MDBCardBody>
+         <MDBCardBody>
+              {Object.entries(editableData).map(([label,value],index) =>(
+                <div key ={index}>
                   <MDBRow>
                     <MDBCol sm="3">
-                      <MDBCardText>Month</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{salaryDetails.month}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                  <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>Basic Salary</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{salaryDetails.basicSalary}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                  <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>Salary Type</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{salaryDetails.salaryType}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                  <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>HRA</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{salaryDetails.hra}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                  <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>DA</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{salaryDetails.da}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                  <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>Date Of Slip</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{salaryDetails.dateOfSlip}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                  <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>Tax</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{salaryDetails.tax}</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                </MDBCardBody>
+                      <MDBCardText>{label}</MDBCardText>
+                      </MDBCol>
+                      <MDBCol sm="9">
+                        {isEditMode ? (
+                          <input
+                          type='text'
+                          className='form-control'
+                          value={value}
+                          onChange={(e)=>handleInputChange(label,e.target.value)}
+                          />
+                        ):(
+                          <MDBCardText className='=text-muted'>{value}</MDBCardText>
+                        )
+                      }
+                      </MDBCol>
+                    
+                    </MDBRow>
+                  <hr/>
+                </div>
+
+              ))}
+                {isEditMode && (
+                <>
+                  <MDBBtn className='me-8 m-3' color="success" onClick={handleSave}>
+                    Save
+                  </MDBBtn>
+                  <MDBBtn className='me-8 m-3' color="danger" onClick={handleCancelEdit}>
+                    Cancel
+                  </MDBBtn>
+                </>
+              )
+              }
+
+            </MDBCardBody>
               </MDBCard>
             )}
           </MDBCol>
@@ -211,7 +179,7 @@ export default function EmpSalary() {
             className='me-8 m-3'
             color='success'
             size='lg'
-            disabled={viewSalaryClicked}
+            // disabled={viewSalaryClicked}
           >
             View Salary Structure
           </MDBBtn>
@@ -220,7 +188,7 @@ export default function EmpSalary() {
             className='me-8 m-3'
             color='success'
             size='lg'
-            disabled={editDetailsClicked}
+            // disabled={editDetailsClicked}
           >
             Edit Details
           </MDBBtn>
@@ -229,5 +197,3 @@ export default function EmpSalary() {
     </section>
   );
 }
-
-

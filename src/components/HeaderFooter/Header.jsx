@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../utils/AuthContext';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../utils/AuthContext';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -20,16 +20,18 @@ const Header = () => {
             <div className="links--wrapper">
                 {user ? (
                     <>
-                        <Link to="/" className="header--link">
+                        <NavLink to="/" className="header--link">
                             Home
-                        </Link>
-                        <Link to="/profile" className="header--link">
-                            Profile
-                        </Link>
+                        </NavLink>
+                       
 
-                        <Link to="/genpdf/:compName" className="header--link">
-                            Generate Pdf
-                        </Link>
+                        <NavLink to="/about" className="header--link">
+                            About US
+                        </NavLink>
+
+                        <NavLink to="/contact" className="header--link">
+                            Contact US
+                        </NavLink>
 
                         <button onClick={logoutUser} className="btn">
                             Logout
@@ -40,13 +42,6 @@ const Header = () => {
                     <Link className="btn" to="/login">Login</Link>
 
                 )}
-
-                {/* Uncomment the following lines to include a Login link */}
-                {/* <>
-          <Link className="btn" to="/login">
-            Login
-          </Link>
-        </> */}
             </div>
         </div>
     );

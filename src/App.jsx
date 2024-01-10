@@ -27,6 +27,7 @@ function App() {
             <Route path="/profile" element={<Profile />}/>
             <Route path="/employees/:compName" element={<Addemp />} />
             <Route path="/genpdf/:compName" element = {<SalSheet/>}/>
+            <Route path="" element={<userApi/>}/>
           </Route>
         </Routes>
       </AuthProvider>

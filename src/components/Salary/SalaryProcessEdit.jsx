@@ -11,6 +11,9 @@ import {
   MDBTableHead,
   MDBTableBody,
 } from 'mdb-react-ui-kit';
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function SalaryProcessEdit() {
   const [employeeNumber, setEmployeeNumber] = useState('');
@@ -28,6 +31,8 @@ export default function SalaryProcessEdit() {
     esi: 0,
     incomeTax: 0,
   });
+
+  const navigate = useNavigate();
 
   const handleEmployeeSubmit = () => {
     // Placeholder logic to fetch employee details based on employee number
@@ -60,8 +65,8 @@ export default function SalaryProcessEdit() {
   };
 
   const handleGenerateSlip = () => {
-    // Placeholder logic for generating salary slip
-    // This could involve additional actions or API calls
+    navigate('/generateslippdf');
+
     console.log('Generating salary slip...');
   };
 

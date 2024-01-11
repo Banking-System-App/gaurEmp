@@ -1,6 +1,6 @@
 import React from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
-
+import { useNavigate } from 'react-router-dom';
 export default function EmployeesList() {
     const data=[
         {
@@ -18,6 +18,11 @@ export default function EmployeesList() {
         }
     ]
     
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+      navigate('/employeeprofile')
+    }
     
   return (
     <MDBTable align='middle' hover>
@@ -32,7 +37,7 @@ export default function EmployeesList() {
       <MDBTableBody>
       {data.map((employee, index) => (
         
-          <tr key={index}>
+          <tr key={index} onClick={handleClick}>
           <td>
             <div className='d-flex align-items-center'>
               <img

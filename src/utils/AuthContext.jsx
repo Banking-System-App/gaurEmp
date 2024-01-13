@@ -6,14 +6,19 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false)
-    const [user, setUser] = useState(false)
+    const [user, setUser] = useState(true)
 
-    useEffect(() => {
-        checkUserStatus()
+    //ye sala loop bna rha tha
+
+    // useEffect(() => {
+    //     console.log("use Effect loop");
+    //     checkUserStatus()
         
-    })
+    // })
+    
     //Logic to login user
     const loginUser = async (userInfo) => {
+        console.log("login loop check");
         setLoading(true)
         try {
             let response = await account.createEmailSession(
@@ -30,12 +35,16 @@ export const AuthProvider = ({ children }) => {
     }
     //logout part
     const logoutUser = () => {
+        console.log("logout loop");
         account.deleteSession('current')
         setUser(null)
     }
 
     //logic to register user
     const registerUser = async (userInfo) => {
+
+        console.log("register loop");
+
         setLoading(true)
 
         try{
@@ -65,6 +74,7 @@ export const AuthProvider = ({ children }) => {
 
     //logic to check the status of the user
     const checkUserStatus = async() => {
+        console.log("chek user status loop");
         try{
             let accountDetails = await account.get()
             setUser(accountDetails)

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { employerApi } from '../../database/employerApi'
 import {
   MDBContainer,
   MDBRow,
@@ -9,22 +10,23 @@ import {
 
 const AddEmployerForm = () => {
   const [employerInfo, setEmployerInfo] = useState({
-    id: '',
-    name: '',
-    address: '',
+    employerId: '',
+    employerName: '',
+    employerAddress: '',
     pfMemberFlag: '',
     pfCode: '',
     group: '',
     pfLimit: '',
     esMemberFlag: '',
     esiCode: '',
-    lOffice: '',
+    locationOffice: '',
     lwfFlag: '',
     lwfCode: '',
     otPayableFlag: '',
     otRate: '',
-    panNo: '',
-    tanNo: '',
+    panNum: '',
+    tanNum: '',
+    agenId: '',
   });
 
   const handleChange = (e) => {
@@ -35,11 +37,27 @@ const AddEmployerForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Placeholder logic to handle form submission
-    // Replace the following example with your actual API call or data handling logic
-    console.log('Submitted Employer Info:', employerInfo);
+    await employerApi.createEmployer(
+      employerInfo.employerId,
+      employerInfo.employerName,
+      employerInfo.employerAddress,
+      employerInfo.pfMemberFlag,
+      employerInfo.pfCode,
+      employerInfo.group,
+      employerInfo.pfLimit,
+      employerInfo.esMemberFlag,
+      employerInfo.esiCode,
+      employerInfo.locationOffice,
+      employerInfo.lwfFlag,
+      employerInfo.lwfCode,
+      employerInfo.otPayableFlag,
+      employerInfo.otRate,
+      employerInfo.panNum,
+      employerInfo.tanNum,
+      "Loacl"
+    )
     // You can add logic here to send the data to your backend or perform other actions
   };
 
@@ -56,19 +74,19 @@ const AddEmployerForm = () => {
           <MDBRow className="mb-4">
             <MDBCol md="4">
               <MDBInput
-                label="ID"
+                label="Employer id"
                 type="text"
-                name="id"
-                value={employerInfo.id}
+                name="employerId"
+                value={employerInfo.employerId}
                 onChange={handleChange}
               />
             </MDBCol>
             <MDBCol md="4">
               <MDBInput
-                label="NAME"
+                label="Name"
                 type="text"
-                name="name"
-                value={employerInfo.name}
+                name="employerName"
+                value={employerInfo.employerName}
                 onChange={handleChange}
               />
             </MDBCol>
@@ -76,8 +94,8 @@ const AddEmployerForm = () => {
               <MDBInput
                 label="Address"
                 type="text"
-                name="address"
-                value={employerInfo.address}
+                name="employerAddress"
+                value={employerInfo.employerAddress}
                 onChange={handleChange}
               />
             </MDBCol>

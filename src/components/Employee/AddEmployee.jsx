@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { employeeApi } from '../../database/employeeApi';
+
 import {
   MDBContainer,
   MDBRow,
@@ -52,14 +54,47 @@ export default function AddEmployeeForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Placeholder logic to handle form submission
-    // Replace the following example with your actual API call or data handling logic
-    console.log('Submitted Employee Info:', employeeInfo);
+    await employeeApi.createEmployee(
+      employeeInfo.empID,
+      employeeInfo.name,
+      employeeInfo.gender,
+      employeeInfo.dob,
+      employeeInfo.maritalStatus,
+      employeeInfo.location,
+      employeeInfo.designation,
+      employeeInfo.doj,
+      employeeInfo.professionalTax,
+      employeeInfo.intlWFlag,
+      employeeInfo.isPfFlag,
+      employeeInfo.pfNum,
+      employeeInfo.isPenFlag,
+      employeeInfo.doMember,
+      employeeInfo.isEsFlag,
+      employeeInfo.esCode,
+      employeeInfo.lwfFlag,
+      employeeInfo.dateOfLeave,
+      employeeInfo.reason,
+      employeeInfo.pf10,
+      employeeInfo.uanNum,
+      employeeInfo.aadharNumber,
+      employeeInfo.panNum,
+      employeeInfo.mobileNumber,
+      employeeInfo.payment,
+      employeeInfo.bank,
+      employeeInfo.account,
+      employeeInfo.fatherName,
+      employeeInfo.husbandName,
+      employeeInfo.motherMaidenName,
+      employeeInfo.localAddress,
+      employeeInfo.sosContact,
+      employeeInfo.permanentAddress,
+      employeeInfo.compName,
+      employeeInfo.compId
+    )
     // You can add logic here to send the data to your backend or perform other actions
   };
-
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
@@ -377,7 +412,7 @@ export default function AddEmployeeForm() {
                 type="text"
                 name="localAddress"
                 value={employeeInfo.localAddress}
-                
+
                 onChange={handleChange}
               />
             </MDBCol>

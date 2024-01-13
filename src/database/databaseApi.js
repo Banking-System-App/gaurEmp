@@ -132,6 +132,7 @@ export const databaseApi = {
   },
 
   getAllCompanies: async () => {
+    console.log("getAllCompany");
     try {
       const promise = databases.listDocuments(
         "656c2c4e3621c2f65000",
@@ -139,12 +140,14 @@ export const databaseApi = {
       );
       const response = await promise;
       return response.documents;
+
     } catch (error) {
       console.log(error); // Failure
     }
   },
 
   getAllEmployees: async () => {
+    console.log("getAllCompany");
     try {
       const promise = databases.listDocuments(
         "656c2c4e3621c2f65000",
@@ -158,6 +161,7 @@ export const databaseApi = {
   },
 
   getCompaniesByUserId: async (userId) => {
+    console.log("getAllCompany");
     try {
     } catch (error) {
       console.log(error); // Failure

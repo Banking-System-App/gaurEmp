@@ -5,7 +5,7 @@ const employerCollectionId = "6570aa637f3e31a920ea";
 const databaseID = "656c2c4e3621c2f65000";
 
 
-export const employeeApi = {
+export const employerApi = {
 
   createEmployer: async (
     employerId,
@@ -23,7 +23,8 @@ export const employeeApi = {
     otPayableFlag,
     otRate,
     panNum,
-    tanNum
+    tanNum,
+    agentId,
   ) => {
     console.log("Collection ID:", employerCollectionId);
     try {
@@ -47,7 +48,8 @@ export const employeeApi = {
             location_office: locationOffice,
             lwf_code: lwfCode,
             ot_rate: otRate,
-            tan_no: tanNum
+            tan_no: tanNum,
+            agent_id: agentId,
         }
       );
 
@@ -59,14 +61,13 @@ export const employeeApi = {
   },
 
 
-getEmployerDetail: async (companyId,empId) => {
-    console.log("companyId: empid",companyId,empId);
+getEmployerDetail: async (employerId) => {
+    console.log("employerId = ",employerId);
     try {
       const promise = databases.listDocuments(
         databaseID,
         employerCollectionId,
-        [ Query.equal("comp_id", companyId),
-          Query.equal("emp_id", empId)]
+        [ Query.equal("employer_id", employerId)]
       );
       const response = await promise;
       if (response.error) {
@@ -81,12 +82,12 @@ getEmployerDetail: async (companyId,empId) => {
     }
   },
 
-  getAllEmployerByUserId: async (compId) => {
+  getAllEmployerByUserId: async (agentId) => {
     try {
       const promise = databases.listDocuments(
         databaseID,
         employerCollectionId,
-        [Query.equal("comp_id", compId)]
+        [Query.equal("agent_id", agentId)]
       );
       const response = await promise;
       if (response.error) {
@@ -100,5 +101,20 @@ getEmployerDetail: async (companyId,empId) => {
       throw new Error("Failed to fetch employees.");
     }
   },
+
+  updateEmployerData:async (updatedData, documentId)=>{
+    try{
+      const promise=databases.updateDocument(
+        databaseID,
+        employerCollectionId,
+        documentId,
+        updatedData
+      );
+    }
+    catch(error){
+      console.error(error);
+      throw new Error("Failed to update Employer data")
+    }
+  }
 
 };

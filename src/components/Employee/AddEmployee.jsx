@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { employeeApi } from '../../database/employeeApi';
+import { useNavigate } from 'react-router-dom';
 
 import {
   MDBContainer,
@@ -10,6 +11,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function AddEmployeeForm() {
+
+  const navigate = useNavigate()
   const [employeeInfo, setEmployeeInfo] = useState({
     empID: '',
     name: '',
@@ -93,6 +96,8 @@ export default function AddEmployeeForm() {
       employeeInfo.compName,
       employeeInfo.compId
     )
+    alert("Employee Added Sucessfuly")
+    navigate("/employerprofile")
     // You can add logic here to send the data to your backend or perform other actions
   };
   return (

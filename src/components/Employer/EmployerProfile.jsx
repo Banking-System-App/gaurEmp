@@ -11,6 +11,7 @@ import {
   MDBBreadcrumb,
   MDBBreadcrumbItem,
 } from 'mdb-react-ui-kit';
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { employerApi } from '../../database/employerApi';
@@ -29,13 +30,15 @@ export default function EmployerProfile() {
   //call api call and set into intial data
   const [isEditMode, setIsEditMode] = useState(false);
   const [employer, setEmployer] = useState([]);
+  const [editableData, setEditableData] = useState({ ...employer[0] });
 
   useEffect(() => {
     const getEmployerDetails = async () => {
       try {
-        const response = await employerApi.getEmployerDetail('fhht').then((response)=>{
+        const response = await employerApi.getEmployerDetail('fgg').then((response)=>{
           console.log('Employer Profile is ', response);
-          setEmployer(response);
+          setEmployer(response[0]);
+          setEditableData(response[0]);
         });
         
       } catch (error) {
@@ -45,30 +48,6 @@ export default function EmployerProfile() {
     getEmployerDetails();
   }, []);
 
-  
-
-  const intialData = {
-    'Company ID': String(employer.employer_id),
-  };
-
-  const [editableData, setEditableData] = useState({ ...intialData });
-  //************************************************** */
-  //ye rerender bar bar ho rha hai ise baad me dekhenge
-  //************************************************** */
-  useEffect(() => {
-    console.log("Loop check in employer profile")
-    const initialData = {
-      'employer_id': String(employer.employer_id ?? ''),
-    };
-    setEditableData({ ...initialData });
-  }, []);
-  
-  
-  //console.log("Initia datatatata ", employer[0]);
-
-  
- // console.log('Edited Data is:', editableData);
-
   const handleInputChange = (label, value) => {
     setEditableData((prevData) => ({
       ...prevData,
@@ -76,12 +55,11 @@ export default function EmployerProfile() {
     }));
   };
 
-
-
   const handleSave = () => {
-    // Implement logic to save the edited data (e.g., send to backend)
-    const resp = employerApi.updateEmployerData(editableData, employer.$id)
-    console.log('Updated Data:', resp);
+    console.log('Updated Data:', editableData);
+    console.log("Emp loyer id : ", employer.$id);
+    employerApi.updateEmployerData(editableData.$id, editableData)
+    alert("Employer Details Edited Successfully");
     setIsEditMode(false);
   };
 
@@ -92,9 +70,20 @@ export default function EmployerProfile() {
 
   };
   const handleCancelEdit = () => {
-    setEditableData({ ...intialData });
+    setEditableData({ ...employer });
     setIsEditMode(false);
   };
+
+  const changelabel = {
+    employer_id: "Employer Id",
+    employer_address: "Employer Address",
+    name: "Employer Name",
+    group: "Group",
+    pan_numer: "Pan Number",
+    location_office: "Location Office",
+    ot_rate: "Over Time Rate",
+    tan_no: "Tan Number",
+  }
 
 
 
@@ -127,9 +116,9 @@ export default function EmployerProfile() {
                   style={{ width: '228px' }}
                   fluid />
                 <p className="text-muted mb-1">Comapny Name</p>
-                <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
+                <p className="text-muted mb-4">Address of the Company </p>
                 <div className="d-flex justify-content-center mb-2">
-                  <MDBBtn>Follow</MDBBtn>
+                  
                   <MDBBtn outline className="ms-1">Message</MDBBtn>
                 </div>
               </MDBCardBody>
@@ -139,10 +128,12 @@ export default function EmployerProfile() {
             <MDBCard className="mb-4">
               <MDBCardBody>
                 {Object.entries(editableData).map(([label, value], index) => (
+                   (changelabel[label]!=null && changelabel[label]!="")?
+
                   <div key={index}>
                     <MDBRow>
                       <MDBCol sm="3">
-                        <MDBCardText>{label}</MDBCardText>
+                        <MDBCardText>{changelabel[label]}</MDBCardText>
                       </MDBCol>
                       <MDBCol sm="9">
                         {isEditMode ? (
@@ -161,7 +152,7 @@ export default function EmployerProfile() {
                     </MDBRow>
                     <hr />
                   </div>
-
+                   :<></>
                 ))}
                 {isEditMode && (
                   <>

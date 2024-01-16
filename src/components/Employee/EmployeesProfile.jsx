@@ -109,7 +109,6 @@ const handleSalaryProcess = () => {
     dol: "dateOfLeave",
     reason: "reason",
     pf_10: "pf10",
-
   }
 
 

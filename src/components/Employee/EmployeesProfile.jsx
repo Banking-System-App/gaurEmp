@@ -64,7 +64,7 @@ const handleSalaryProcess = () => {
   const handleSave = () => {
     // Implement logic to save the edited data (e.g., send to backend)
     console.log('Edited Data on save:', editableData);
-    employeeApi.updateEmployeeData(editableData.$id,editableData)
+    employeeApi.updateEmployeeData(editableData.$id, editableData)
     setIsEditMode(false);
   };
 
@@ -107,7 +107,6 @@ const handleSalaryProcess = () => {
     dol: "dateOfLeave",
     reason: "reason",
     pf_10: "pf10",
-
   }
 
 

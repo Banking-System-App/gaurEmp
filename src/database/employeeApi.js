@@ -139,4 +139,19 @@ getEmployeeDetail: async (companyId,empId) => {
     }
   },
 
+  updateEmployeeData:async (documentId,updatedData)=>{
+    try{
+      const promise=databases.updateDocument(
+        databaseID,
+        employeesCollectionId,
+        documentId,
+        updatedData
+      );
+    }
+    catch(error){
+      console.error(error);
+      throw new Error("Failed to update Employer data")
+    }
+  }
+
 };

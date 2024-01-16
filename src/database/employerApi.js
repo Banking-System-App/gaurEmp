@@ -102,7 +102,7 @@ getEmployerDetail: async (employerId) => {
     }
   },
 
-  updateEmployerData:async (updatedData, documentId)=>{
+  updateEmployerData:async (documentId, updatedData)=>{
     try{
       const promise=databases.updateDocument(
         databaseID,

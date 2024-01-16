@@ -45,6 +45,7 @@ const Routess = () => {
             <Route path="/salarystructure" element={<EmpSalary/>}/>
             <Route path="/salaryprocess" element={<SalaryProcessEdit/>}/>
             <Route path="/generateslippdf" element={<SalSheet/>}/>
+            <Route path="/addsalarystructure" element={<SalSheet/>}/>
 
             {/* <Route path="/profile" element={<Profile />}/>
             <Route path="/employees/:compName" element={<Addemp />} /> */}

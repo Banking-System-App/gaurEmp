@@ -14,6 +14,7 @@ import {
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { employeeApi } from '../../database/employeeApi';
+import { EmployeeUtil } from '../../utils/EmployeeUtil';
 
 export default function EmployeeProfile() {
 const navigate = useNavigate()
@@ -62,9 +63,10 @@ const handleSalaryProcess = () => {
     }));
   };
   const handleSave = () => {
+    
     // Implement logic to save the edited data (e.g., send to backend)
     console.log('Edited Data on save:', editableData);
-    employeeApi.updateEmployeeData(editableData.$id,editableData)
+    employeeApi.updateEmployeeData(editableData.$id,EmployeeUtil.updatedData(editableData))
     setIsEditMode(false);
   };
 

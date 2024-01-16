@@ -15,6 +15,7 @@ import {
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { employerApi } from '../../database/employerApi';
+import { EmployerUtil } from '../../utils/EmployerUtil';
 
 export default function EmployerProfile() {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ export default function EmployerProfile() {
   const handleSave = () => {
     console.log('Updated Data:', editableData);
     console.log("Emp loyer id : ", employer.$id);
-    employerApi.updateEmployerData(editableData.$id, editableData)
+    employerApi.updateEmployerData(editableData.$id, EmployerUtil.updatedData(editableData))
     alert("Employer Details Edited Successfully");
     setIsEditMode(false);
   };
@@ -74,16 +75,16 @@ export default function EmployerProfile() {
     setIsEditMode(false);
   };
 
-  const changelabel = {
-    employer_id: "Employer Id",
-    employer_address: "Employer Address",
-    name: "Employer Name",
-    group: "Group",
-    pan_numer: "Pan Number",
-    location_office: "Location Office",
-    ot_rate: "Over Time Rate",
-    tan_no: "Tan Number",
-  }
+  // const changelabel = {
+  //   employer_id: "Employer Id",
+  //   employer_address: "Employer Address",
+  //   name: "Employer Name",
+  //   group: "Group",
+  //   pan_numer: "Pan Number",
+  //   location_office: "Location Office",
+  //   ot_rate: "Over Time Rate",
+  //   tan_no: "Tan Number",
+  // }
 
 
 
@@ -127,13 +128,13 @@ export default function EmployerProfile() {
           <MDBCol lg="8">
             <MDBCard className="mb-4">
               <MDBCardBody>
-                {Object.entries(editableData).map(([label, value], index) => (
-                   (changelabel[label]!=null && changelabel[label]!="")?
+                {Object.entries(EmployerUtil.updatedData(editableData)).map(([label, value]) => (
+                  
 
-                  <div key={index}>
+                  <div key={label}>
                     <MDBRow>
                       <MDBCol sm="3">
-                        <MDBCardText>{changelabel[label]}</MDBCardText>
+                        <MDBCardText>{EmployerUtil.changelabel[label]}</MDBCardText>
                       </MDBCol>
                       <MDBCol sm="9">
                         {isEditMode ? (
@@ -152,7 +153,7 @@ export default function EmployerProfile() {
                     </MDBRow>
                     <hr />
                   </div>
-                   :<></>
+                  
                 ))}
                 {isEditMode && (
                   <>

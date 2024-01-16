@@ -5,9 +5,7 @@ const databaseID = "656c2c4e3621c2f65000";
 const collectionIdSalaryStructure = "658b0eee2802c5d7a42c";
 const collectionIdProcessSalary = "659ee3c01f10512c7e17";
 
-
-
-export const databaseApi = {
+export const salaryApi = {
 
     //function to create salary structure
 
@@ -203,6 +201,8 @@ export const databaseApi = {
             throw new Error("Failed to fetch employees.");
         }
     },
+
+    
 
     
 };

@@ -88,33 +88,6 @@ const handleSalaryProcess = () => {
   console.log('Employee data latest:', employee[0]);
 
 
-  const changelabel ={
-    emp_id: "empId",
-    emp_name: "empName",
-    gender: "gender",
-    dob: "dob",
-    marital_status: "maritalStatus",
-    location: "location",
-    designation: "designation",
-    date_of_joining: "dateOfJoining",
-    professional_tax: "professionalTax",
-    intl_w_flag: "intlWFlag",
-    pf_flag: "pfFlag",
-    pf_number: "pfNum",
-    pen_flag: "penFlag",
-    d_o_member: "dateOfMember",
-    es_flag: "esFlag",
-    es_code: "esCode",
-    lwf_flag: "lwfFlag",
-    dol: "dateOfLeave",
-    reason: "reason",
-    pf_10: "pf10",
-  }
-
-
-
-  
-
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
@@ -170,13 +143,13 @@ const handleSalaryProcess = () => {
       ))}
     </MDBCardBody> */}
     <MDBCardBody>
-      {Object.entries(editableData).map(([label,value],index) =>(
-        (changelabel[label]!=null && changelabel[label]!="")?
+      {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label,value],index) =>(
+    
 
         <div key ={index}>
           <MDBRow>
             <MDBCol sm="3">
-              <MDBCardText>{changelabel[label]}</MDBCardText>
+              <MDBCardText>{EmployeeUtil.changelabel[label]}</MDBCardText>
               </MDBCol>
               <MDBCol sm="9">
                 {isEditMode ? (
@@ -194,7 +167,7 @@ const handleSalaryProcess = () => {
             </MDBRow>
           <hr/>
         </div>
-        :<></>
+    
 
       ))}
         {isEditMode && (
@@ -224,7 +197,7 @@ const handleSalaryProcess = () => {
         <div className="d-flex justify-content-center mb-3">
   
   <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={handleClick}>
-    Salary Structure
+    View Salary Structure
   </MDBBtn>
   <MDBBtn  className ="me-8 m-3"color='success' onClick={handleEditClick} size='lg'>
     Edit Details

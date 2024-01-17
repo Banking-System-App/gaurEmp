@@ -149,12 +149,15 @@ export const salaryApi = {
     },
 
 
-    getSalaryStructure: async (empId) => {
+    getSalaryStructure: async (empId,month,year) => {
+        console.log("getSalaryStructure API called");
         try {
             const promise = databases.listDocuments(
                 databaseID,
                 collectionIdSalaryStructure,
-                [Query.equal("emp_id", empId)]
+                [Query.equal("emp_id", empId),
+                Query.equal("month", month)]
+                // Query.equal("year", year)]
             );
             const response = await promise;
             return response.documents;

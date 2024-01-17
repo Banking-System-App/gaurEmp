@@ -15,11 +15,13 @@ import {
 import { salaryApi } from '../../database/salaryApi';
 
 export default function EmpSalary() {
-  const [selectedMonth, setSelectedMonth] = useState('Jan');
+  const [selectedMonth, setSelectedMonth] = useState('February');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [salaryDetails, setSalaryDetails] = useState({});
+  const [salaryDetails, setSalaryDetails] = useState({ram:"jai"});
   const [viewSalaryClicked, setViewSalaryClicked] = useState(false);
   const [editDetailsClicked, setEditDetailsClicked] = useState(false);
+  
+
   const navigate = useNavigate();
 
   const fetchedSalaryDetails = {
@@ -32,13 +34,17 @@ export default function EmpSalary() {
     tax: '10%',
   };
 
+  const [editableData, setEditableData] = useState({...fetchedSalaryDetails});
+  const [isEditMode, setIsEditMode] = useState(false);
   useEffect(() => {
     const getSalaryStructure = async () => {
       try {
-        const response = await salaryApi.getSalaryStructure('290', selectedMonth, selectedYear).then((response) => {
+        const response = await salaryApi.getSalaryStructure('213', selectedMonth, selectedYear).then((response) => {
           console.log('Response is  ', response);
-          if (typeof response !== 'undefined')
+          if (typeof response !== 'undefined'){
             setSalaryDetails(response);
+            setEditableData(response[0]);
+          }
         });
 
       } catch (error) {
@@ -54,21 +60,39 @@ export default function EmpSalary() {
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
+    console.log("selected month", event.target.value);
+    
+
   };
 
   const handleYearChange = (event) => {
     setSelectedYear(parseInt(event.target.value, 10));
+    console.log("selected year", parseInt(event.target.value, 10));
   };
 
-  const handleViewSalary = () => {
+  const handleViewSalary = async() => {
     setViewSalaryClicked(true);
     // Fetch and set the salary structure based on selectedMonth and selectedYear
     // Replace the following example with your actual API call or data fetching logic
 
-    setSalaryDetails(fetchedSalaryDetails);
+    // setSalaryDetails(fetchedSalaryDetails);
+
+   
+      try {
+        const response = await salaryApi.getSalaryStructure('213', selectedMonth, selectedYear).then((response) => {
+          console.log('Response is in viewsalary after selection  ', response);
+          if (typeof response !== 'undefined'){
+            // setSalaryDetails(response);
+            setEditableData(response[0]);
+          }
+        });
+
+      } catch (error) {
+        console.error("Error in the file is  ", error);
+      }
+    
   };
-  const [editableData, setEditableData] = useState({ ...fetchedSalaryDetails });
-  const [isEditMode, setIsEditMode] = useState(false);
+ 
 
 
 
@@ -103,6 +127,8 @@ export default function EmpSalary() {
   console.log("Salary Details", salaryDetails);
   console.log("Salary Details length", salaryDetails.length);
 
+  console.log("selected month state", selectedMonth);
+  console.log("selected month year", selectedYear);
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">

@@ -15,19 +15,19 @@ export default function AddSalaryStructure() {
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    EmployeeID: '',
-    EmployeeName: '',
-    EmployeeType: '',
-    CompanyID:'',
-    BasicSalary: '',
-    DA:'',
-    HRA:'',
-    Convayance:'',
-    WashingAllowance:'',
-    MedicalAllowance:'',
-    OtherAllowance:'',
-    Year:'',
-    Month:''
+   " Employee ID": '',
+    "Employee Name": '',
+    "Employee Type": '',
+    "Company ID":'',
+    "Basic Salary": '',
+    "DA":'',
+    "HRA":'',
+    "Convayance":'',
+    "Washing Allowance":'',
+    "Medical Allowance":'',
+    "Other Allowance":'',
+    "Year":'',
+    "Month":''
   });
 
   const handleInputChange = (label, value) => {

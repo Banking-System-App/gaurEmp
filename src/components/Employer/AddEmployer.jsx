@@ -8,7 +8,14 @@ import {
   MDBInput,
 } from 'mdb-react-ui-kit';
 
+
+import {useAuth} from '../../utils/AuthContext'
+
+
 const AddEmployerForm = () => {
+
+  const user = useAuth()
+
   const [employerInfo, setEmployerInfo] = useState({
     employerId: '',
     employerName: '',
@@ -29,6 +36,7 @@ const AddEmployerForm = () => {
     agenId: '',
   });
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEmployerInfo((prevInfo) => ({
@@ -36,6 +44,10 @@ const AddEmployerForm = () => {
       [name]: value,
     }));
   };
+
+  console.log(
+    "useContext id", user.$id
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,10 +68,11 @@ const AddEmployerForm = () => {
       employerInfo.otRate,
       employerInfo.panNum,
       employerInfo.tanNum,
-      "Loacl"
+      user.$id
     )
     // You can add logic here to send the data to your backend or perform other actions
   };
+
 
   return (
     <section style={{ backgroundColor: '#eee' }}>

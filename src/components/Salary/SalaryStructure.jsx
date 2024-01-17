@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
   MDBContainer,
   MDBRow,
@@ -18,6 +20,7 @@ export default function EmpSalary() {
   const [salaryDetails, setSalaryDetails] = useState({});
   const [viewSalaryClicked, setViewSalaryClicked] = useState(false);
   const [editDetailsClicked, setEditDetailsClicked] = useState(false);
+  const navigate = useNavigate();
 
   const fetchedSalaryDetails = {
     month: selectedMonth,
@@ -45,7 +48,9 @@ export default function EmpSalary() {
     getSalaryStructure();
   }, []);
 
-
+  const handleAddSalaryStructure = () => {
+    navigate('/addsalarystructure');
+  }
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
@@ -72,6 +77,7 @@ export default function EmpSalary() {
     setIsEditMode(true);
     // Implement logic to navigate to the edit details page or show an edit modal
   };
+
   const handleInputChange = (label, value) => {
     setEditableData((prevData) => ({
       ...prevData,
@@ -114,7 +120,7 @@ export default function EmpSalary() {
 
         {Object.entries(salaryDetails).length === 0 ? (<div>
           <h1>Sorry, Salary structure no found</h1>
-          <MDBBtn>Add Salary Structure</MDBBtn>
+          <MDBBtn onClick={handleAddSalaryStructure}>Add Salary Structure</MDBBtn>
         </div> ): (
           <div>
             <MDBRow className="d-flex justify-content-center mb-4">
@@ -202,6 +208,15 @@ export default function EmpSalary() {
             </MDBRow>
 
             <div className="d-flex justify-content-center mb-3">
+            <MDBBtn
+                onClick={handleAddSalaryStructure}
+                className='me-8 m-3'
+                color='success'
+                size='lg'
+              // disabled={viewSalaryClicked}
+              >
+               Add New Salary Structure
+              </MDBBtn>
               <MDBBtn
                 onClick={handleViewSalary}
                 className='me-8 m-3'

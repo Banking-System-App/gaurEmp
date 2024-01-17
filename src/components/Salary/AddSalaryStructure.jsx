@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { salaryApi } from '../../database/salaryApi';
+import { useNavigate } from 'react-router-dom';
 import {
   MDBContainer,
   MDBRow,
@@ -10,14 +12,22 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function AddSalaryStructure() {
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
-    month: '',
-    basicSalary: '',
-    salaryType: '',
-    hra: '',
-    da: '',
-    dateOfSlip: '',
-    tax: '',
+    EmployeeID: '',
+    EmployeeName: '',
+    EmployeeType: '',
+    CompanyID:'',
+    BasicSalary: '',
+    DA:'',
+    HRA:'',
+    Convayance:'',
+    WashingAllowance:'',
+    MedicalAllowance:'',
+    OtherAllowance:'',
+    Year:'',
+    Month:''
   });
 
   const handleInputChange = (label, value) => {
@@ -30,6 +40,23 @@ export default function AddSalaryStructure() {
   const handleSave = () => {
     // Add logic to save the form data
     console.log('Form Data:', formData);
+    salaryApi.createSalaryStrcture(
+      formData.EmployeeID,
+      formData.EmployeeName,
+      formData.EmployeeType,
+      formData.CompanyID,
+      formData.BasicSalary,
+      formData.DA,
+      formData.HRA,
+      formData.Convayance,
+      formData.WashingAllowance,
+      formData.MedicalAllowance,
+      formData.OtherAllowance,
+      formData.Year,
+      formData.Month,
+    )
+    alert(`Salary Structure for employee ID ${formData.EmployeeID} Added Successfully` )
+    navigate('/salarystructure');
     // You can make an API call to save the data or perform other actions
   };
 

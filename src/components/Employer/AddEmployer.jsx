@@ -14,7 +14,7 @@ import {useAuth} from '../../utils/AuthContext'
 
 const AddEmployerForm = () => {
 
-  const user = useAuth()
+  const {user} = useAuth()
 
   const [employerInfo, setEmployerInfo] = useState({
     employerId: '',

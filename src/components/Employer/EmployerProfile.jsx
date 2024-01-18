@@ -16,8 +16,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { employerApi } from '../../database/employerApi';
 import { EmployerUtil } from '../../utils/EmployerUtil';
+import { useEmployerData } from '../../context/EmployerContext';
 
 export default function EmployerProfile() {
+  const {EmployerDetails} = useEmployerData();
+
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -36,7 +39,7 @@ export default function EmployerProfile() {
   useEffect(() => {
     const getEmployerDetails = async () => {
       try {
-        const response = await employerApi.getEmployerDetail('fgg').then((response)=>{
+        const response = await employerApi.getEmployerDetail(EmployerDetails.employer_id).then((response)=>{
           console.log('Employer Profile is ', response);
           setEmployer(response[0]);
           setEditableData(response[0]);
@@ -75,19 +78,6 @@ export default function EmployerProfile() {
     setIsEditMode(false);
   };
 
-  // const changelabel = {
-  //   employer_id: "Employer Id",
-  //   employer_address: "Employer Address",
-  //   name: "Employer Name",
-  //   group: "Group",
-  //   pan_numer: "Pan Number",
-  //   location_office: "Location Office",
-  //   ot_rate: "Over Time Rate",
-  //   tan_no: "Tan Number",
-  // }
-
-
-
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
@@ -116,8 +106,8 @@ export default function EmployerProfile() {
                   className="rounded-circle"
                   style={{ width: '228px' }}
                   fluid />
-                <p className="text-muted mb-1">Comapny Name</p>
-                <p className="text-muted mb-4">Address of the Company </p>
+                <p className="text-muted mb-1">Comapny Name: {editableData.name}</p>
+                <p className="text-muted mb-4">Address: {editableData.employer_address} </p>
                 <div className="d-flex justify-content-center mb-2">
                   
                   <MDBBtn outline className="ms-1">Message</MDBBtn>
@@ -126,7 +116,9 @@ export default function EmployerProfile() {
             </MDBCard>
           </MDBCol>
           <MDBCol lg="8">
+          <h1>Company Details</h1>
             <MDBCard className="mb-4">
+             
               <MDBCardBody>
                 {Object.entries(EmployerUtil.updatedData(editableData)).map(([label, value]) => (
                   

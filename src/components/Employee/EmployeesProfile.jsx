@@ -15,8 +15,11 @@ import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { employeeApi } from '../../database/employeeApi';
 import { EmployeeUtil } from '../../utils/EmployeeUtil';
+import { useEmployeeData } from '../../context/EmployeeContext';
 
 export default function EmployeeProfile() {
+const {EmployeeDetails} = useEmployeeData();
+console.log("Employee Detail is : ", EmployeeDetails);
 const navigate = useNavigate()
 
 const handleClick = () => {
@@ -42,8 +45,8 @@ const handleSalaryProcess = () => {
   useEffect(() => {
     const getEmployeeDetail = async () => {
       try {
-        await employeeApi.getEmployeeDetail('ramRajya',"1001").then((response)=>{
-          console.log('Employee Profile is ', response);
+        await employeeApi.getEmployeeDetail(EmployeeDetails.comp_id,EmployeeDetails.emp_id).then((response)=>{
+       //   console.log('Employee Profile is ', response);
           setEmployee(response);
           setEditableData(response[0])
         });
@@ -65,7 +68,7 @@ const handleSalaryProcess = () => {
   const handleSave = () => {
     
     // Implement logic to save the edited data (e.g., send to backend)
-    console.log('Edited Data on save:', editableData);
+    //console.log('Edited Data on save:', editableData);
     employeeApi.updateEmployeeData(editableData.$id,EmployeeUtil.updatedData(editableData))
     setIsEditMode(false);
   };
@@ -83,9 +86,9 @@ const handleSalaryProcess = () => {
 
 
 
-  console.log('Edited Data latest:', editableData);
+  //console.log('Edited Data latest:', editableData);
 
-  console.log('Employee data latest:', employee[0]);
+  //console.log('Employee data latest:', employee[0]);
 
 
   return (

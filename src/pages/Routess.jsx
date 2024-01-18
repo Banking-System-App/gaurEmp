@@ -19,7 +19,8 @@ import EmployeeProfile from '../components/Employee/EmployeesProfile';
 import EmpSalary from '../components/Salary/SalaryStructure';
 import AddSalaryStructure from '../components/Salary/AddSalaryStructure';
 import SalaryProcessEdit from '../components/Salary/SalaryProcessEdit';
-
+import { EmployerProvider } from '../context/EmployerContext';
+import { EmployeeProvider } from '../context/EmployeeContext';
 
 const Routess = () => {
 
@@ -34,15 +35,12 @@ const Routess = () => {
           <Route path='/contact' element={<Contact />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Home />} />
-            <Route path="/getcompany" element={<EmployerList/>}/>
-            <Route path="/employerprofile" element={<EmployerProfile/>}/>
-            <Route path="/addemployee" element={<AddEmployeeForm/>}/>
-            <Route path="/viewemployees" element={<EmployeesList/>}/>
-            <Route path="/employeeprofile" element={<EmployeeProfile/>}/>
-      
-
             <Route path="/addemployer" element={<AddEmployerForm/>}/>
-           
+            <Route path="/getcompany" element={<EmployerProvider><EmployerList/></EmployerProvider>}/>
+            <Route path="/employerprofile" element={<EmployerProvider><EmployerProfile/></EmployerProvider>}/>
+            <Route path="/addemployee" element={<EmployerProvider><AddEmployeeForm/></EmployerProvider>}/>
+            <Route path="/viewemployees" element={<EmployerProvider><EmployeeProvider><EmployeesList/></EmployeeProvider></EmployerProvider>}/>
+            <Route path="/employeeprofile" element={<EmployerProvider><EmployeeProvider><EmployeeProfile/></EmployeeProvider></EmployerProvider>}/>
             <Route path="/salarystructure" element={<EmpSalary/>}/>
             <Route path="/salaryprocess" element={<SalaryProcessEdit/>}/>
             <Route path="/generateslippdf" element={<SalSheet/>}/>

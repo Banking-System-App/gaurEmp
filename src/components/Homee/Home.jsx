@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../utils/AuthContext';
 
 import {
   MDBCol,
@@ -15,6 +16,9 @@ import {
 
 export default function Home() {
 
+  const {user} = useAuth()
+  console.log("User At home is ", user);
+
   const navigate = useNavigate()
   
   const addCompany = () => {
@@ -30,18 +34,18 @@ export default function Home() {
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
 
-        <MDBRow>
+        {/* <MDBRow>
           <MDBCol>
             <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
-              {/* <MDBBtn className="ms-auto m-3" color='success' size='lg'>
+              <MDBBtn className="ms-auto m-3" color='success' size='lg'>
        Salary Process Edit 
-      </MDBBtn> */}
+      </MDBBtn>
               <MDBBreadcrumbItem>
                 <a href='#'>Home</a>
               </MDBBreadcrumbItem>
             </MDBBreadcrumb>
           </MDBCol>
-        </MDBRow>
+        </MDBRow> */}
 
 
         <MDBRow>
@@ -55,7 +59,7 @@ export default function Home() {
                   style={{ width: '165px' }}
                   fluid /> */}
                 <h1>hi</h1>
-                <p className="text-muted mb-1">Employer Name..</p>
+                <p className="text-muted mb-1">{user.name}</p>
                 {/* <div className="d-flex justify-content-center mb-2">
                   <MDBBtn>Follow</MDBBtn>
                   <MDBBtn outline className="ms-1">Message</MDBBtn>
@@ -71,7 +75,7 @@ export default function Home() {
                     <MDBCardText>Email </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">chacha@gmail.com</MDBCardText>
+                    <MDBCardText className="text-muted">{user.email}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />

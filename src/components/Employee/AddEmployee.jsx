@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { employeeApi } from '../../database/employeeApi';
 import { useNavigate } from 'react-router-dom';
+import { useEmployerData } from '../../context/EmployerContext';
 
 import {
   MDBContainer,
@@ -11,6 +12,8 @@ import {
 } from 'mdb-react-ui-kit';
 
 export default function AddEmployeeForm() {
+
+  const {EmployerDetails} = useEmployerData()
 
   const navigate = useNavigate()
   const [employeeInfo, setEmployeeInfo] = useState({
@@ -47,6 +50,8 @@ export default function AddEmployeeForm() {
     localAddress: '',
     sosContact: '',
     permanentAddress: '',
+    compName:'',
+    compId:''
   });
 
   const handleChange = (e) => {
@@ -93,8 +98,8 @@ export default function AddEmployeeForm() {
       employeeInfo.localAddress,
       employeeInfo.sosContact,
       employeeInfo.permanentAddress,
-      employeeInfo.compName,
-      employeeInfo.compId
+      EmployerDetails.name,
+      EmployerDetails.employer_id
     )
     alert("Employee Added Sucessfuly")
     navigate("/employerprofile")

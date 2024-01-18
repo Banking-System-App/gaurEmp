@@ -11,7 +11,13 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit';
 
+import { useEmployeeData } from '../../context/EmployeeContext';
+
+
 export default function AddSalaryStructure() {
+  const {EmployeeDetails} = useEmployeeData();
+  console.log("Employee Detail is : ", EmployeeDetails);
+
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -40,8 +46,11 @@ export default function AddSalaryStructure() {
   const handleSave = () => {
     // Add logic to save the form data
     console.log('Form Data:', formData);
+    console.log('Emplyee id in add salary strurtre:',  EmployeeDetails.$id);
+    console.log('Emplyee whole in add salary strurtre:',  EmployeeDetails);
+
     salaryApi.createSalaryStrcture(
-      formData.EmployeeID,
+      EmployeeDetails.$id,
       formData.EmployeeName,
       formData.EmployeeType,
       formData.CompanyID,

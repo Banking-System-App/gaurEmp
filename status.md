@@ -4,4 +4,13 @@ issue to solve
 1. salary strurcture us employee ki add kro jo exist krta ho phle se aka
    employee name, id vagera insert krna option nhi dena hai salary structure wale form me.
 
-2. 
+
+=======Optimizations=======
+1. Remove getEmployer and getEmployeeDetail calls from Employer and EmployeeProfiles use respective context to get the details.
+
+
+=====bmt========
+1. Review code
+   1. API calls
+   2. put logs on calling
+   3. states

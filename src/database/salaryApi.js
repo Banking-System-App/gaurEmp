@@ -180,7 +180,21 @@ export const salaryApi = {
         }
     },
 
-
+    getSalaryStructuresByEmpId: async (empId) => {
+        console.log("getSalaryStructuresByEmpId API called");
+        try {
+            const promise = databases.listDocuments(
+                databaseID,
+                collectionIdSalaryStructure,
+                [Query.equal("emp_id", empId)]
+                // Query.equal("year", year)]
+            );
+            const response = await promise;
+            return response.documents;
+        } catch (error) {
+            console.log(error); // Failure
+        }
+    },
 
     //get the salary structure by emp_id
 

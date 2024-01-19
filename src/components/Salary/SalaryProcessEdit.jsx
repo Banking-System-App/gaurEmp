@@ -12,7 +12,7 @@ import {
   MDBTableBody,
 } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
-
+import { useEmployeeData } from '../../context/EmployeeContext';
 
 
 export default function SalaryProcessEdit() {
@@ -31,6 +31,10 @@ export default function SalaryProcessEdit() {
     esi: 0,
     incomeTax: 0,
   });
+
+  const {EmployeeDetails} = useEmployeeData()
+
+  console.log("Employee Data at Salary Proceess page ", EmployeeDetails);
 
   const navigate = useNavigate();
 

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useEmployeeData } from '../../context/EmployeeContext';
+import { useEmployerData } from '../../context/EmployerContext';
+import { salaryApi } from '../../database/salaryApi';
 
 import {
   MDBContainer,
@@ -12,15 +15,20 @@ import {
   MDBCardBody,
   MDBCardText,
 } from 'mdb-react-ui-kit';
-import { salaryApi } from '../../database/salaryApi';
+
 
 export default function EmpSalary() {
   const [selectedMonth, setSelectedMonth] = useState('February');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [salaryDetails, setSalaryDetails] = useState({ram:"jai"});
+  const [salaryDetails, setSalaryDetails] = useState({});
   const [viewSalaryClicked, setViewSalaryClicked] = useState(false);
   const [editDetailsClicked, setEditDetailsClicked] = useState(false);
   
+  const {EmployeeDetails} = useEmployeeData();
+  const {EmployerDetails} = useEmployerData();
+
+  console.log("Emp at salary structure is ", EmployeeDetails);
+  console.log("Employer at salary structure is ", EmployerDetails);
 
   const navigate = useNavigate();
 
@@ -36,10 +44,29 @@ export default function EmpSalary() {
 
   const [editableData, setEditableData] = useState({...fetchedSalaryDetails});
   const [isEditMode, setIsEditMode] = useState(false);
+
   useEffect(() => {
     const getSalaryStructure = async () => {
       try {
-        const response = await salaryApi.getSalaryStructure('213', selectedMonth, selectedYear).then((response) => {
+        const response = await salaryApi.getSalaryStructure(EmployeeDetails.emp_id, selectedMonth, selectedYear).then((response) => {
+          console.log('Response is  ', response);
+          if (typeof response !== 'undefined'){
+            setSalaryDetails(response);
+            setEditableData(response[0]);
+          }
+        });
+
+      } catch (error) {
+        console.error("Error in the file is  ", error);
+      }
+    }
+    getSalaryStructure();
+  }, []);
+
+  useEffect(() => {
+    const getSalaryStructure = async () => {
+      try {
+        const response = await salaryApi.getSalaryStructure(EmployeeDetails.emp_id, selectedMonth, selectedYear).then((response) => {
           console.log('Response is  ', response);
           if (typeof response !== 'undefined'){
             setSalaryDetails(response);

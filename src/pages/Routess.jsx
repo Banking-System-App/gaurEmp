@@ -41,10 +41,11 @@ const Routess = () => {
             <Route path="/addemployee" element={<EmployerProvider><AddEmployeeForm/></EmployerProvider>}/>
             <Route path="/viewemployees" element={<EmployerProvider><EmployeeProvider><EmployeesList/></EmployeeProvider></EmployerProvider>}/>
             <Route path="/employeeprofile" element={<EmployerProvider><EmployeeProvider><EmployeeProfile/></EmployeeProvider></EmployerProvider>}/>
-            <Route path="/salarystructure" element={<EmployeeProvider><EmpSalary/></EmployeeProvider>}/>
-            <Route path="/salaryprocess" element={<SalaryProcessEdit/>}/>
-            <Route path="/generateslippdf" element={<SalSheet/>}/>
+            <Route path="/salarystructure" element={<EmployerProvider><EmployeeProvider><EmpSalary/></EmployeeProvider></EmployerProvider>}/>
             <Route path="/addsalarystructure" element={<EmployerProvider><EmployeeProvider><AddSalaryStructure/></EmployeeProvider></EmployerProvider>}/>
+            <Route path="/salaryprocess" element={<EmployerProvider><EmployeeProvider><SalaryProcessEdit/></EmployeeProvider></EmployerProvider>}/>
+            <Route path="/generateslippdf" element={<SalSheet/>}/>
+            
 
             {/* <Route path="/profile" element={<Profile />}/>
             <Route path="/employees/:compName" element={<Addemp />} /> */}

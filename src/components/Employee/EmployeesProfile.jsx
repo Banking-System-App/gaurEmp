@@ -24,7 +24,7 @@ const navigate = useNavigate()
 
 const handleClick = () => {
   navigate('/salarystructure');
-  alert(' salarystructure button clicked');
+ // alert(' salarystructure button clicked');
 }
 
 const handleSalaryProcess = () => {

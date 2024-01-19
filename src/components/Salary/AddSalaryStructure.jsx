@@ -15,25 +15,23 @@ import { useEmployeeData } from '../../context/EmployeeContext';
 
 
 export default function AddSalaryStructure() {
-  const {EmployeeDetails} = useEmployeeData();
+  const { EmployeeDetails } = useEmployeeData();
   console.log("Employee Detail is : ", EmployeeDetails);
 
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
-   " Employee ID": '',
-    "Employee Name": '',
+  
     "Employee Type": '',
-    "Company ID":'',
-    "Basic Salary": '',
-    "DA":'',
-    "HRA":'',
-    "Convayance":'',
-    "Washing Allowance":'',
-    "Medical Allowance":'',
-    "Other Allowance":'',
-    "Year":'',
-    "Month":''
+    BasicSalary: '',
+    "DA": '',
+    "HRA": '',
+    "Convayance": '',
+    WashingAllowance: '',
+    MedicalAllowance: '',
+    OtherAllowance: '',
+    "Year": '',
+    "Month": ''
   });
 
   const handleInputChange = (label, value) => {
@@ -46,14 +44,14 @@ export default function AddSalaryStructure() {
   const handleSave = () => {
     // Add logic to save the form data
     console.log('Form Data:', formData);
-    console.log('Emplyee id in add salary strurtre:',  EmployeeDetails.$id);
-    console.log('Emplyee whole in add salary strurtre:',  EmployeeDetails);
+    console.log('Emplyee id in add salary strurtre:', EmployeeDetails.$id);
+    console.log('Emplyee whole in add salary strurtre:', EmployeeDetails);
 
     salaryApi.createSalaryStrcture(
       EmployeeDetails.$id,
-      formData.EmployeeName,
+      EmployeeDetails.emp_name,
       formData.EmployeeType,
-      formData.CompanyID,
+      EmployeeDetails.comp_id,
       formData.BasicSalary,
       formData.DA,
       formData.HRA,
@@ -64,7 +62,7 @@ export default function AddSalaryStructure() {
       formData.Year,
       formData.Month,
     )
-    alert(`Salary Structure for employee ID ${formData.EmployeeID} Added Successfully` )
+    alert(`Salary Structure for employee ID ${EmployeeDetails.name} Added Successfully`)
     navigate('/salarystructure');
     // You can make an API call to save the data or perform other actions
   };

@@ -181,7 +181,7 @@ export const salaryApi = {
     },
 
     getSalaryStructuresByEmpId: async (empId) => {
-        console.log("getSalaryStructuresByEmpId API called");
+        console.log("getSalaryStructuresByEmpId API called", empId);
         try {
             const promise = databases.listDocuments(
                 databaseID,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   MDBTable,
   MDBTableHead,
@@ -12,6 +12,12 @@ import {
   MDBCardText,
 } from 'mdb-react-ui-kit';
 
+import { salaryApi } from '../../database/salaryApi';
+import { useEmployerData } from '../../context/EmployerContext';
+import { useEmployeeData } from '../../context/EmployeeContext';
+import { salaryUtil } from '../../utils/SalaryUtil';
+
+
 function EmployeeSalaryStructure() {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
@@ -23,21 +29,45 @@ function EmployeeSalaryStructure() {
   const [washingAllowance, setWaDashingAllowance] = useState('');
   const [medicalAllowance, setMadicalAllowance] = useState('');
   const [otherAllowance, setOtherAllowance] = useState('');
-
+  const [salstruct, setSalstruct] = useState({}); //Hrituraj did this
   const [salaryStructures, setSalaryStructures] = useState([
     {
-      basic: '16500',
-      da: '120',
-      hra: '456',
-      convayance: '578',
-      washingAllowance: '34',
-      medicalAllowance: '98',
-      otherAllowance: '4563'
+      basic: '',
+      da: '',
+      hra: '',
+      convayance: '',
+      washingAllowance: '',
+      medicalAllowance: '',
+      otherAllowance: ''
     },
   ]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showMonthYear, setShowMonthYear] = useState(false);
 
+  const {EmployerDetails} = useEmployerData();
+  const {EmployeeDetails} = useEmployeeData();
+  //const [editableData,setEditableData]=useState({ ...employee[0]});
+  //console.log("Employer At Salary Structure is :", EmployerDetails);
+  //console.log("Employee at Salary Struct is", EmployeeDetails);
+
+  useEffect(() => {
+    const fetchEmployeeSalaryByEmpId = async () => {
+      try {
+        await salaryApi.getSalaryStructuresByEmpId(EmployeeDetails.emp_id).then((response) => {
+          console.log("lodaaa", response[0]);
+          setSalstruct((response));
+        })
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEmployeeSalaryByEmpId();
+  }, []);
+   
+
+  console.log("New obj = ", salstruct);
 
   const handleAddSalaryStructure = () => {
     setShowAddForm(true);
@@ -83,19 +113,19 @@ function EmployeeSalaryStructure() {
                       <th>Conveyance</th>
                       <th>Washing Allowance</th>
                       <th>Medical Allowance</th>
-                      <th>Other Allowance</th>
+                      <th>Other Allowance{salstruct.basic}</th>
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody>
-                    {salaryStructures.map((salaryStructure, index) => (
+                    {Object.entries(salaryUtil.updatedSalaryData(salstruct)).map((salaryStructure, index) => (
                       <tr key={index}>
                         <td>{salaryStructure.basic}</td>
                         <td>{salaryStructure.da}</td>
                         <td>{salaryStructure.hra}</td>
                         <td>{salaryStructure.convayance}</td>
-                        <td>{salaryStructure.washingAllowance}</td>
-                        <td>{salaryStructure.medicalAllowance}</td>
-                        <td>{salaryStructure.otherAllowance}</td>
+                        <td>{salaryStructure.washing_allowance}</td>
+                        <td>{salaryStructure.medical_allowance}</td>
+                        <td>{salaryStructure.other_allowance}</td>
                       </tr>
                     ))}
                   </MDBTableBody>

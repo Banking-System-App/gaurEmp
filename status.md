@@ -9,8 +9,15 @@ issue to solve
 1. Remove getEmployer and getEmployeeDetail calls from Employer and EmployeeProfiles use respective context to get the details.
 
 
+
+
+======Mirecals to understand==========
+1. Mr Hrituraj accessing EmployerContext to make working employeeContext.
+
+
 =====bmt========
 1. Review code
    1. API calls
    2. put logs on calling
    3. states
+

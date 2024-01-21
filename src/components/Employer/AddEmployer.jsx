@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { employerApi } from '../../database/employerApi';
 import { useAuth } from '../../utils/AuthContext';
 
+import { ToastContainer, toast} from 'react-toastify';
+
+
+
 const AddEmployerForm = () => {
   const { user } = useAuth();
 
@@ -9,16 +13,16 @@ const AddEmployerForm = () => {
     employerId: '',
     employerName: '',
     employerAddress: '',
-    pfMemberFlag: '',
+    pfMemberFlag: '0',
     pfCode: '',
     group: '',
     pfLimit: '',
-    esMemberFlag: '',
+    esMemberFlag: '0',
     esiCode: '',
     locationOffice: '',
-    lwfFlag: '',
+    lwfFlag: '0',
     lwfCode: '',
-    otPayableFlag: '',
+    otPayableFlag: '0',
     otRate: '',
     panNum: '',
     tanNum: '',
@@ -54,6 +58,10 @@ const AddEmployerForm = () => {
       employerInfo.tanNum,
       user.$id
     );
+    toast.success("Employeer Added !", {
+      "theme":"light",
+      "autoClose": 1000
+    });
     // You can add logic here to send the data to your backend or perform other actions
   };
 
@@ -107,14 +115,10 @@ const AddEmployerForm = () => {
             <label htmlFor="pfMemberFlag" className="form-label">
               PF MemberFlag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="pfMemberFlag"
-              name="pfMemberFlag"
-              value={employerInfo.pfMemberFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="pfMemberFlag" name="pfMemberFlag" value={employerInfo.pfMemberFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="pfCode" className="form-label">
@@ -127,6 +131,7 @@ const AddEmployerForm = () => {
               name="pfCode"
               value={employerInfo.pfCode}
               onChange={handleChange}
+              disabled= {employerInfo.pfMemberFlag!=="1"}
             />
           </div>
           <div className="col-md-4">
@@ -160,14 +165,10 @@ const AddEmployerForm = () => {
             <label htmlFor="esMemberFlag" className="form-label">
               ES Member Flag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="esMemberFlag"
-              name="esMemberFlag"
-              value={employerInfo.esMemberFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="esMemberFlag" name="esMemberFlag" value={employerInfo.esMemberFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="esiCode" className="form-label">
@@ -180,6 +181,7 @@ const AddEmployerForm = () => {
               name="esiCode"
               value={employerInfo.esiCode}
               onChange={handleChange}
+              disabled= {employerInfo.esMemberFlag!=="1"}
             />
           </div>
 
@@ -200,14 +202,10 @@ const AddEmployerForm = () => {
             <label htmlFor="lwfFlag" className="form-label">
               LWF Flag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="lwfFlag"
-              name="lwfFlag"
-              value={employerInfo.lwfFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="lwfFlag" name="lwfFlag" value={employerInfo.lwfFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="lwfCode" className="form-label">
@@ -220,6 +218,7 @@ const AddEmployerForm = () => {
               name="lwfCode"
               value={employerInfo.lwfCode}
               onChange={handleChange}
+              disabled= {employerInfo.lwfFlag!=="1"}
             />
           </div>
 
@@ -227,14 +226,10 @@ const AddEmployerForm = () => {
             <label htmlFor="otPayableFlag" className="form-label">
               OT Payable Flag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="otPayableFlag"
-              name="otPayableFlag"
-              value={employerInfo.otPayableFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="otPayableFlag" name="otPayableFlag" value={employerInfo.otPayableFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="otRate" className="form-label">
@@ -247,6 +242,7 @@ const AddEmployerForm = () => {
               name="otRate"
               value={employerInfo.otRate}
               onChange={handleChange}
+              disabled= {employerInfo.otPayableFlag!=="1"}
             />
           </div>
           <div className="col-md-4">
@@ -284,6 +280,7 @@ const AddEmployerForm = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </section>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { employeeApi } from '../../database/employeeApi';
 import { useNavigate } from 'react-router-dom';
 import { useEmployerData } from '../../context/EmployerContext';
+import { toast,ToastContainer } from 'react-toastify';
 
 export default function AddEmployeeForm() {
   const { EmployerDetails } = useEmployerData();
@@ -10,21 +11,21 @@ export default function AddEmployeeForm() {
   const [employeeInfo, setEmployeeInfo] = useState({
     empID: '',
     name: '',
-    gender: '',
+    gender: 'Male',
     dob: '',
-    maritalStatus: '',
+    maritalStatus: 'Married',
     location: '',
     designation: '',
     doj: '',
     pTax: '',
-    intlWFlag: '',
-    isPfFlag: '',
+    intlWFlag: '0',
+    isPfFlag: '0',
     pfNumber: '',
-    isPenFlag: '',
+    isPenFlag: '0',
     doMember: '',
-    isEsFlag: '',
+    isEsFlag: '0',
     esCode: '',
-    lwfFlag: '',
+    lwfFlag: '0',
     dol: '',
     reason: '',
     pf10: '',
@@ -94,7 +95,10 @@ export default function AddEmployeeForm() {
       EmployerDetails.name,
       EmployerDetails.employer_id
     );
-    alert('Employee Added Successfully');
+    toast.success("Employee Added !", {
+      "theme":"light",
+      "autoClose": 1000
+    });
     navigate('/employerprofile');
     // You can add logic here to send the data to your backend or perform other actions
   };
@@ -131,18 +135,14 @@ export default function AddEmployeeForm() {
               onChange={handleChange}
             />
           </div>
-          <div className="col-md-4">
-            <label htmlFor="gender" className="form-label">
+          <div className="col-md-4" >
+            <label htmlFor="gender" className="form-label" >
               Gender
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="gender"
-              name="gender"
-              value={employeeInfo.gender}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="gender" name="gender" value={employeeInfo.gender} onChange={handleChange} >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
           </div>
 
           <div className="col-md-4">
@@ -150,7 +150,7 @@ export default function AddEmployeeForm() {
               DOB
             </label>
             <input
-              type="text"
+              type="date"
               className="form-control"
               id="dob"
               name="dob"
@@ -162,14 +162,10 @@ export default function AddEmployeeForm() {
             <label htmlFor="maritalStatus" className="form-label">
               Marital Status
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="maritalStatus"
-              name="maritalStatus"
-              value={employeeInfo.maritalStatus}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="maritalStatus" name="maritalStatus" value={employeeInfo.maritalStatus} onChange={handleChange}>
+              <option value="Married">Married</option>
+              <option value="Unmarried">Unmarried</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="location" className="form-label">
@@ -203,7 +199,7 @@ export default function AddEmployeeForm() {
               DOJ
             </label>
             <input
-              type="text"
+              type="date"
               className="form-control"
               id="doj"
               name="doj"
@@ -229,30 +225,30 @@ export default function AddEmployeeForm() {
             <label htmlFor="intlWFlag" className="form-label">
               Intl W Flag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="intlWFlag"
-              name="intlWFlag"
-              value={employeeInfo.intlWFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="intlWFlag" name="intlWFlag" value={employeeInfo.intlWFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="isPfFlag" className="form-label">
               IS PF Flag
             </label>
-            <input
+            <select className="form-control" id="isPfFlag" name="isPfFlag" value={employeeInfo.isPfFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+            {/* <input
               type="text"
               className="form-control"
               id="isPfFlag"
-              name="isPfFlag"
+              
               value={employeeInfo.isPfFlag}
               onChange={handleChange}
-            />
+            /> */}
           </div>
           <div className="col-md-4">
-            <label htmlFor="pfNumber" className="form-label">
+            <label htmlFor="pfNumber" className="form-label" >
               PF Number
             </label>
             <input
@@ -262,6 +258,7 @@ export default function AddEmployeeForm() {
               name="pfNumber"
               value={employeeInfo.pfNumber}
               onChange={handleChange}
+              disabled= {employeeInfo.isPfFlag!=="1"}
             />
           </div>
 
@@ -269,14 +266,10 @@ export default function AddEmployeeForm() {
             <label htmlFor="isPenFlag" className="form-label">
               IS Pen Flag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="isPenFlag"
-              name="isPenFlag"
-              value={employeeInfo.isPenFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="isPenFlag" name="isPenFlag" value={employeeInfo.isPenFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="doMember" className="form-label">
@@ -295,14 +288,10 @@ export default function AddEmployeeForm() {
             <label htmlFor="isEsFlag" className="form-label">
               IS ES Flag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="isEsFlag"
-              name="isEsFlag"
-              value={employeeInfo.isEsFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="isEsFlag" name="isEsFlag" value={employeeInfo.isEsFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
 
           <div className="col-md-4">
@@ -316,27 +305,24 @@ export default function AddEmployeeForm() {
               name="esCode"
               value={employeeInfo.esCode}
               onChange={handleChange}
+              disabled= {employeeInfo.isEsFlag!=="1"}
             />
           </div>
           <div className="col-md-4">
             <label htmlFor="lwfFlag" className="form-label">
               LWF Flag
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="lwfFlag"
-              name="lwfFlag"
-              value={employeeInfo.lwfFlag}
-              onChange={handleChange}
-            />
+            <select className="form-control" id="lwfFlag" name="lwfFlag" value={employeeInfo.lwfFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
           <div className="col-md-4">
             <label htmlFor="dol" className="form-label">
               DOL
             </label>
             <input
-              type="text"
+              type="date"
               className="form-control"
               id="dol"
               name="dol"
@@ -579,6 +565,7 @@ export default function AddEmployeeForm() {
             </div>
           </form>
         </div>
+      <ToastContainer/>
       </section>
     );
   }

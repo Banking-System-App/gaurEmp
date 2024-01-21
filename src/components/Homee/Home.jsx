@@ -98,7 +98,7 @@ export default function Home() {
           <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={getCompany}>
             Get Company
           </MDBBtn>
-          <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={addCompany}>
+          <MDBBtn className='me-8 m-3' color='danger' size='lg' onClick={addCompany}>
             Add Comapny
           </MDBBtn>
           {/* <MDBBtn  className ="me-8 m-3"color='success' size='lg'>

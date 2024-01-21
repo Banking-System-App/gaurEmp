@@ -37,7 +37,7 @@ export default function EmployerList() {
   }, []);
 
   return (
-    <MDBTable align='middle' hover>
+    <MDBTable align='middle' className='table table-hover'>
       <MDBTableHead>
         <tr>
           <th scope='col'>Employer ID</th>
@@ -49,22 +49,9 @@ export default function EmployerList() {
       <MDBTableBody>
 
         {employers.map((emps, index) => (
-          <tr key={index} onClick={()=>handleEmpDetailClick(emps)}>
+          <tr key={index} onClick={() => handleEmpDetailClick(emps)} style={{ cursor: 'pointer' }}>
             <td>
-              <div className='d-flex align-items-center'>
-                <img
-                  src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                  alt=''
-                  style={{ width: '45px', height: '45px' }}
-                  className='rounded-circle'
-                />
-                <div className='ms-3'>
-                  <p className='fw-bold mb-1'>{emps.employer_id}</p>
-
-
-                  {/* <p className='text-muted mb-0'>{emps.Address}</p> */}
-                </div>
-              </div>
+              <p className='fw-bold mb-1'>{emps.employer_id}</p>
             </td>
             <td>
               <p className='fw-bold mb-1'>{emps.name}</p>
@@ -74,7 +61,6 @@ export default function EmployerList() {
             </td>
             <td>Senior</td>
             <td>
-
             </td>
           </tr>
         ))}

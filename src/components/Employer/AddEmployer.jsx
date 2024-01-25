@@ -3,11 +3,13 @@ import { employerApi } from '../../database/employerApi';
 import { useAuth } from '../../utils/AuthContext';
 
 import { ToastContainer, toast} from 'react-toastify';
+import { useNavigate } from 'react-router';
 
 
 
 const AddEmployerForm = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [employerInfo, setEmployerInfo] = useState({
     employerId: '',
@@ -37,6 +39,10 @@ const AddEmployerForm = () => {
     }));
   };
 
+  const handleCancel = () => {
+    navigate('/');
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await employerApi.createEmployer(
@@ -62,6 +68,8 @@ const AddEmployerForm = () => {
       "theme":"light",
       "autoClose": 1000
     });
+
+    navigate('/')
     // You can add logic here to send the data to your backend or perform other actions
   };
 
@@ -70,7 +78,7 @@ const AddEmployerForm = () => {
       <div className="container py-5">
         <h1 className="text-center mb-4">Add Employer</h1>
 
-        <form onSubmit={handleSubmit} className="row g-3">
+        <form  className="row g-3">
           <div className="col-md-4">
             <label htmlFor="employerId" className="form-label">
               Employer id
@@ -274,8 +282,11 @@ const AddEmployerForm = () => {
           </div>
 
           <div className="col-12">
-            <button type="submit" className="btn btn-success">
+            <button type="submit" className="btn btn-success" onClick={handleSubmit}>
               Submit
+            </button>
+            <button type="cancel" className="btn btn-danger" onClick = {handleCancel}>
+              Cancel
             </button>
           </div>
         </form>

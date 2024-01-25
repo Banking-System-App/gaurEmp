@@ -15,6 +15,7 @@ import {
 import { salaryApi } from '../../database/salaryApi';
 import { useEmployerData } from '../../context/EmployerContext';
 import { useEmployeeData } from '../../context/EmployeeContext';
+import { salaryUtil } from '../../utils/SalaryUtil';
 
 
 function EmployeeSalaryStructure() {
@@ -32,9 +33,14 @@ function EmployeeSalaryStructure() {
   const [salaryStructures, setSalaryStructures] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showMonthYear, setShowMonthYear] = useState(false);
+  
+  const [isEditMode,setIsEditMode]=useState(false);
+  const [editableData, setEditableData] = useState(...salaryStructures)
+  
 
   const {EmployerDetails} = useEmployerData();
   const {EmployeeDetails} = useEmployeeData();
+
 
 
   useEffect(() => {
@@ -43,7 +49,9 @@ function EmployeeSalaryStructure() {
         await salaryApi.getSalaryStructuresByEmpId(EmployeeDetails.emp_id).then((response) => {
           console.log("lodaaa", response[0]);
           setSalaryStructures((response));
+          setEditableData(salaryUtil.updatedSalaryData(response[0]))
         })
+
 
       } catch (error) {
         console.error(error);
@@ -52,7 +60,10 @@ function EmployeeSalaryStructure() {
 
     fetchEmployeeSalaryByEmpId();
   }, []);
-   
+
+
+  
+  console.log("EDITABLE data of Str = ", editableData);
 
   const handleAddSalaryStructure = async(event) => {
     // setShowAddForm(true);
@@ -77,7 +88,8 @@ function EmployeeSalaryStructure() {
     } catch (error) {
       console.error(error);
     }
-    
+    setShowAddForm(false);
+    setShowMonthYear(false);
 
   };
 
@@ -101,6 +113,25 @@ function EmployeeSalaryStructure() {
     // setSelectedYear('');
   };
 
+  const handleEditSalaryStructure = () => {
+    
+  }
+
+  
+
+  const handleSave = () => {
+    console.log("Sorted data is ", salaryUtil.sortedSalaryData(salaryStructures))
+    console.log("Edited data Structure is ", editableData)
+    salaryApi.updateSalaryStructure(salaryUtil.sortedSalaryData(salaryStructures)[0].$id, editableData)
+    setIsEditMode(false);
+  };
+
+  const handleEditClick = () => {
+    setIsEditMode(true);
+    console.log("button clickeed",isEditMode);
+ 
+  };
+
   return (
     <MDBContainer>
       <MDBRow>
@@ -122,24 +153,92 @@ function EmployeeSalaryStructure() {
                       <th>Washing Allowance</th>
                       <th>Medical Allowance</th>
                       <th>Other Allowance</th>
+                      <th>year</th>
+                      <th>month</th>
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody>
-                    {salaryStructures.map((salaryStructure, index) => (
-                      <tr key={index}>
-                        <td>{salaryStructure.basic}</td>
-                        <td>{salaryStructure.da}</td>
-                        <td>{salaryStructure.hra}</td>
-                        <td>{salaryStructure.convayance}</td>
-                        <td>{salaryStructure.washing_allowance}</td>
-                        <td>{salaryStructure.medical_allowance}</td>
-                        <td>{salaryStructure.other_allowance}</td>
-                      </tr>
-                    ))}
+                  {salaryUtil.sortedSalaryData(salaryStructures).map((salaryStructure, index) => (
+                    <tr key={index}>
+                      {isEditMode ? (
+                        <>
+                          <td>
+                            <input
+                              type="text"
+                              value={editableData.basic}
+                              onChange={(e) => setEditableData({ ...editableData, basic: e.target.value })}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={editableData.da}
+                              onChange={(e) => setEditableData({ ...editableData, da: e.target.value })}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={editableData.hra}
+                              onChange={(e) => setEditableData({ ...editableData, hra: e.target.value })}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={editableData.convayance}
+                              onChange={(e) => setEditableData({ ...editableData, convayance: e.target.value })}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={editableData.washing_allowance}
+                              onChange={(e) => setEditableData({ ...editableData, washing_allowance: e.target.value })}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={editableData.medical_allowance}
+                              onChange={(e) => setEditableData({ ...editableData, medical_allowance: e.target.value })}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={editableData.other_allowance}
+                              onChange={(e) => setEditableData({ ...editableData, other_allowance: e.target.value })}
+                            />
+                          </td>
+                          <td>
+                            <MDBBtn onClick={handleSave}>Save</MDBBtn>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td>{salaryStructure.basic}</td>
+                          <td>{salaryStructure.da}</td>
+                          <td>{salaryStructure.hra}</td>
+                          <td>{salaryStructure.convayance}</td>
+                          <td>{salaryStructure.washing_allowance}</td>
+                          <td>{salaryStructure.medical_allowance}</td>
+                          <td>{salaryStructure.other_allowance}</td>
+                          <td>{salaryStructure.year}</td>
+                          <td>{salaryStructure.month}</td>
+                          <td>
+                            <MDBBtn onClick={handleEditClick}>Edit</MDBBtn>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
                   </MDBTableBody>
+                 
                 </MDBTable>
                 <div className="col-md-4 offset-md-4 text-center ">
                   <div className="col-md-4 offset-md-4 mt-4 text-center">
+                 
                     <MDBBtn onClick={handleAddSalClick}>Add New Salary Structure</MDBBtn>
                   </div>
                 </div>

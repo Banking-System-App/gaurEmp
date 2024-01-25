@@ -149,7 +149,7 @@ export const salaryApi = {
     },
 
 
-    getSalaryStructure: async (empId,month,year) => {
+    getSalaryStructure: async (empId, month, year) => {
         console.log("getSalaryStructure API called");
         try {
             const promise = databases.listDocuments(
@@ -166,19 +166,7 @@ export const salaryApi = {
         }
     },
 
-    getAllEmployees: async () => {
-        try {
-            const promise = databases.listDocuments(
-                databaseID,
-                collectionIdProcessSalary,
-                ""
-            );
-            const response = await promise;
-            return response.documents;
-        } catch (error) {
-            console.log(error); // Failure
-        }
-    },
+
 
     getSalaryStructuresByEmpId: async (empId) => {
         console.log("getSalaryStructuresByEmpId API called", empId);
@@ -204,8 +192,8 @@ export const salaryApi = {
             const promise = databases.listDocuments(
                 databaseID,
                 collectionIdProcessSalary,
-                [Query.equal("emp_id, ", empId)& 
-                 Query.equal("company_id, ", companyId) ]
+                [Query.equal("emp_id, ", empId) &
+                    Query.equal("company_id, ", companyId)]
             );
             const response = await promise;
             if (response.error) {
@@ -219,7 +207,19 @@ export const salaryApi = {
         }
     },
 
-    
+    updateSalaryStructure: async (documentID, updatedData) => {
+        try {
+            await databases.updateDocument(
+                databaseID,
+                collectionIdSalaryStructure,
+                documentID,
+                updatedData
+            )
+        }
+        catch (error) {
+            console.error(error);
+        }
+    },
 
-    
+
 };

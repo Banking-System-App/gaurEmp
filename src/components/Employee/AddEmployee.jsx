@@ -54,6 +54,10 @@ export default function AddEmployeeForm() {
     }));
   };
 
+  const handleCancel = () => {
+    navigate('/employerprofile');
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await employeeApi.createEmployee(
@@ -108,7 +112,7 @@ export default function AddEmployeeForm() {
       <div className="container py-5">
         <h1 className="text-center mb-4">Add Employee</h1>
 
-        <form onSubmit={handleSubmit} className="row g-3">
+        <form className="row g-3">
           <div className="col-md-4">
             <label htmlFor="empID" className="form-label">
               Emp ID
@@ -559,8 +563,11 @@ export default function AddEmployeeForm() {
             </div>
   
             <div className="col-md-12 text-center">
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="btn btn-success" onClick={handleSubmit} >
                 Submit
+              </button>
+              <button type="cancel" className="btn btn-success" onClick={handleCancel} >
+                Cancel
               </button>
             </div>
           </form>

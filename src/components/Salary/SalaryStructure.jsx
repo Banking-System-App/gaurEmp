@@ -54,8 +54,31 @@ function EmployeeSalaryStructure() {
   }, []);
    
 
-  const handleAddSalaryStructure = () => {
-    setShowAddForm(true);
+  const handleAddSalaryStructure = async(event) => {
+    // setShowAddForm(true);
+    event.preventDefault();
+    
+    try {
+      await salaryApi.createSalaryStrcture(
+        EmployeeDetails.emp_id,
+        EmployeeDetails.emp_name,
+        employeeType,
+        EmployerDetails.employer_id,
+        basic,
+        da,
+        hra,
+        convayance,
+        washingAllowance,
+        medicalAllowance,
+        otherAllowance,
+        selectedYear,
+        selectedMonth
+        )
+    } catch (error) {
+      console.error(error);
+    }
+    
+
   };
 
   const handleSelectMonthYear = () => {
@@ -74,8 +97,8 @@ function EmployeeSalaryStructure() {
 
   const handleAddNewClick = () => {
     setShowAddForm(true);
-    setSelectedMonth('');
-    setSelectedYear('');
+    // setSelectedMonth('');
+    // setSelectedYear('');
   };
 
   return (
@@ -84,7 +107,7 @@ function EmployeeSalaryStructure() {
         <MDBCol>
           <MDBCard>
             <MDBCardBody>
-              <MDBCardText>
+              <MDBCardText/>
                 <MDBCol>
                   <h1 className="text-center mb-4">Employee Name: Abhishek Gaur</h1>
                   <h3 className="text-center mb-4">Employee Type: Lead</h3>
@@ -173,7 +196,7 @@ function EmployeeSalaryStructure() {
                     
                     <h4 className="text-center mb-4 mt-4">Add New Salary Structure</h4>
                     <h3>{selectedMonth} {selectedYear}</h3>
-                    <form className="row g-3">
+                    <form className="row g-3" >
                       <div className="col-md-3 mb-3">
                         <label htmlFor="employeeType" className="form-label">
                           Employee Type
@@ -272,7 +295,7 @@ function EmployeeSalaryStructure() {
                       </div>
                       <div className="row justify-content-center">
                         <div className="col-md-4 text-center">
-                          <MDBBtn className="col-md-10 mt-4" onClick={handleAddSalaryStructure}>
+                          <MDBBtn className="col-md-10 mt-4" type='submit' onClick={handleAddSalaryStructure}>
                             Submit
                           </MDBBtn>
                         </div>
@@ -289,7 +312,7 @@ function EmployeeSalaryStructure() {
                 ) : (
                   <></>
                 )}
-              </MDBCardText>
+             
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

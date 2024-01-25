@@ -21,3 +21,9 @@ issue to solve
    2. put logs on calling
    3. states
 
+25Jan=========
+2. add salary and edit salary structure API calls on salary sturucture page
+3. form closures, cancle buttons
+4. what to display on profile pages
+5. discuss Bhavishy
+6. 

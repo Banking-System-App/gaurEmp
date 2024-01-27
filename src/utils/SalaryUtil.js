@@ -65,7 +65,7 @@ export const salaryUtil = {
         });
     
         // Return the sorted array
-        return array.slice(0,3);
+        return array.slice(0,1);
     },
 
 }

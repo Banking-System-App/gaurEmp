@@ -42,22 +42,21 @@ function EmployeeSalaryStructure() {
   const {EmployeeDetails} = useEmployeeData();
 
 
+  const fetchEmployeeSalaryByEmpId = async () => {
+    try {
+      await salaryApi.getSalaryStructuresByEmpId(EmployeeDetails.emp_id).then((response) => {
+        console.log("", response[0]);
+        setSalaryStructures((response));
+        setEditableData(salaryUtil.updatedSalaryData(salaryUtil.sortedSalaryData(response)[0]))
+      })
+
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchEmployeeSalaryByEmpId = async () => {
-      try {
-        await salaryApi.getSalaryStructuresByEmpId(EmployeeDetails.emp_id).then((response) => {
-          console.log("lodaaa", response[0]);
-          setSalaryStructures((response));
-          setEditableData(salaryUtil.updatedSalaryData(response[0]))
-        })
-
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchEmployeeSalaryByEmpId();
   }, []);
 
@@ -84,7 +83,9 @@ function EmployeeSalaryStructure() {
         otherAllowance,
         selectedYear,
         selectedMonth
-        )
+        ).then((res)=>{
+          fetchEmployeeSalaryByEmpId();
+        })
     } catch (error) {
       console.error(error);
     }
@@ -109,8 +110,7 @@ function EmployeeSalaryStructure() {
 
   const handleAddNewClick = () => {
     setShowAddForm(true);
-    // setSelectedMonth('');
-    // setSelectedYear('');
+    setShowMonthYear(false);
   };
 
   const handleEditSalaryStructure = () => {
@@ -119,10 +119,16 @@ function EmployeeSalaryStructure() {
 
   
 
-  const handleSave = () => {
+  const handleSave = async() => {
     console.log("Sorted data is ", salaryUtil.sortedSalaryData(salaryStructures))
     console.log("Edited data Structure is ", editableData)
-    salaryApi.updateSalaryStructure(salaryUtil.sortedSalaryData(salaryStructures)[0].$id, editableData)
+    try {
+      await salaryApi.updateSalaryStructure(salaryUtil.sortedSalaryData(salaryStructures)[0].$id, editableData).then((res)=>{
+        fetchEmployeeSalaryByEmpId();
+      })
+    } catch (error) {
+      console.log(error);
+    }
     setIsEditMode(false);
   };
 
@@ -140,8 +146,8 @@ function EmployeeSalaryStructure() {
             <MDBCardBody>
               <MDBCardText/>
                 <MDBCol>
-                  <h1 className="text-center mb-4">Employee Name: Abhishek Gaur</h1>
-                  <h3 className="text-center mb-4">Employee Type: Lead</h3>
+                  <h1 className="text-center mb-4">Employee Name: {EmployeeDetails.emp_name}</h1>
+                  <h3 className="text-center mb-4">Employee Type: </h3>
                 </MDBCol>
                 <MDBTable>
                   <MDBTableHead>
@@ -238,8 +244,7 @@ function EmployeeSalaryStructure() {
                 </MDBTable>
                 <div className="col-md-4 offset-md-4 text-center ">
                   <div className="col-md-4 offset-md-4 mt-4 text-center">
-                 
-                    <MDBBtn onClick={handleAddSalClick}>Add New Salary Structure</MDBBtn>
+                  { (showAddForm || showMonthYear)? <></>: <MDBBtn onClick={handleAddSalClick} >Add New Salary Structure</MDBBtn>}
                   </div>
                 </div>
                 {showMonthYear ? (
@@ -284,7 +289,9 @@ function EmployeeSalaryStructure() {
                       <option value="2035">2035</option>
                       {/* Add other years */}
                     </select>
-                    <MDBBtn className="col-md-4 offset-md-4 mt-4 text-center" onClick={handleAddNewClick}>Next</MDBBtn>
+                    <div className="col-md-4 offset-md-4 mt-4 text-center">
+                    <MDBBtn onClick={handleAddNewClick}>Next</MDBBtn>
+                  </div>
                   </div>
                 ) : (
                   <></>

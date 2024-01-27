@@ -1,68 +1,71 @@
 export const salaryUtil = {
 
 
-updatedData(obj){
+    updatedSalaryData(obj) {
 
-    var {
-        employer_id,
-        employer_address,
-        pf_code,
-        pf_limit,
-        esi_code,
-        name,
-        lwf_flag,
-        pf_member,
-        ot_payable_flag,
-        group,
-        pan_numer,
-        es_member_flag,
-        location_office,
-        lwf_code,
-        ot_rate,
-        tan_no,
-        agent_id,
-    } = obj;
+        var {
+            emp_id,
+            emp_name,
+            emp_type,
+            company_id,
+            basic,
+            da,
+            hra,
+            conveyance,
+            washing_allowance,
+            medical_allowance,
+            other_allowance,
+            year,
+            month
+        } = obj;
 
-    var newobj = {
-        employer_id,
-        employer_address,
-        pf_code,
-        pf_limit,
-        esi_code,
-        name,
-        lwf_flag,
-        pf_member,
-        ot_payable_flag,
-        group,
-        pan_numer,
-        es_member_flag,
-        location_office,
-        lwf_code,
-        ot_rate,
-        tan_no,
-        agent_id,
-    }
+        var newobj = {
+            emp_id,
+            emp_name,
+            emp_type,
+            company_id,
+            basic,
+            da,
+            hra,
+            conveyance,
+            washing_allowance,
+            medical_allowance,
+            other_allowance,
+            year,
+            month
+        }
 
-    return newobj;
-},
+        return newobj;
+    },
 
- changelabel : {
-    employer_id: "Employer Id",
-        employer_address: "Employer Address",
-        pf_code: "pfCode",
-        pf_limit: "PF Limit",
-        esi_code: "esiCode",
-        name: "Employer Name",
-        lwf_flag: "lwfFlag",
-        pf_member: "pfMemberFlag",
-        ot_payable_flag: "otPayableFlag",
-        group: "group",
-        pan_numer: "Pan Number",
-        es_member_flag: "esMemberFlag",
-        location_office: "Office location",
-        lwf_code: "lwfCode",
-        ot_rate: "otRate",
-        tan_no: "Tan Number",
-        agent_id: "agentId",
-},
+    sortedSalaryData(array) {
+        // Sort the array based on the year and month
+        array.sort((a, b) => {
+            // Compare years first
+            if (b.year !== a.year) {
+                return b.year - a.year; // Sort by year in descending order
+            } else {
+                // If years are the same, compare months
+                const monthsOrder = {
+                    "January": 1,
+                    "February": 2,
+                    "March": 3,
+                    "April": 4,
+                    "May": 5,
+                    "June": 6,
+                    "July": 7,
+                    "August": 8,
+                    "September": 9,
+                    "October": 10,
+                    "November": 11,
+                    "December": 12
+                };
+                return monthsOrder[b.month] - monthsOrder[a.month]; // Sort by month in ascending order
+            }
+        });
+    
+        // Return the sorted array
+        return array.slice(0,1);
+    },
+
 }

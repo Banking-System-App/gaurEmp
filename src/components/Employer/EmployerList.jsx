@@ -1,92 +1,71 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
 import { employerApi } from '../../database/employerApi';
+import { useAuth } from '../../utils/AuthContext';
+import { useEmployerData } from '../../context/EmployerContext';
 
 export default function EmployerList() {
-    const data=[
-        {
-        "Company":"Abhi ka Dhaba",
-        "Address":"Mumbai",
-        "PAN":"ABH1234",
-        "EMPCount":"50"
-        }
-       
-    ]
-    const navigate = useNavigate();
+  const { user } = useAuth();
 
-    const handleClick1 = () => {
-      navigate('/employerprofile');
-    }
+  const { setEmployerDataValue } = useEmployerData();
+  const navigate = useNavigate();
 
-    const [employers, setEmployers] = useState([]);
-    //**********************@@@@####
-    //ye do bar chal rha hai
-    //**********************@@@@####
-    useEffect(() => {
-      const fetchEmployerByAgentId = async () => {
-        try {
-          const compEmployees = await employerApi.getAllEmployerByUserId('Loacl').then((response) => {
-            console.log("lod",response)
-                    setEmployers(response);
-                })
-          
-        } catch (error) {
-          console.error(error);
-        }
-      };
-  
-      fetchEmployerByAgentId();
-    }, []);
+  const handleEmpDetailClick = (employerData) => {
+    console.log("emps data is, ", employerData);
+    setEmployerDataValue(employerData);
+    navigate('/employerprofile');
+  };
+  const [employers, setEmployers] = useState([]);
+  //**********************@@@@####
+  //ye do bar chal rha hai
+  //**********************@@@@####
+  useEffect(() => {
+    const fetchEmployerByAgentId = async () => {
+      try {
+        const compEmployees = await employerApi.getAllEmployerByUserId(user.$id).then((response) => {
+          console.log("lod", response)
+          setEmployers(response);
+        })
 
-    console.log("loduuuuuu = ", employers);
-    
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEmployerByAgentId();
+  }, []);
+
   return (
-    <MDBTable align='middle' hover>
-  <MDBTableHead>
-    <tr>
-      <th scope='col'>Employer ID</th>
-      <th scope='col'>Address</th>
-      <th scope='col'>PAN</th>
-      <th scope='col'>EMPCount</th>
-    </tr>
-  </MDBTableHead>
-  <MDBTableBody>
-     
-    {employers.map((emps, index) => (
-      <tr key={index} onClick={handleClick1}>
-        <td>
-          <div className='d-flex align-items-center'>
-            <img
-              src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-              alt=''
-              style={{ width: '45px', height: '45px' }}
-              className='rounded-circle'
-            />
-            <div className='ms-3'>
+    <MDBTable align='middle' className='table table-hover'>
+      <MDBTableHead>
+        <tr>
+          <th scope='col'>Employer ID</th>
+          <th scope='col'>Name</th>
+          <th scope='col'>Address</th>
+          <th scope='col'>EMPCount</th>
+        </tr>
+      </MDBTableHead>
+      <MDBTableBody>
+
+        {employers.map((emps, index) => (
+          <tr key={index} onClick={() => handleEmpDetailClick(emps)} style={{ cursor: 'pointer' }}>
+            <td>
               <p className='fw-bold mb-1'>{emps.employer_id}</p>
-              <p className='text-muted mb-0'>{emps.Address}</p>
-            </div>
-          </div>
-        </td>
-        <td>
-          {/* Include your content for the second column here */}
-        </td>
-        <td>
-          <MDBBadge color='success' pill>
-            Active
-          </MDBBadge>
-        </td>
-        <td>Senior</td>
-        <td>
-          <MDBBtn color='link' rounded size='sm'>
-            Edit
-          </MDBBtn>
-        </td>
-      </tr>
-    ))}
-  </MDBTableBody>
-</MDBTable>
+            </td>
+            <td>
+              <p className='fw-bold mb-1'>{emps.name}</p>
+            </td>
+            <td>
+              <p className='fw-bold mb-1'>{emps.employer_address}</p>
+            </td>
+            <td>Senior</td>
+            <td>
+            </td>
+          </tr>
+        ))}
+      </MDBTableBody>
+    </MDBTable>
 
   );
 }

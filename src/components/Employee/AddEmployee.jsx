@@ -1,36 +1,31 @@
 import React, { useState } from 'react';
 import { employeeApi } from '../../database/employeeApi';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBBtn,
-  MDBInput,
-} from 'mdb-react-ui-kit';
+import { useEmployerData } from '../../context/EmployerContext';
+import { toast,ToastContainer } from 'react-toastify';
 
 export default function AddEmployeeForm() {
+  const { EmployerDetails } = useEmployerData();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
   const [employeeInfo, setEmployeeInfo] = useState({
     empID: '',
     name: '',
-    gender: '',
+    gender: 'Male',
     dob: '',
-    maritalStatus: '',
+    maritalStatus: 'Married',
     location: '',
     designation: '',
     doj: '',
     pTax: '',
-    intlWFlag: '',
-    isPfFlag: '',
+    intlWFlag: '0',
+    isPfFlag: '0',
     pfNumber: '',
-    isPenFlag: '',
+    isPenFlag: '0',
     doMember: '',
-    isEsFlag: '',
+    isEsFlag: '0',
     esCode: '',
-    lwfFlag: '',
+    lwfFlag: '0',
     dol: '',
     reason: '',
     pf10: '',
@@ -47,6 +42,8 @@ export default function AddEmployeeForm() {
     localAddress: '',
     sosContact: '',
     permanentAddress: '',
+    compName: '',
+    compId: ''
   });
 
   const handleChange = (e) => {
@@ -56,6 +53,10 @@ export default function AddEmployeeForm() {
       [name]: value,
     }));
   };
+
+  const handleCancel = () => {
+    navigate('/employerprofile');
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,22 +69,22 @@ export default function AddEmployeeForm() {
       employeeInfo.location,
       employeeInfo.designation,
       employeeInfo.doj,
-      employeeInfo.professionalTax,
+      employeeInfo.pTax,
       employeeInfo.intlWFlag,
       employeeInfo.isPfFlag,
-      employeeInfo.pfNum,
+      employeeInfo.pfNumber,
       employeeInfo.isPenFlag,
       employeeInfo.doMember,
       employeeInfo.isEsFlag,
       employeeInfo.esCode,
       employeeInfo.lwfFlag,
-      employeeInfo.dateOfLeave,
+      employeeInfo.dol,
       employeeInfo.reason,
       employeeInfo.pf10,
-      employeeInfo.uanNum,
+      employeeInfo.uanNumber,
       employeeInfo.aadharNumber,
-      employeeInfo.panNum,
-      employeeInfo.mobileNumber,
+      employeeInfo.pan,
+      employeeInfo.mobileNo,
       employeeInfo.payment,
       employeeInfo.bank,
       employeeInfo.account,
@@ -94,364 +95,485 @@ export default function AddEmployeeForm() {
       employeeInfo.sosContact,
       employeeInfo.permanentAddress,
       employeeInfo.compName,
-      employeeInfo.compId
-    )
-    alert("Employee Added Sucessfuly")
-    navigate("/employerprofile")
+      employeeInfo.compId,
+      EmployerDetails.name,
+      EmployerDetails.employer_id
+    );
+    toast.success("Employee Added !", {
+      "theme":"light",
+      "autoClose": 1000
+    });
+    navigate('/employerprofile');
     // You can add logic here to send the data to your backend or perform other actions
   };
+
   return (
     <section style={{ backgroundColor: '#eee' }}>
-      <MDBContainer className="py-5">
-        <MDBRow>
-          <MDBCol>
-            <h1 className="text-center mb-4">Add Employee</h1>
-          </MDBCol>
-        </MDBRow>
+      <div className="container py-5">
+        <h1 className="text-center mb-4">Add Employee</h1>
 
-        <form onSubmit={handleSubmit}>
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Emp ID"
-                type="text"
-                name="empID"
-                value={employeeInfo.empID}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Name"
-                type="text"
-                name="name"
-                value={employeeInfo.name}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Gender"
-                type="text"
-                name="gender"
-                value={employeeInfo.gender}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+        <form className="row g-3">
+          <div className="col-md-4">
+            <label htmlFor="empID" className="form-label">
+              Emp ID
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="empID"
+              name="empID"
+              value={employeeInfo.empID}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="name" className="form-label">
+              Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              value={employeeInfo.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4" >
+            <label htmlFor="gender" className="form-label" >
+              Gender
+            </label>
+            <select className="form-control" id="gender" name="gender" value={employeeInfo.gender} onChange={handleChange} >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="DOB"
-                type="text"
-                name="dob"
-                value={employeeInfo.dob}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="M Status"
-                type="text"
-                name="maritalStatus"
-                value={employeeInfo.maritalStatus}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Location"
-                type="text"
-                name="location"
-                value={employeeInfo.location}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="dob" className="form-label">
+              DOB
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              id="dob"
+              name="dob"
+              value={employeeInfo.dob}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="maritalStatus" className="form-label">
+              Marital Status
+            </label>
+            <select className="form-control" id="maritalStatus" name="maritalStatus" value={employeeInfo.maritalStatus} onChange={handleChange}>
+              <option value="Married">Married</option>
+              <option value="Unmarried">Unmarried</option>
+            </select>
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="location" className="form-label">
+              Location
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="location"
+              name="location"
+              value={employeeInfo.location}
+              onChange={handleChange}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Designation"
-                type="text"
-                name="designation"
-                value={employeeInfo.designation}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="DOJ"
-                type="text"
-                name="doj"
-                value={employeeInfo.doj}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="P Tax"
-                type="text"
-                name="pTax"
-                value={employeeInfo.pTax}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="designation" className="form-label">
+              Designation
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="designation"
+              name="designation"
+              value={employeeInfo.designation}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="doj" className="form-label">
+              DOJ
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              id="doj"
+              name="doj"
+              value={employeeInfo.doj}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="pTax" className="form-label">
+              P Tax
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="pTax"
+              name="pTax"
+              value={employeeInfo.pTax}
+              onChange={handleChange}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Intl W Flag"
-                type="text"
-                name="intlWFlag"
-                value={employeeInfo.intlWFlag}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="IS PF Flag"
-                type="text"
-                name="isPfFlag"
-                value={employeeInfo.isPfFlag}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="PF Number"
-                type="text"
-                name="pfNumber"
-                value={employeeInfo.pfNumber}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="intlWFlag" className="form-label">
+              Intl W Flag
+            </label>
+            <select className="form-control" id="intlWFlag" name="intlWFlag" value={employeeInfo.intlWFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="isPfFlag" className="form-label">
+              IS PF Flag
+            </label>
+            <select className="form-control" id="isPfFlag" name="isPfFlag" value={employeeInfo.isPfFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+            {/* <input
+              type="text"
+              className="form-control"
+              id="isPfFlag"
+              
+              value={employeeInfo.isPfFlag}
+              onChange={handleChange}
+            /> */}
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="pfNumber" className="form-label" >
+              PF Number
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="pfNumber"
+              name="pfNumber"
+              value={employeeInfo.pfNumber}
+              onChange={handleChange}
+              disabled= {employeeInfo.isPfFlag!=="1"}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="IS Pen Flag"
-                type="text"
-                name="isPenFlag"
-                value={employeeInfo.isPenFlag}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="DO Member"
-                type="text"
-                name="doMember"
-                value={employeeInfo.doMember}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="IS ES Flag"
-                type="text"
-                name="isEsFlag"
-                value={employeeInfo.isEsFlag}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="isPenFlag" className="form-label">
+              IS Pen Flag
+            </label>
+            <select className="form-control" id="isPenFlag" name="isPenFlag" value={employeeInfo.isPenFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="doMember" className="form-label">
+              DO Member
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="doMember"
+              name="doMember"
+              value={employeeInfo.doMember}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="isEsFlag" className="form-label">
+              IS ES Flag
+            </label>
+            <select className="form-control" id="isEsFlag" name="isEsFlag" value={employeeInfo.isEsFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="ES Code"
-                type="text"
-                name="esCode"
-                value={employeeInfo.esCode}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="LWF Flag"
-                type="text"
-                name="lwfFlag"
-                value={employeeInfo.lwfFlag}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="DOL"
-                type="text"
-                name="dol"
-                value={employeeInfo.dol}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="esCode" className="form-label">
+              ES Code
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="esCode"
+              name="esCode"
+              value={employeeInfo.esCode}
+              onChange={handleChange}
+              disabled= {employeeInfo.isEsFlag!=="1"}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="lwfFlag" className="form-label">
+              LWF Flag
+            </label>
+            <select className="form-control" id="lwfFlag" name="lwfFlag" value={employeeInfo.lwfFlag} onChange={handleChange}>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="dol" className="form-label">
+              DOL
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              id="dol"
+              name="dol"
+              value={employeeInfo.dol}
+              onChange={handleChange}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Reason"
-                type="text"
-                name="reason"
-                value={employeeInfo.reason}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="PF 10"
-                type="text"
-                name="pf10"
-                value={employeeInfo.pf10}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="UAN Number"
-                type="text"
-                name="uanNumber"
-                value={employeeInfo.uanNumber}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="reason" className="form-label">
+              Reason
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="reason"
+              name="reason"
+              value={employeeInfo.reason}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="pf10" className="form-label">
+              PF 10
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="pf10"
+              name="pf10"
+              value={employeeInfo.pf10}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="uanNumber" className="form-label">
+              UAN Number
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="uanNumber"
+              name="uanNumber"
+              value={employeeInfo.uanNumber}
+              onChange={handleChange}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Aadhar Number"
-                type="text"
-                name="aadharNumber"
-                value={employeeInfo.aadharNumber}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="PAN"
-                type="text"
-                name="pan"
-                value={employeeInfo.pan}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Mobile No"
-                type="text"
-                name="mobileNo"
-                value={employeeInfo.mobileNo}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="aadharNumber" className="form-label">
+              Aadhar Number
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="aadharNumber"
+              name="aadharNumber"
+              value={employeeInfo.aadharNumber}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="pan" className="form-label">
+              PAN
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="pan"
+              name="pan"
+              value={employeeInfo.pan}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="mobileNo" className="form-label">
+              Mobile No
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="mobileNo"
+              name="mobileNo"
+              value={employeeInfo.mobileNo}
+              onChange={handleChange}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Payment"
-                type="text"
-                name="payment"
-                value={employeeInfo.payment}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Bank"
-                type="text"
-                name="bank"
-                value={employeeInfo.bank}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Account"
-                type="text"
-                name="account"
-                value={employeeInfo.account}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="payment" className="form-label">
+              Payment
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="payment"
+              name="payment"
+              value={employeeInfo.payment}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="bank" className="form-label">
+              Bank
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="bank"
+              name="bank"
+              value={employeeInfo.bank}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="account" className="form-label">
+              Account
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="account"
+              name="account"
+              value={employeeInfo.account}
+              onChange={handleChange}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Father Name"
-                type="text"
-                name="fatherName"
-                value={employeeInfo.fatherName}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Husband Name"
-                type="text"
-                name="husbandName"
-                value={employeeInfo.husbandName}
-                onChange={handleChange}
-              />
-            </MDBCol>
-            <MDBCol md="4">
-              <MDBInput
-                label="Mother Maiden Name"
-                type="text"
-                name="motherMaidenName"
-                value={employeeInfo.motherMaidenName}
-                onChange={handleChange}
-              />
-            </MDBCol>
-          </MDBRow>
+          <div className="col-md-4">
+            <label htmlFor="fatherName" className="form-label">
+              Father Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="fatherName"
+              name="fatherName"
+              value={employeeInfo.fatherName}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="husbandName" className="form-label">
+              Husband Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="husbandName"
+              name="husbandName"
+              value={employeeInfo.husbandName}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="motherMaidenName" className="form-label">
+              Mother Maiden Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="motherMaidenName"
+              name="motherMaidenName"
+              value={employeeInfo.motherMaidenName}
+              onChange={handleChange}
+            />
+          </div>
 
-          <MDBRow className="mb-4">
-            <MDBCol md="4">
-              <MDBInput
-                label="Local Address"
-                type="text"
-                name="localAddress"
-                value={employeeInfo.localAddress}
-
-                onChange={handleChange}
+          <div className="col-md-4">
+            <label htmlFor="localAddress" className="form-label">
+              Local Address
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="localAddress"
+              name="localAddress"
+              value={employeeInfo.localAddress}
+              onChange={handleChange}
               />
-            </MDBCol>
-          </MDBRow>
-          <MDBRow className="mb-4">
-            <MDBCol md="6">
-              <MDBInput
-                label="SOS Contact"
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="sosContact" className="form-label">
+                SOS Contact
+              </label>
+              <input
                 type="text"
+                className="form-control"
+                id="sosContact"
                 name="sosContact"
                 value={employeeInfo.sosContact}
                 onChange={handleChange}
               />
-            </MDBCol>
-            <MDBCol md="6">
-              <MDBInput
-                label="Permanent Address"
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="permanentAddress" className="form-label">
+                Permanent Address
+              </label>
+              <input
                 type="text"
+                className="form-control"
+                id="permanentAddress"
                 name="permanentAddress"
                 value={employeeInfo.permanentAddress}
                 onChange={handleChange}
               />
-            </MDBCol>
-          </MDBRow>
-
-          <MDBRow className="mb-4">
-            <MDBCol>
-              <MDBBtn type="submit" color="success">
+            </div>
+  
+            <div className="col-md-4">
+              <label htmlFor="compName" className="form-label">
+                Company Name
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="compName"
+                name="compName"
+                value={employeeInfo.compName}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-4">
+              <label htmlFor="compId" className="form-label">
+                Company ID
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="compId"
+                name="compId"
+                value={employeeInfo.compId}
+                onChange={handleChange}
+              />
+            </div>
+  
+            <div className="col-md-12 text-center">
+              <button type="submit" className="btn btn-success" onClick={handleSubmit} >
                 Submit
-              </MDBBtn>
-            </MDBCol>
-          </MDBRow>
-        </form>
-      </MDBContainer>
-    </section>
-  );
-}
+              </button>
+              <button type="cancel" className="btn btn-success" onClick={handleCancel} >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      <ToastContainer/>
+      </section>
+    );
+  }
+  

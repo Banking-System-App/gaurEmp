@@ -11,34 +11,52 @@ import {
   MDBBreadcrumb,
   MDBBreadcrumbItem,
 } from 'mdb-react-ui-kit';  
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { employeeApi } from '../../database/employeeApi';
+import { EmployeeUtil } from '../../utils/EmployeeUtil';
+import { useEmployeeData } from '../../context/EmployeeContext';
 
 export default function EmployeeProfile() {
+const {EmployeeDetails} = useEmployeeData();
+console.log("Employee Detail is : ", EmployeeDetails);
 const navigate = useNavigate()
 
 const handleClick = () => {
   navigate('/salarystructure');
-  alert('button loda');
+ // alert(' salarystructure button clicked');
 }
 
 const handleSalaryProcess = () => {
   navigate('/salaryprocess');
-  alert('button ch*t');
+  alert('salaryprocess button clicked');
 }
 
 //call api call and set into intial data
 
-  const intialData= {
-    "EmpID":"1",
-    "EmpName":"Sunny",
-    "EmployeEmail":"sunny@gmail.com",
-    "Aadhar":"6969696"
+  const [employee, setEmployee] = useState([]);
 
-    // ... (other data fields)
-  };
-  const [editableData,setEditableData]=useState({ ...intialData});
+  const [editableData,setEditableData]=useState({ ...employee[0]});
   const [isEditMode,setIsEditMode]=useState(false);
+
+
+  
+
+  useEffect(() => {
+    const getEmployeeDetail = async () => {
+      try {
+        await employeeApi.getEmployeeDetail(EmployeeDetails.comp_id,EmployeeDetails.emp_id).then((response)=>{
+       //   console.log('Employee Profile is ', response);
+          setEmployee(response);
+          setEditableData(response[0])
+        });
+        
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getEmployeeDetail();
+  }, []);
 
 
   const handleInputChange = (label, value) => {
@@ -48,8 +66,10 @@ const handleSalaryProcess = () => {
     }));
   };
   const handleSave = () => {
+    
     // Implement logic to save the edited data (e.g., send to backend)
-    console.log('Edited Data:', editableData);
+    //console.log('Edited Data on save:', editableData);
+    employeeApi.updateEmployeeData(editableData.$id,EmployeeUtil.updatedData(editableData))
     setIsEditMode(false);
   };
 
@@ -59,9 +79,18 @@ const handleSalaryProcess = () => {
  
   };
   const handleCancelEdit = () => {
-    setEditableData({ ...intialData });
+    setEditableData({ ...employee[0] });
     setIsEditMode(false);
   };
+
+
+
+
+  //console.log('Edited Data latest:', editableData);
+
+  //console.log('Employee data latest:', employee[0]);
+
+
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
@@ -117,11 +146,13 @@ const handleSalaryProcess = () => {
       ))}
     </MDBCardBody> */}
     <MDBCardBody>
-      {Object.entries(editableData).map(([label,value],index) =>(
+      {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label,value],index) =>(
+    
+
         <div key ={index}>
           <MDBRow>
             <MDBCol sm="3">
-              <MDBCardText>{label}</MDBCardText>
+              <MDBCardText>{EmployeeUtil.changelabel[label]}</MDBCardText>
               </MDBCol>
               <MDBCol sm="9">
                 {isEditMode ? (
@@ -131,15 +162,15 @@ const handleSalaryProcess = () => {
                   value={value}
                   onChange={(e)=>handleInputChange(label,e.target.value)}
                   />
-                ):(
+                ):
                   <MDBCardText className='=text-muted'>{value}</MDBCardText>
-                )
               }
               </MDBCol>
             
             </MDBRow>
           <hr/>
         </div>
+    
 
       ))}
         {isEditMode && (
@@ -169,7 +200,7 @@ const handleSalaryProcess = () => {
         <div className="d-flex justify-content-center mb-3">
   
   <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={handleClick}>
-    Salary Structure
+    View Salary Structure
   </MDBBtn>
   <MDBBtn  className ="me-8 m-3"color='success' onClick={handleEditClick} size='lg'>
     Edit Details

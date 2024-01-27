@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../utils/AuthContext';
 
 import {
   MDBCol,
@@ -15,33 +16,36 @@ import {
 
 export default function Home() {
 
+  const {user} = useAuth()
+  console.log("User At home is ", user);
+
   const navigate = useNavigate()
+  
   const addCompany = () => {
-      alert("Button Clicked");
-      navigate('/addemployer');
+    navigate('/addemployer');
   }
 
   const getCompany = () => {
-    alert("Button Clicked");
+
     navigate('/getcompany');
-}
+  }
 
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
-     
-      <MDBRow>
-  <MDBCol>
-    <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
-      {/* <MDBBtn className="ms-auto m-3" color='success' size='lg'>
+
+        {/* <MDBRow>
+          <MDBCol>
+            <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
+              <MDBBtn className="ms-auto m-3" color='success' size='lg'>
        Salary Process Edit 
-      </MDBBtn> */}
-      <MDBBreadcrumbItem>
-        <a href='#'>Home</a>
-      </MDBBreadcrumbItem>
-    </MDBBreadcrumb>
-  </MDBCol>
-</MDBRow>
+      </MDBBtn>
+              <MDBBreadcrumbItem>
+                <a href='#'>Home</a>
+              </MDBBreadcrumbItem>
+            </MDBBreadcrumb>
+          </MDBCol>
+        </MDBRow> */}
 
 
         <MDBRow>
@@ -54,8 +58,8 @@ export default function Home() {
                   className="rounded-circle"
                   style={{ width: '165px' }}
                   fluid /> */}
-                  <h1>hi</h1>
-                <p className="text-muted mb-1">Employer Name..</p>
+                <h1>hi</h1>
+                <p className="text-muted mb-1">{user.name}</p>
                 {/* <div className="d-flex justify-content-center mb-2">
                   <MDBBtn>Follow</MDBBtn>
                   <MDBBtn outline className="ms-1">Message</MDBBtn>
@@ -71,65 +75,38 @@ export default function Home() {
                     <MDBCardText>Email </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">chacha@gmail.com</MDBCardText>
+                    <MDBCardText className="text-muted">{user.email}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Gender</MDBCardText>
-                  </MDBCol>
-                  <MDBCol sm="9">
-                    <MDBCardText className="text-muted">Male/Female</MDBCardText>
-                  </MDBCol>
-                </MDBRow>
-                <hr />
-                <MDBRow>
-                  <MDBCol sm="3">
-                    <MDBCardText>Date Of Birth</MDBCardText>
-                  </MDBCol>
-                  <MDBCol sm="9">
-                    <MDBCardText className="text-muted">21-08-1989</MDBCardText>
-                  </MDBCol>
-                </MDBRow>
-                <hr />
-                <MDBRow>
-                  <MDBCol sm="3">
-                    <MDBCardText>Location</MDBCardText>
-                  </MDBCol>
-                  <MDBCol sm="9">
-                    <MDBCardText className="text-muted">Mumbai</MDBCardText>
-                  </MDBCol>
-                </MDBRow>
-                <hr />
-                <MDBRow>
-                  <MDBCol sm="3">
-                    <MDBCardText>Contect No.</MDBCardText>
+                    <MDBCardText>Contact No.</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted"></MDBCardText>
                   </MDBCol>
                 </MDBRow>
-                
+
               </MDBCardBody>
             </MDBCard>
 
-           
+
           </MDBCol>
         </MDBRow>
         <div className="d-flex justify-content-center mb-3">
-  <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={getCompany}>
-    Get Company
-  </MDBBtn>
-  <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={addCompany}>
-    Add Comapny
-  </MDBBtn>
-  {/* <MDBBtn  className ="me-8 m-3"color='success' size='lg'>
+          <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={getCompany}>
+            Get Company
+          </MDBBtn>
+          <MDBBtn className='me-8 m-3' color='danger' size='lg' onClick={addCompany}>
+            Add Comapny
+          </MDBBtn>
+          {/* <MDBBtn  className ="me-8 m-3"color='success' size='lg'>
     Edit Details
   </MDBBtn> */}
-</div>
+        </div>
       </MDBContainer>
-  
+
     </section>
   );
 }

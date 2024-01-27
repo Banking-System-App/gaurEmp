@@ -14,9 +14,6 @@ const Register = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("userDetail", user, user.$id, user.name);
-
-      //addUser(user.name, user.email, user.$id);
       navigate("/");
     }
   });

@@ -65,7 +65,37 @@ export const salaryUtil = {
         });
     
         // Return the sorted array
-        return array.slice(0,3);
+        return array.slice(0,1);
     },
+
+    earning(obj) {
+
+        var {
+            emp_id,
+            company_id,
+            basic,
+            da,
+            hra,
+            conveyance,
+            washing_allowance,
+            medical_allowance,
+            other_allowance,
+        } = obj;
+
+        var newobj = {
+            emp_id,
+            company_id,
+            basic,
+            da,
+            hra,
+            conveyance,
+            washing_allowance,
+            medical_allowance,
+            other_allowance,
+        }
+
+        return newobj;
+    },
+
 
 }

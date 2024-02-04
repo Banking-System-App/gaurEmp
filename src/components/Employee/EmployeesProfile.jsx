@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import {
   MDBCol,
   MDBContainer,
@@ -110,7 +110,7 @@ const handleSalaryProcess = () => {
 
 
         <MDBRow>
-          <MDBCol lg="4">
+          <MDBCol lg="2">
             <MDBCard className="mb-4">
               <MDBCardBody className="text-center">
                 <MDBCardImage
@@ -119,12 +119,9 @@ const handleSalaryProcess = () => {
                   className="rounded-circle"
                   style={{ width: '228px' }}
                   fluid />
-                <p className="text-muted mb-1">Comapny Name</p>
-                <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                <div className="d-flex justify-content-center mb-2">
-                  <MDBBtn>Follow</MDBBtn>
-                  <MDBBtn outline className="ms-1">Message</MDBBtn>
-                </div>
+                <p className="text-muted mb-1">Employee Name : {EmployeeDetails.emp_name}</p>
+                <p className="text-muted mb-4">Address: {EmployeeDetails.location}</p>
+                
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
@@ -146,33 +143,48 @@ const handleSalaryProcess = () => {
       ))}
     </MDBCardBody> */}
     <MDBCardBody>
-      {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label,value],index) =>(
-    
-
-        <div key ={index}>
-          <MDBRow>
-            <MDBCol sm="3">
-              <MDBCardText>{EmployeeUtil.changelabel[label]}</MDBCardText>
-              </MDBCol>
-              <MDBCol sm="9">
-                {isEditMode ? (
-                  <input
-                  type='text'
-                  className='form-control'
-                  value={value}
-                  onChange={(e)=>handleInputChange(label,e.target.value)}
-                  />
-                ):
-                  <MDBCardText className='=text-muted'>{value}</MDBCardText>
-              }
-              </MDBCol>
-            
-            </MDBRow>
-          <hr/>
-        </div>
-    
-
+    {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label, value], index) => (
+  index % 4 === 0 && ( // Start a new row for every fourth item
+    <MDBRow key={index}>
+      <MDBCol sm="3">
+        <MDBCardText>{EmployeeUtil.changelabel[label]}</MDBCardText>
+      </MDBCol>
+      <MDBCol sm="3">
+        {isEditMode ? (
+          <input
+            type='text'
+            className='form-control'
+            value={value}
+            onChange={(e) => handleInputChange(label, e.target.value)}
+          />
+        ) : (
+          <MDBCardText className='text-muted'>{value}</MDBCardText>
+        )}
+      </MDBCol>
+      {/* Render the next three key-value pairs in the same row */}
+      {Object.entries(EmployeeUtil.updatedData(editableData)).slice(index + 1, index + 4).map(([innerLabel, innerValue], innerIndex) => (
+        <React.Fragment key={innerIndex}>
+          <MDBCol sm="3">
+            <MDBCardText>{EmployeeUtil.changelabel[innerLabel]}</MDBCardText>
+          </MDBCol>
+          <MDBCol sm="3">
+            {isEditMode ? (
+              <input
+                type='text'
+                className='form-control'
+                value={innerValue}
+                onChange={(e) => handleInputChange(innerLabel, e.target.value)}
+              />
+            ) : (
+              <MDBCardText className='text-muted'>{innerValue}</MDBCardText>
+            )}
+          </MDBCol>
+        </React.Fragment>
       ))}
+    </MDBRow>
+  )
+))}
+
         {isEditMode && (
         <>
           <MDBBtn className='me-8 m-3' color="success" onClick={handleSave}>

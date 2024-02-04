@@ -16,7 +16,7 @@ export default function EmployeesList() {
   const {EmployerDetails} = useEmployerData();
   const {setEmployeeDataValue} = useEmployeeData()
 
- // console.log("Employer Detailwa at Employees List is ", EmployerDetail);
+  console.log("Employer Detailwa at Employees List is ", EmployerDetails);
   const [employees, setEmployees] = useState([]);
 
   //**********************@@@@####
@@ -28,7 +28,7 @@ export default function EmployeesList() {
         await employeeApi
           .getAllEmployeesByCompanyId(EmployerDetails.employer_id)
           .then((response) => {
-           // console.log("lod", response);
+            console.log("loding.....", response);
             setEmployees(response);
           });
       } catch (error) {

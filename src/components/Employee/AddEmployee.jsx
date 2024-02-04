@@ -535,32 +535,7 @@ export default function AddEmployeeForm() {
               />
             </div>
   
-            <div className="col-md-4">
-              <label htmlFor="compName" className="form-label">
-                Company Name
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="compName"
-                name="compName"
-                value={employeeInfo.compName}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="col-md-4">
-              <label htmlFor="compId" className="form-label">
-                Company ID
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="compId"
-                name="compId"
-                value={employeeInfo.compId}
-                onChange={handleChange}
-              />
-            </div>
+           
   
             <div className="col-md-12 text-center">
               <button type="submit" className="btn btn-success" onClick={handleSubmit} >

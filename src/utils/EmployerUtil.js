@@ -40,7 +40,6 @@ export const EmployerUtil = {
             lwf_code,
             ot_rate,
             tan_no,
-            agent_id,
         }
 
         return newobj;
@@ -49,20 +48,19 @@ export const EmployerUtil = {
      changelabel : {
         employer_id: "Employer Id",
             employer_address: "Employer Address",
-            pf_code: "pfCode",
+            pf_code: "PF Code",
             pf_limit: "PF Limit",
-            esi_code: "esiCode",
+            esi_code: "ESI Code",
             name: "Employer Name",
-            lwf_flag: "lwfFlag",
-            pf_member: "pfMemberFlag",
-            ot_payable_flag: "otPayableFlag",
-            group: "group",
+            lwf_flag: "LWF Flag",
+            pf_member: "PF Member Flag",
+            ot_payable_flag: "OT Payable Flag",
+            group: "Group",
             pan_numer: "Pan Number",
-            es_member_flag: "esMemberFlag",
+            es_member_flag: "ES Member Flag",
             location_office: "Office location",
-            lwf_code: "lwfCode",
-            ot_rate: "otRate",
+            lwf_code: "LWF Code",
+            ot_rate: "OT Rate",
             tan_no: "Tan Number",
-            agent_id: "agentId",
     },
 }

@@ -78,7 +78,7 @@ function EmployeeSalaryStructure() {
         basic,
         da,
         hra,
-        convayance,
+        conveyance,
         washingAllowance,
         medicalAllowance,
         otherAllowance,
@@ -186,8 +186,8 @@ function EmployeeSalaryStructure() {
                           <td>
                             <input
                               type="text"
-                              value={editableData.convayance}
-                              onChange={(e) => setEditableData({ ...editableData, convayance: e.target.value })}
+                              value={editableData.conveyance}
+                              onChange={(e) => setEditableData({ ...editableData, conveyance: e.target.value })}
                             />
                           </td>
                           <td>
@@ -220,7 +220,7 @@ function EmployeeSalaryStructure() {
                           <td>{salaryStructure.basic}</td>
                           <td>{salaryStructure.da}</td>
                           <td>{salaryStructure.hra}</td>
-                          <td>{salaryStructure.convayance}</td>
+                          <td>{salaryStructure.conveyance}</td>
                           <td>{salaryStructure.washing_allowance}</td>
                           <td>{salaryStructure.medical_allowance}</td>
                           <td>{salaryStructure.other_allowance}</td>

@@ -8,7 +8,7 @@ import Signup from './Signup';
 import About from './About';
 import Home from '../components/Homee/Home';
 import { AuthProvider } from '../utils/AuthContext';
-import SalSheet from '../pdfs/SalSheet';
+
 import EmployerList from '../components/Employer/EmployerList';
 import Contact from './Contact';
 import AddEmployeeForm from '../components/Employee/AddEmployee';
@@ -21,6 +21,7 @@ import AddSalaryStructure from '../components/Salary/AddSalaryStructure';
 import SalaryProcessEdit from '../components/Salary/SalaryProcessEdit';
 import { EmployerProvider } from '../context/EmployerContext';
 import { EmployeeProvider } from '../context/EmployeeContext';
+import SalSheet from '../pdfs/SalSheet';
 
 const Routess = () => {
 
@@ -44,12 +45,7 @@ const Routess = () => {
             <Route path="/salarystructure" element={<EmployerProvider><EmployeeProvider><EmpSalary/></EmployeeProvider></EmployerProvider>}/>
             <Route path="/addsalarystructure" element={<EmployerProvider><EmployeeProvider><AddSalaryStructure/></EmployeeProvider></EmployerProvider>}/>
             <Route path="/salaryprocess" element={<EmployerProvider><EmployeeProvider><SalaryProcessEdit/></EmployeeProvider></EmployerProvider>}/>
-            {/* <Route path="/generateslippdf" element={<SalSheet/>}/> */}
-            
-
-            {/* <Route path="/profile" element={<Profile />}/>
-            <Route path="/employees/:compName" element={<Addemp />} /> */}
-            <Route path="/genpdf/:compName" element = {<SalSheet/>}/>
+            <Route path="/generateslippdf" element = {<EmployerProvider><EmployeeProvider><SalSheet/></EmployeeProvider></EmployerProvider>}/>
             <Route path="" element={<userApi/>}/>
           </Route>
         </Routes>

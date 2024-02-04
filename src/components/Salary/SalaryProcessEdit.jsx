@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   MDBContainer,
   MDBRow,
@@ -11,8 +11,11 @@ import {
   MDBTableHead,
   MDBTableBody,
 } from 'mdb-react-ui-kit';
+import { salaryApi } from '../../database/salaryApi';
 import { useNavigate } from 'react-router-dom';
+import { useEmployerData } from '../../context/EmployerContext';
 import { useEmployeeData } from '../../context/EmployeeContext';
+import { salaryUtil } from '../../utils/SalaryUtil';
 
 
 export default function SalaryProcessEdit() {
@@ -20,8 +23,9 @@ export default function SalaryProcessEdit() {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [employeeName, setEmployeeName] = useState('');
+  const [earning, setEarning] = useState({});
   const [earningDetails, setEarningDetails] = useState({
-    base: 0,
+    basic: 0,
     hra: 0,
     da: 0,
   });
@@ -33,8 +37,30 @@ export default function SalaryProcessEdit() {
   });
 
   const {EmployeeDetails} = useEmployeeData()
+  const {EmployerDetails} = useEmployerData();
 
+  console.log("Employer Data at Salary Proceess page ", EmployerDetails);
   console.log("Employee Data at Salary Proceess page ", EmployeeDetails);
+
+  useEffect(() => {
+    const fetchEmployeeSalaryByEmpId = async () => {
+      try {
+        await salaryApi.getSalaryStructuresByEmpId(EmployeeDetails.emp_id).then((response) => {
+          console.log("lodaaa at salary process", response[0]);
+         // setEarning((response));
+          setEarning(salaryUtil.updatedSalaryData(salaryUtil.sortedSalaryData(response)[0]))
+        })
+
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEmployeeSalaryByEmpId();
+  }, []);
+
+  console.log("earnig i s ", earning);
 
   const navigate = useNavigate();
 
@@ -162,7 +188,7 @@ export default function SalaryProcessEdit() {
           </MDBCol>
         </MDBRow>
 
-        {earningDetails.base !== 0 && (
+        {earning.basic !== 0 && (
           <MDBRow className="mb-4">
             <MDBCol>
               <MDBCard>
@@ -175,7 +201,7 @@ export default function SalaryProcessEdit() {
                       </tr>
                     </MDBTableHead>
                     <MDBTableBody>
-                      {Object.entries(earningDetails).map(([category, amount], index) => (
+                      {Object.entries(salaryUtil.earning(earning)).map(([category, amount], index) => (
                         <tr key={index}>
                           <td>{category}</td>
                           <td>{amount}</td>

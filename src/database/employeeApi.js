@@ -120,6 +120,7 @@ getEmployeeDetail: async (companyId,empId) => {
   },
 
   getAllEmployeesByCompanyId: async (compId) => {
+    console.log("getAllEmployeeByCompanyId is called ", compId);
     try {
       const promise = databases.listDocuments(
         databaseID,

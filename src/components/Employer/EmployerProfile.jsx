@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -10,13 +10,14 @@ import {
   MDBBtn,
   MDBBreadcrumb,
   MDBBreadcrumbItem,
-} from 'mdb-react-ui-kit';
+} from "mdb-react-ui-kit";
 
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { employerApi } from '../../database/employerApi';
-import { EmployerUtil } from '../../utils/EmployerUtil';
-import { useEmployerData } from '../../context/EmployerContext';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { EmployerUtil } from "../../utils/EmployerUtil";
+import { useEmployerData } from "../../context/EmployerContext";
+import employerApis from "../../database/EmployerAPIs";
+import { toast } from "react-toastify";
 
 export default function EmployerProfile() {
   const { EmployerDetails } = useEmployerData();
@@ -24,12 +25,12 @@ export default function EmployerProfile() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/addemployee');
-  }
+    navigate("/addemployee");
+  };
 
   const handleViewEmployees = () => {
-    navigate('/viewemployees');
-  }
+    navigate("/viewemployees");
+  };
 
   //call api call and set into intial data
   const [isEditMode, setIsEditMode] = useState(false);
@@ -37,19 +38,21 @@ export default function EmployerProfile() {
   const [editableData, setEditableData] = useState({ ...employer[0] });
 
   useEffect(() => {
-    const getEmployerDetails = async () => {
-      try {
-        const response = await employerApi.getEmployerDetail(EmployerDetails.employer_id).then((response) => {
-          console.log('Employer Profile is ', response);
-          setEmployer(response[0]);
-          setEditableData(response[0]);
-        });
+    employerApis
+      .getEmployerDetail(EmployerDetails.employer_id)
+      .then((response) => {
+        console.log("EmployerProfile:: Employer ", response);
 
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getEmployerDetails();
+        if (response === false) {
+          toast.error("Loading Failed !", {
+            theme: "light",
+            autoClose: 1000,
+          });
+        } else {
+          setEmployer(response.documents[0]);
+          setEditableData(response.documents[0]);
+        }
+      });
   }, []);
 
   const handleInputChange = (label, value) => {
@@ -60,19 +63,35 @@ export default function EmployerProfile() {
   };
 
   const handleSave = () => {
-    console.log('Updated Data:', editableData);
+    console.log("Updated Data:", editableData);
     console.log("Emp loyer id : ", employer.$id);
-    employerApi.updateEmployerData(editableData.$id, EmployerUtil.updatedData(editableData))
-    alert("Employer Details Edited Successfully");
-    setIsEditMode(false);
+
+    employerApis
+      .updateEmployerData(
+        editableData.$id,
+        EmployerUtil.updatedData(editableData)
+      )
+      .then((response) => {
+        //In case of error: False is returned from API method
+        if (response === false) {
+          toast.error("Something went wrong !", {
+            theme: "light",
+            autoClose: 1000,
+          });
+        } else {
+          toast.success("Updated Successfully!", {
+            theme: "light",
+            autoClose: 1000,
+          });
+        }
+
+        setIsEditMode(false);
+      });
   };
-
-
 
   const handleEditClick = () => {
     setIsEditMode(true);
     console.log("button clickeed", isEditMode);
-
   };
   const handleCancelEdit = () => {
     setEditableData({ ...employer });
@@ -80,17 +99,16 @@ export default function EmployerProfile() {
   };
 
   const handlePaySlips = () => {
-    navigate('/generateslippdf');
-  }
+    navigate("/generateslippdf");
+  };
 
   return (
-    <section style={{ backgroundColor: '#eee' }}>
+    <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
-
         <MDBRow>
           <MDBCol>
             <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
-              <MDBBtn className="ms-auto m-3" color='success' size='lg'>
+              <MDBBtn className="ms-auto m-3" color="success" size="lg">
                 Salary Process Edit
               </MDBBtn>
               <MDBBreadcrumbItem>
@@ -100,7 +118,6 @@ export default function EmployerProfile() {
           </MDBCol>
         </MDBRow>
 
-
         <MDBRow>
           <MDBCol lg="2">
             <MDBCard className="mb-3">
@@ -109,87 +126,134 @@ export default function EmployerProfile() {
                   src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
                   alt="avatar"
                   className="rounded-circle"
-                  style={{ width: '228px' }}
-                  fluid />
-                <p className="text-muted mb-1">Comapny Name: {editableData.name}</p>
-                <p className="text-muted mb-4">Address: {editableData.employer_address} </p>
+                  style={{ width: "228px" }}
+                  fluid
+                />
+                <p className="text-muted mb-1">
+                  Comapny Name: {editableData.name}
+                </p>
+                <p className="text-muted mb-4">
+                  Address: {editableData.employer_address}{" "}
+                </p>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
           <MDBCol lg="8">
             <h1>Company Details</h1>
             <MDBCard className="mb-4">
-
               <MDBCardBody>
-                {Object.entries(EmployerUtil.updatedData(editableData)).map(([label, value], index) => (
-                  index % 4 === 0 && ( // Start a new row for every fourth item
-                    <MDBRow key={index}>
-                      <MDBCol sm="3">
-                        <MDBCardText>{EmployerUtil.changelabel[label]}</MDBCardText>
-                      </MDBCol>
-                      <MDBCol sm="3">
-                        {isEditMode ? (
-                          <input
-                            type='text'
-                            className='form-control'
-                            value={value}
-                            onChange={(e) => handleInputChange(label, e.target.value)}
-                          />
-                        ) : (
-                          <MDBCardText className='text-muted'>{value}</MDBCardText>
-                        )}
-                      </MDBCol>
-                      {/* Render the next three key-value pairs in the same row */}
-                      {Object.entries(EmployerUtil.updatedData(editableData)).slice(index + 1, index + 4).map(([innerLabel, innerValue], innerIndex) => (
-                        <React.Fragment key={innerIndex}>
-                          <MDBCol sm="3">
-                            <MDBCardText>{EmployerUtil.changelabel[innerLabel]}</MDBCardText>
-                          </MDBCol>
-                          <MDBCol sm="3">
-                            {isEditMode ? (
-                              <input
-                                type='text'
-                                className='form-control'
-                                value={innerValue}
-                                onChange={(e) => handleInputChange(innerLabel, e.target.value)}
-                              />
-                            ) : (
-                              <MDBCardText className='text-muted'>{innerValue}</MDBCardText>
-                            )}
-                          </MDBCol>
-                        </React.Fragment>
-                      ))}
-                    </MDBRow>
-                  )
-                ))}
+                {Object.entries(EmployerUtil.updatedData(editableData)).map(
+                  ([label, value], index) =>
+                    index % 4 === 0 && ( // Start a new row for every fourth item
+                      <MDBRow key={index}>
+                        <MDBCol sm="3">
+                          <MDBCardText>
+                            {EmployerUtil.changelabel[label]}
+                          </MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="3">
+                          {isEditMode ? (
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={value}
+                              onChange={(e) =>
+                                handleInputChange(label, e.target.value)
+                              }
+                            />
+                          ) : (
+                            <MDBCardText className="text-muted">
+                              {value}
+                            </MDBCardText>
+                          )}
+                        </MDBCol>
+                        {/* Render the next three key-value pairs in the same row */}
+                        {Object.entries(EmployerUtil.updatedData(editableData))
+                          .slice(index + 1, index + 4)
+                          .map(([innerLabel, innerValue], innerIndex) => (
+                            <React.Fragment key={innerIndex}>
+                              <MDBCol sm="3">
+                                <MDBCardText>
+                                  {EmployerUtil.changelabel[innerLabel]}
+                                </MDBCardText>
+                              </MDBCol>
+                              <MDBCol sm="3">
+                                {isEditMode ? (
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={innerValue}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        innerLabel,
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                ) : (
+                                  <MDBCardText className="text-muted">
+                                    {innerValue}
+                                  </MDBCardText>
+                                )}
+                              </MDBCol>
+                            </React.Fragment>
+                          ))}
+                      </MDBRow>
+                    )
+                )}
                 {isEditMode && (
                   <>
-                    <MDBBtn className='me-8 m-3' color="success" onClick={handleSave}>
+                    <MDBBtn
+                      className="me-8 m-3"
+                      color="success"
+                      onClick={handleSave}
+                    >
                       Save
                     </MDBBtn>
-                    <MDBBtn className='me-8 m-3' color="danger" onClick={handleCancelEdit}>
+                    <MDBBtn
+                      className="me-8 m-3"
+                      color="danger"
+                      onClick={handleCancelEdit}
+                    >
                       Cancel
                     </MDBBtn>
                   </>
-
-                )
-                }
-
+                )}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
         </MDBRow>
         <div className="d-flex justify-content-center mb-3">
-          <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={handleViewEmployees}>
+          <MDBBtn
+            className="me-8 m-3"
+            color="success"
+            size="lg"
+            onClick={handleViewEmployees}
+          >
             View Employees
           </MDBBtn>
-          <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={handleClick}>
+          <MDBBtn
+            className="me-8 m-3"
+            color="success"
+            size="lg"
+            onClick={handleClick}
+          >
             Add Employee
           </MDBBtn>
-          <MDBBtn className="me-8 m-3" color='success' onClick={handleEditClick} size='lg'>
+          <MDBBtn
+            className="me-8 m-3"
+            color="success"
+            onClick={handleEditClick}
+            size="lg"
+          >
             Edit Details
           </MDBBtn>
-          <MDBBtn className="me-8 m-3" color='success' onClick={handlePaySlips} size='lg'>
+          <MDBBtn
+            className="me-8 m-3"
+            color="success"
+            onClick={handlePaySlips}
+            size="lg"
+          >
             Generate Pay Slips
           </MDBBtn>
         </div>

@@ -22,9 +22,9 @@ import SalaryProcessEdit from "../components/Salary/SalaryProcessEdit";
 import { EmployerProvider } from "../context/EmployerContext";
 import { EmployeeProvider } from "../context/EmployeeContext";
 import SalSheet from "../pdfs/SalSheet";
-import Sidebar from "../components/HeaderFooter/Sidebar";
 
 import "../components/HeaderFooter/Sidebar.css"; // Import your custom CSS file for styling
+import { ToastContainer } from "react-toastify";
 
 const Routess = () => {
   return (
@@ -130,6 +130,7 @@ const Routess = () => {
               </Routes>
            
       </AuthProvider>
+      <ToastContainer/>
     </Router>
   );
 };

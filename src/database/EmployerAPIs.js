@@ -1,8 +1,9 @@
 import { databases } from "../appWrite/appwrite";
 import { Query } from "appwrite";
+import conf from "../conf/conf";
 
-const employerCollectionId = "6570aa637f3e31a920ea";
-const databaseID = "656c2c4e3621c2f65000";
+const employerCollectionId = conf.appwriteEmployersCollectionId
+const databaseID = conf.appwriteDatabaseId;
 
 export class EmployerAPIs {
   constructor() {}

@@ -1,34 +1,32 @@
-import React, { useState } from 'react';
-import { employerApi } from '../../database/employerApi';
-import { useAuth } from '../../utils/AuthContext';
+import React, { useState } from "react";
+import { useAuth } from "../../utils/AuthContext";
 
-import { ToastContainer, toast} from 'react-toastify';
-import { useNavigate } from 'react-router';
-
-
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import employerApis from "../../database/EmployerAPIs";
 
 const AddEmployerForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const [employerInfo, setEmployerInfo] = useState({
-    employerId: '',
-    employerName: '',
-    employerAddress: '',
-    pfMemberFlag: '0',
-    pfCode: '',
-    group: '',
-    pfLimit: '',
-    esMemberFlag: '0',
-    esiCode: '',
-    locationOffice: '',
-    lwfFlag: '0',
-    lwfCode: '',
-    otPayableFlag: '0',
-    otRate: '',
-    panNum: '',
-    tanNum: '',
-    agenId: '',
+    employerId: "",
+    employerName: "",
+    employerAddress: "",
+    pfMemberFlag: "0",
+    pfCode: "",
+    group: "",
+    pfLimit: "",
+    esMemberFlag: "0",
+    esiCode: "",
+    locationOffice: "",
+    lwfFlag: "0",
+    lwfCode: "",
+    otPayableFlag: "0",
+    otRate: "",
+    panNum: "",
+    tanNum: "",
+    agenId: "",
   });
 
   const handleChange = (e) => {
@@ -40,45 +38,58 @@ const AddEmployerForm = () => {
   };
 
   const handleCancel = () => {
-    navigate('/');
-  }
+    navigate("/");
+  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await employerApi.createEmployer(
-      employerInfo.employerId,
-      employerInfo.employerName,
-      employerInfo.employerAddress,
-      employerInfo.pfMemberFlag,
-      employerInfo.pfCode,
-      employerInfo.group,
-      employerInfo.pfLimit,
-      employerInfo.esMemberFlag,
-      employerInfo.esiCode,
-      employerInfo.locationOffice,
-      employerInfo.lwfFlag,
-      employerInfo.lwfCode,
-      employerInfo.otPayableFlag,
-      employerInfo.otRate,
-      employerInfo.panNum,
-      employerInfo.tanNum,
-      user.$id
-    );
-    toast.success("Employeer Added !", {
-      "theme":"light",
-      "autoClose": 1000
-    });
+    employerApis
+      .createEmployer(
+        employerInfo.employerId,
+        employerInfo.employerName,
+        employerInfo.employerAddress,
+        employerInfo.pfMemberFlag,
+        employerInfo.pfCode,
+        employerInfo.group,
+        employerInfo.pfLimit,
+        employerInfo.esMemberFlag,
+        employerInfo.esiCode,
+        employerInfo.locationOffice,
+        employerInfo.lwfFlag,
+        employerInfo.lwfCode,
+        employerInfo.otPayableFlag,
+        employerInfo.otRate,
+        employerInfo.panNum,
+        employerInfo.tanNum,
+        user.$id
+      )
+      .then((response) => {
 
-    navigate('/')
-    // You can add logic here to send the data to your backend or perform other actions
+        if (response === false) {
+          toast.error("Employer Creation Failed !", {
+            theme: "light",
+            autoClose: 1000,
+          });
+        } else {
+          toast.success("Added Successfuly !", {
+            theme: "light",
+            autoClose: 1000,
+          });
+        }
+
+        //Navigate after the toast is shown
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      });
   };
 
   return (
-    <section style={{ backgroundColor: '#eee' }}>
+    <section style={{ backgroundColor: "#eee" }}>
       <div className="container py-5">
         <h1 className="text-center mb-4">Add Employer</h1>
 
-        <form  className="row g-3">
+        <form className="row g-3">
           <div className="col-md-4">
             <label htmlFor="employerId" className="form-label">
               Employer id
@@ -123,7 +134,13 @@ const AddEmployerForm = () => {
             <label htmlFor="pfMemberFlag" className="form-label">
               PF MemberFlag
             </label>
-            <select className="form-control" id="pfMemberFlag" name="pfMemberFlag" value={employerInfo.pfMemberFlag} onChange={handleChange}>
+            <select
+              className="form-control"
+              id="pfMemberFlag"
+              name="pfMemberFlag"
+              value={employerInfo.pfMemberFlag}
+              onChange={handleChange}
+            >
               <option value="0">No</option>
               <option value="1">Yes</option>
             </select>
@@ -139,7 +156,7 @@ const AddEmployerForm = () => {
               name="pfCode"
               value={employerInfo.pfCode}
               onChange={handleChange}
-              disabled= {employerInfo.pfMemberFlag!=="1"}
+              disabled={employerInfo.pfMemberFlag !== "1"}
             />
           </div>
           <div className="col-md-4">
@@ -173,7 +190,13 @@ const AddEmployerForm = () => {
             <label htmlFor="esMemberFlag" className="form-label">
               ES Member Flag
             </label>
-            <select className="form-control" id="esMemberFlag" name="esMemberFlag" value={employerInfo.esMemberFlag} onChange={handleChange}>
+            <select
+              className="form-control"
+              id="esMemberFlag"
+              name="esMemberFlag"
+              value={employerInfo.esMemberFlag}
+              onChange={handleChange}
+            >
               <option value="0">No</option>
               <option value="1">Yes</option>
             </select>
@@ -189,7 +212,7 @@ const AddEmployerForm = () => {
               name="esiCode"
               value={employerInfo.esiCode}
               onChange={handleChange}
-              disabled= {employerInfo.esMemberFlag!=="1"}
+              disabled={employerInfo.esMemberFlag !== "1"}
             />
           </div>
 
@@ -210,7 +233,13 @@ const AddEmployerForm = () => {
             <label htmlFor="lwfFlag" className="form-label">
               LWF Flag
             </label>
-            <select className="form-control" id="lwfFlag" name="lwfFlag" value={employerInfo.lwfFlag} onChange={handleChange}>
+            <select
+              className="form-control"
+              id="lwfFlag"
+              name="lwfFlag"
+              value={employerInfo.lwfFlag}
+              onChange={handleChange}
+            >
               <option value="0">No</option>
               <option value="1">Yes</option>
             </select>
@@ -226,7 +255,7 @@ const AddEmployerForm = () => {
               name="lwfCode"
               value={employerInfo.lwfCode}
               onChange={handleChange}
-              disabled= {employerInfo.lwfFlag!=="1"}
+              disabled={employerInfo.lwfFlag !== "1"}
             />
           </div>
 
@@ -234,7 +263,13 @@ const AddEmployerForm = () => {
             <label htmlFor="otPayableFlag" className="form-label">
               OT Payable Flag
             </label>
-            <select className="form-control" id="otPayableFlag" name="otPayableFlag" value={employerInfo.otPayableFlag} onChange={handleChange}>
+            <select
+              className="form-control"
+              id="otPayableFlag"
+              name="otPayableFlag"
+              value={employerInfo.otPayableFlag}
+              onChange={handleChange}
+            >
               <option value="0">No</option>
               <option value="1">Yes</option>
             </select>
@@ -250,7 +285,7 @@ const AddEmployerForm = () => {
               name="otRate"
               value={employerInfo.otRate}
               onChange={handleChange}
-              disabled= {employerInfo.otPayableFlag!=="1"}
+              disabled={employerInfo.otPayableFlag !== "1"}
             />
           </div>
           <div className="col-md-4">
@@ -282,10 +317,18 @@ const AddEmployerForm = () => {
           </div>
 
           <div className="col-12">
-            <button type="submit" className="btn btn-success" onClick={handleSubmit}>
+            <button
+              type="submit"
+              className="btn btn-success"
+              onClick={handleSubmit}
+            >
               Submit
             </button>
-            <button type="cancel" className="btn btn-danger" onClick = {handleCancel}>
+            <button
+              type="cancel"
+              className="btn btn-danger"
+              onClick={handleCancel}
+            >
               Cancel
             </button>
           </div>

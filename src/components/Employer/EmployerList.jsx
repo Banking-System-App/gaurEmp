@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
-import { useNavigate } from 'react-router-dom';
-import { employerApi } from '../../database/employerApi';
-import { useAuth } from '../../utils/AuthContext';
-import { useEmployerData } from '../../context/EmployerContext';
+import React, { useState, useEffect } from "react";
+import {
+  MDBBadge,
+  MDBBtn,
+  MDBTable,
+  MDBTableHead,
+  MDBTableBody,
+} from "mdb-react-ui-kit";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../utils/AuthContext";
+import { useEmployerData } from "../../context/EmployerContext";
+
+import employerApis from "../../database/EmployerAPIs";
+import { toast } from "react-toastify";
 
 export default function EmployerList() {
   const { user } = useAuth();
@@ -14,58 +22,57 @@ export default function EmployerList() {
   const handleEmpDetailClick = (employerData) => {
     console.log("emps data is, ", employerData);
     setEmployerDataValue(employerData);
-    navigate('/employerprofile');
+    navigate("/employerprofile");
   };
   const [employers, setEmployers] = useState([]);
-  //**********************@@@@####
-  //ye do bar chal rha hai
-  //**********************@@@@####
+  
+  //::: TODO: Debug: Running Twice
   useEffect(() => {
-    const fetchEmployerByAgentId = async () => {
-      try {
-        const compEmployees = await employerApi.getAllEmployerByUserId(user.$id).then((response) => {
-          console.log("lod", response)
-          setEmployers(response);
-        })
+    employerApis.getAllEmployerByUserId(user.$id).then((response) => {
+      console.log("EmployerList:: List Of Employees", response);
 
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      //In case of error: False is returned from API method
+      if (response === false) {
+        toast.error("Something went wrong !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      } else setEmployers(response.documents);
+    });
 
-    fetchEmployerByAgentId();
   }, []);
 
   return (
-    <MDBTable align='middle' className='table table-hover'>
+    <MDBTable align="middle" className="table table-hover">
       <MDBTableHead>
         <tr>
-          <th scope='col'>Employer ID</th>
-          <th scope='col'>Name</th>
-          <th scope='col'>Address</th>
-          <th scope='col'>EMPCount</th>
+          <th scope="col">Employer ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Address</th>
+          <th scope="col">EMPCount</th>
         </tr>
       </MDBTableHead>
       <MDBTableBody>
-
         {employers.map((emps, index) => (
-          <tr key={index} onClick={() => handleEmpDetailClick(emps)} style={{ cursor: 'pointer' }}>
+          <tr
+            key={index}
+            onClick={() => handleEmpDetailClick(emps)}
+            style={{ cursor: "pointer" }}
+          >
             <td>
-              <p className='fw-bold mb-1'>{emps.employer_id}</p>
+              <p className="fw-bold mb-1">{emps.employer_id}</p>
             </td>
             <td>
-              <p className='fw-bold mb-1'>{emps.name}</p>
+              <p className="fw-bold mb-1">{emps.name}</p>
             </td>
             <td>
-              <p className='fw-bold mb-1'>{emps.employer_address}</p>
+              <p className="fw-bold mb-1">{emps.employer_address}</p>
             </td>
             <td>Senior</td>
-            <td>
-            </td>
+            <td></td>
           </tr>
         ))}
       </MDBTableBody>
     </MDBTable>
-
   );
 }

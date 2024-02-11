@@ -1,8 +1,9 @@
 import { databases } from "../appWrite/appwrite";
 import { Query } from "appwrite";
+import conf from "../conf/conf";
 
-const employeesCollectionId = "6570acd4d7b822e5c1b1";
-const databaseID = "656c2c4e3621c2f65000";
+const employeesCollectionId = conf.appwriteEmployeesCollectionId
+const databaseID = conf.appwriteDatabaseId
 
 
 export class EmployeeAPIs{

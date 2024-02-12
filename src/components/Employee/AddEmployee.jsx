@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { employeeApi } from '../../database/employeeApi';
 import { useNavigate } from 'react-router-dom';
 import { useEmployerData } from '../../context/EmployerContext';
 import { toast,ToastContainer } from 'react-toastify';
+import employeeApis from '../../database/EmployeeAPIs';
 
 export default function AddEmployeeForm() {
   const { EmployerDetails } = useEmployerData();
@@ -58,9 +58,9 @@ export default function AddEmployeeForm() {
     navigate('/employerprofile');
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await employeeApi.createEmployee(
+    employeeApis.createEmployee(
       employeeInfo.empID,
       employeeInfo.name,
       employeeInfo.gender,
@@ -98,13 +98,26 @@ export default function AddEmployeeForm() {
       employeeInfo.compId,
       EmployerDetails.name,
       EmployerDetails.employer_id
-    );
-    toast.success("Employee Added !", {
-      "theme":"light",
-      "autoClose": 1000
+    ).then((response)=>{
+
+      if (response === false) {
+        toast.error("Employee Creation Failed !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      } else {
+        toast.success("Added Successfuly !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      }
+
+      //Navigate after the toast is shown
+      setTimeout(() => {
+        navigate('/employerprofile');
+      }, 2000);
     });
-    navigate('/employerprofile');
-    // You can add logic here to send the data to your backend or perform other actions
+    
   };
 
   return (

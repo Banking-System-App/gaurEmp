@@ -7,36 +7,31 @@ import {
   MDBTableBody,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import { employeeApi } from "../../database/employeeApi";
 import {useEmployeeData} from "../../context/EmployeeContext";
 import { useEmployerData } from "../../context/EmployerContext";
+import employeeApis from "../../database/EmployeeAPIs";
+import { toast } from "react-toastify";
 
 export default function EmployeesList() {
 
   const {EmployerDetails} = useEmployerData();
   const {setEmployeeDataValue} = useEmployeeData()
 
-  console.log("Employer Detailwa at Employees List is ", EmployerDetails);
   const [employees, setEmployees] = useState([]);
 
-  //**********************@@@@####
-  //ye do bar chal rha hai
-  //**********************@@@@####
+  //TODO: Do war chal rha hai
   useEffect(() => {
-    const fetchEmployeesByCompanyId = async () => {
-      try {
-        await employeeApi
+    employeeApis
           .getAllEmployeesByCompanyId(EmployerDetails.employer_id)
           .then((response) => {
-            console.log("loding.....", response);
-            setEmployees(response);
+            if (response === false) {
+              toast.error("Fetching Failed !", {
+                theme: "light",
+                autoClose: 1000,
+              });
+            } else setEmployees(response.documents);
           });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchEmployeesByCompanyId();
+   
   }, []);
 
   const navigate = useNavigate();

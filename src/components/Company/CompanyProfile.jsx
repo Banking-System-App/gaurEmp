@@ -14,13 +14,13 @@ import {
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { EmployerUtil } from "../../utils/EmployerUtil";
-import { useEmployerData } from "../../context/EmployerContext";
-import employerApis from "../../database/EmployerAPIs";
+import { CompanyUtil } from "../../utils/CompanyUtil";
+import { useCompanyData } from "../../context/CompanyContext";
+import companyApis from "../../database/CompanyAPIs";
 import { toast } from "react-toastify";
 
-export default function EmployerProfile() {
-  const { EmployerDetails } = useEmployerData();
+export default function CompanyProfile() {
+  const { CompanyDetails } = useCompanyData();
 
   const navigate = useNavigate();
 
@@ -34,25 +34,23 @@ export default function EmployerProfile() {
 
   //call api call and set into intial data
   const [isEditMode, setIsEditMode] = useState(false);
-  const [employer, setEmployer] = useState([]);
-  const [editableData, setEditableData] = useState({ ...employer[0] });
+  const [company, setCompany] = useState([]);
+  const [editableData, setEditableData] = useState({ ...company[0] });
 
   useEffect(() => {
-    employerApis
-      .getEmployerDetail(EmployerDetails.employer_id)
-      .then((response) => {
-        console.log("EmployerProfile:: Employer ", response);
+    companyApis.getCompanyDetail(CompanyDetails.company_id).then((response) => {
+      console.log("CompanyProfile:: Company ", response);
 
-        if (response === false) {
-          toast.error("Loading Failed !", {
-            theme: "light",
-            autoClose: 1000,
-          });
-        } else {
-          setEmployer(response.documents[0]);
-          setEditableData(response.documents[0]);
-        }
-      });
+      if (response === false) {
+        toast.error("Loading Failed !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      } else {
+        setCompany(response.documents[0]);
+        setEditableData(response.documents[0]);
+      }
+    });
   }, []);
 
   const handleInputChange = (label, value) => {
@@ -64,12 +62,12 @@ export default function EmployerProfile() {
 
   const handleSave = () => {
     console.log("Updated Data:", editableData);
-    console.log("Emp loyer id : ", employer.$id);
+    console.log("Emp loyer id : ", company.$id);
 
-    employerApis
-      .updateEmployerData(
+    companyApis
+      .updateCompanyData(
         editableData.$id,
-        EmployerUtil.updatedData(editableData)
+        CompanyUtil.updatedData(editableData)
       )
       .then((response) => {
         //In case of error: False is returned from API method
@@ -94,7 +92,7 @@ export default function EmployerProfile() {
     console.log("button clickeed", isEditMode);
   };
   const handleCancelEdit = () => {
-    setEditableData({ ...employer });
+    setEditableData({ ...company });
     setIsEditMode(false);
   };
 
@@ -133,7 +131,7 @@ export default function EmployerProfile() {
                   Comapny Name: {editableData.name}
                 </p>
                 <p className="text-muted mb-4">
-                  Address: {editableData.employer_address}{" "}
+                  Address: {editableData.company_address}{" "}
                 </p>
               </MDBCardBody>
             </MDBCard>
@@ -142,13 +140,13 @@ export default function EmployerProfile() {
             <h1>Company Details</h1>
             <MDBCard className="mb-4">
               <MDBCardBody>
-                {Object.entries(EmployerUtil.updatedData(editableData)).map(
+                {Object.entries(CompanyUtil.updatedData(editableData)).map(
                   ([label, value], index) =>
                     index % 4 === 0 && ( // Start a new row for every fourth item
                       <MDBRow key={index}>
                         <MDBCol sm="3">
                           <MDBCardText>
-                            {EmployerUtil.changelabel[label]}
+                            {CompanyUtil.changelabel[label]}
                           </MDBCardText>
                         </MDBCol>
                         <MDBCol sm="3">
@@ -168,13 +166,13 @@ export default function EmployerProfile() {
                           )}
                         </MDBCol>
                         {/* Render the next three key-value pairs in the same row */}
-                        {Object.entries(EmployerUtil.updatedData(editableData))
+                        {Object.entries(CompanyUtil.updatedData(editableData))
                           .slice(index + 1, index + 4)
                           .map(([innerLabel, innerValue], innerIndex) => (
                             <React.Fragment key={innerIndex}>
                               <MDBCol sm="3">
                                 <MDBCardText>
-                                  {EmployerUtil.changelabel[innerLabel]}
+                                  {CompanyUtil.changelabel[innerLabel]}
                                 </MDBCardText>
                               </MDBCol>
                               <MDBCol sm="3">

@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../utils/AuthContext';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../utils/AuthContext";
 
 import {
   MDBCol,
@@ -12,28 +12,25 @@ import {
   MDBBtn,
   MDBBreadcrumb,
   MDBBreadcrumbItem,
-} from 'mdb-react-ui-kit';
+} from "mdb-react-ui-kit";
 
 export default function Home() {
-
-  const {user} = useAuth()
+  const { user } = useAuth();
   console.log("User At home is ", user);
 
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   const addCompany = () => {
-    navigate('/addemployer');
-  }
+    navigate("/addcompany");
+  };
 
   const getCompany = () => {
-
-    navigate('/getcompany');
-  }
+    navigate("/getcompany");
+  };
 
   return (
-    <section style={{ backgroundColor: '#eee' }}>
+    <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
-
         {/* <MDBRow>
           <MDBCol>
             <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
@@ -46,7 +43,6 @@ export default function Home() {
             </MDBBreadcrumb>
           </MDBCol>
         </MDBRow> */}
-
 
         <MDBRow>
           <MDBCol lg="4">
@@ -75,7 +71,9 @@ export default function Home() {
                     <MDBCardText>Email </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{user.email}</MDBCardText>
+                    <MDBCardText className="text-muted">
+                      {user.email}
+                    </MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -87,18 +85,25 @@ export default function Home() {
                     <MDBCardText className="text-muted"></MDBCardText>
                   </MDBCol>
                 </MDBRow>
-
               </MDBCardBody>
             </MDBCard>
-
-
           </MDBCol>
         </MDBRow>
         <div className="d-flex justify-content-center mb-3">
-          <MDBBtn className='me-8 m-3' color='success' size='lg' onClick={getCompany}>
+          <MDBBtn
+            className="me-8 m-3"
+            color="success"
+            size="lg"
+            onClick={getCompany}
+          >
             Get Company
           </MDBBtn>
-          <MDBBtn className='me-8 m-3' color='danger' size='lg' onClick={addCompany}>
+          <MDBBtn
+            className="me-8 m-3"
+            color="danger"
+            size="lg"
+            onClick={addCompany}
+          >
             Add Comapny
           </MDBBtn>
           {/* <MDBBtn  className ="me-8 m-3"color='success' size='lg'>
@@ -106,7 +111,6 @@ export default function Home() {
   </MDBBtn> */}
         </div>
       </MDBContainer>
-
     </section>
   );
 }

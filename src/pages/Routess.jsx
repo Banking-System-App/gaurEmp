@@ -9,17 +9,17 @@ import About from "./About";
 import Home from "../components/Homee/Home";
 import { AuthProvider } from "../utils/AuthContext";
 
-import EmployerList from "../components/Employer/EmployerList";
+import CompanyList from "../components/Company/CompanyList";
 import Contact from "./Contact";
 import AddEmployeeForm from "../components/Employee/AddEmployee";
-import AddEmployerForm from "../components/Employer/AddEmployer";
-import EmployerProfile from "../components/Employer/EmployerProfile";
+import AddCompanyForm from "../components/Company/AddCompany";
+import CompanyProfile from "../components/Company/CompanyProfile";
 import EmployeesList from "../components/Employee/EmployeesList";
 import EmployeeProfile from "../components/Employee/EmployeesProfile";
 import EmpSalary from "../components/Salary/SalaryStructure";
 import AddSalaryStructure from "../components/Salary/AddSalaryStructure";
 import SalaryProcessEdit from "../components/Salary/SalaryProcessEdit";
-import { EmployerProvider } from "../context/EmployerContext";
+import { CompanyProvider } from "../context/CompanyContext";
 import { EmployeeProvider } from "../context/EmployeeContext";
 import SalSheet from "../pdfs/SalSheet";
 
@@ -30,107 +30,105 @@ const Routess = () => {
   return (
     <Router>
       <AuthProvider>
-        <Header/>
+        <Header />
 
-        
-              <Routes>
-                <Route path="/Login" element={<Login />} />
-                <Route path="/Signup" element={<Signup />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route element={<PrivateRoutes />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/addemployer" element={<AddEmployerForm />} />
-                  <Route
-                    path="/getcompany"
-                    element={
-                      <EmployerProvider>
-                        <EmployerList />
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/employerprofile"
-                    element={
-                      <EmployerProvider>
-                        <EmployerProfile />
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/addemployee"
-                    element={
-                      <EmployerProvider>
-                        <AddEmployeeForm />
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/viewemployees"
-                    element={
-                      <EmployerProvider>
-                        <EmployeeProvider>
-                          <EmployeesList />
-                        </EmployeeProvider>
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/employeeprofile"
-                    element={
-                      <EmployerProvider>
-                        <EmployeeProvider>
-                          <EmployeeProfile />
-                        </EmployeeProvider>
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/salarystructure"
-                    element={
-                      <EmployerProvider>
-                        <EmployeeProvider>
-                          <EmpSalary />
-                        </EmployeeProvider>
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/addsalarystructure"
-                    element={
-                      <EmployerProvider>
-                        <EmployeeProvider>
-                          <AddSalaryStructure />
-                        </EmployeeProvider>
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/salaryprocess"
-                    element={
-                      <EmployerProvider>
-                        <EmployeeProvider>
-                          <SalaryProcessEdit />
-                        </EmployeeProvider>
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route
-                    path="/generateslippdf"
-                    element={
-                      <EmployerProvider>
-                        <EmployeeProvider>
-                          <SalSheet />
-                        </EmployeeProvider>
-                      </EmployerProvider>
-                    }
-                  />
-                  <Route path="" element={<userApi />} />
-                </Route>
-              </Routes>
-           
+        <Routes>
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Signup" element={<Signup />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/addcompany" element={<AddCompanyForm />} />
+            <Route
+              path="/getcompany"
+              element={
+                <CompanyProvider>
+                  <CompanyList />
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/companyprofile"
+              element={
+                <CompanyProvider>
+                  <CompanyProfile />
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/addemployee"
+              element={
+                <CompanyProvider>
+                  <AddEmployeeForm />
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/viewemployees"
+              element={
+                <CompanyProvider>
+                  <EmployeeProvider>
+                    <EmployeesList />
+                  </EmployeeProvider>
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/employeeprofile"
+              element={
+                <CompanyProvider>
+                  <EmployeeProvider>
+                    <EmployeeProfile />
+                  </EmployeeProvider>
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/salarystructure"
+              element={
+                <CompanyProvider>
+                  <EmployeeProvider>
+                    <EmpSalary />
+                  </EmployeeProvider>
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/addsalarystructure"
+              element={
+                <CompanyProvider>
+                  <EmployeeProvider>
+                    <AddSalaryStructure />
+                  </EmployeeProvider>
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/salaryprocess"
+              element={
+                <CompanyProvider>
+                  <EmployeeProvider>
+                    <SalaryProcessEdit />
+                  </EmployeeProvider>
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/generateslippdf"
+              element={
+                <CompanyProvider>
+                  <EmployeeProvider>
+                    <SalSheet />
+                  </EmployeeProvider>
+                </CompanyProvider>
+              }
+            />
+            <Route path="" element={<userApi />} />
+          </Route>
+        </Routes>
       </AuthProvider>
-      <ToastContainer/>
+      <ToastContainer />
     </Router>
   );
 };

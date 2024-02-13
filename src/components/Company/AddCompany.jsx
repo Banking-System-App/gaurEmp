@@ -3,16 +3,16 @@ import { useAuth } from "../../utils/AuthContext";
 
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router";
-import employerApis from "../../database/EmployerAPIs";
+import companyApis from "../../database/CompanyAPIs";
 
-const AddEmployerForm = () => {
+const AddCompanyForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [employerInfo, setEmployerInfo] = useState({
-    employerId: "",
-    employerName: "",
-    employerAddress: "",
+  const [companyInfo, setCompanyInfo] = useState({
+    companyId: "",
+    companyName: "",
+    companyAddress: "",
     pfMemberFlag: "0",
     pfCode: "",
     group: "",
@@ -31,7 +31,7 @@ const AddEmployerForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEmployerInfo((prevInfo) => ({
+    setCompanyInfo((prevInfo) => ({
       ...prevInfo,
       [name]: value,
     }));
@@ -43,30 +43,29 @@ const AddEmployerForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    employerApis
-      .createEmployer(
-        employerInfo.employerId,
-        employerInfo.employerName,
-        employerInfo.employerAddress,
-        employerInfo.pfMemberFlag,
-        employerInfo.pfCode,
-        employerInfo.group,
-        employerInfo.pfLimit,
-        employerInfo.esMemberFlag,
-        employerInfo.esiCode,
-        employerInfo.locationOffice,
-        employerInfo.lwfFlag,
-        employerInfo.lwfCode,
-        employerInfo.otPayableFlag,
-        employerInfo.otRate,
-        employerInfo.panNum,
-        employerInfo.tanNum,
+    companyApis
+      .createCompany(
+        companyInfo.companyId,
+        companyInfo.companyName,
+        companyInfo.companyAddress,
+        companyInfo.pfMemberFlag,
+        companyInfo.pfCode,
+        companyInfo.group,
+        companyInfo.pfLimit,
+        companyInfo.esMemberFlag,
+        companyInfo.esiCode,
+        companyInfo.locationOffice,
+        companyInfo.lwfFlag,
+        companyInfo.lwfCode,
+        companyInfo.otPayableFlag,
+        companyInfo.otRate,
+        companyInfo.panNum,
+        companyInfo.tanNum,
         user.$id
       )
       .then((response) => {
-
         if (response === false) {
-          toast.error("Employer Creation Failed !", {
+          toast.error("Company Creation Failed !", {
             theme: "light",
             autoClose: 1000,
           });
@@ -87,45 +86,45 @@ const AddEmployerForm = () => {
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <div className="container py-5">
-        <h1 className="text-center mb-4">Add Employer</h1>
+        <h1 className="text-center mb-4">Add Company</h1>
 
         <form className="row g-3">
           <div className="col-md-4">
-            <label htmlFor="employerId" className="form-label">
-              Employer id
+            <label htmlFor="companyId" className="form-label">
+              Company id
             </label>
             <input
               type="text"
               className="form-control"
-              id="employerId"
-              name="employerId"
-              value={employerInfo.employerId}
+              id="companyId"
+              name="companyId"
+              value={companyInfo.companyId}
               onChange={handleChange}
             />
           </div>
           <div className="col-md-4">
-            <label htmlFor="employerName" className="form-label">
+            <label htmlFor="companyName" className="form-label">
               Name
             </label>
             <input
               type="text"
               className="form-control"
-              id="employerName"
-              name="employerName"
-              value={employerInfo.employerName}
+              id="companyName"
+              name="companyName"
+              value={companyInfo.companyName}
               onChange={handleChange}
             />
           </div>
           <div className="col-md-4">
-            <label htmlFor="employerAddress" className="form-label">
+            <label htmlFor="companyAddress" className="form-label">
               Address
             </label>
             <input
               type="text"
               className="form-control"
-              id="employerAddress"
-              name="employerAddress"
-              value={employerInfo.employerAddress}
+              id="companyAddress"
+              name="companyAddress"
+              value={companyInfo.companyAddress}
               onChange={handleChange}
             />
           </div>
@@ -138,7 +137,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="pfMemberFlag"
               name="pfMemberFlag"
-              value={employerInfo.pfMemberFlag}
+              value={companyInfo.pfMemberFlag}
               onChange={handleChange}
             >
               <option value="0">No</option>
@@ -154,9 +153,9 @@ const AddEmployerForm = () => {
               className="form-control"
               id="pfCode"
               name="pfCode"
-              value={employerInfo.pfCode}
+              value={companyInfo.pfCode}
               onChange={handleChange}
-              disabled={employerInfo.pfMemberFlag !== "1"}
+              disabled={companyInfo.pfMemberFlag !== "1"}
             />
           </div>
           <div className="col-md-4">
@@ -168,7 +167,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="group"
               name="group"
-              value={employerInfo.group}
+              value={companyInfo.group}
               onChange={handleChange}
             />
           </div>
@@ -182,7 +181,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="pfLimit"
               name="pfLimit"
-              value={employerInfo.pfLimit}
+              value={companyInfo.pfLimit}
               onChange={handleChange}
             />
           </div>
@@ -194,7 +193,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="esMemberFlag"
               name="esMemberFlag"
-              value={employerInfo.esMemberFlag}
+              value={companyInfo.esMemberFlag}
               onChange={handleChange}
             >
               <option value="0">No</option>
@@ -210,9 +209,9 @@ const AddEmployerForm = () => {
               className="form-control"
               id="esiCode"
               name="esiCode"
-              value={employerInfo.esiCode}
+              value={companyInfo.esiCode}
               onChange={handleChange}
-              disabled={employerInfo.esMemberFlag !== "1"}
+              disabled={companyInfo.esMemberFlag !== "1"}
             />
           </div>
 
@@ -225,7 +224,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="locationOffice"
               name="locationOffice"
-              value={employerInfo.locationOffice}
+              value={companyInfo.locationOffice}
               onChange={handleChange}
             />
           </div>
@@ -237,7 +236,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="lwfFlag"
               name="lwfFlag"
-              value={employerInfo.lwfFlag}
+              value={companyInfo.lwfFlag}
               onChange={handleChange}
             >
               <option value="0">No</option>
@@ -253,9 +252,9 @@ const AddEmployerForm = () => {
               className="form-control"
               id="lwfCode"
               name="lwfCode"
-              value={employerInfo.lwfCode}
+              value={companyInfo.lwfCode}
               onChange={handleChange}
-              disabled={employerInfo.lwfFlag !== "1"}
+              disabled={companyInfo.lwfFlag !== "1"}
             />
           </div>
 
@@ -267,7 +266,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="otPayableFlag"
               name="otPayableFlag"
-              value={employerInfo.otPayableFlag}
+              value={companyInfo.otPayableFlag}
               onChange={handleChange}
             >
               <option value="0">No</option>
@@ -283,9 +282,9 @@ const AddEmployerForm = () => {
               className="form-control"
               id="otRate"
               name="otRate"
-              value={employerInfo.otRate}
+              value={companyInfo.otRate}
               onChange={handleChange}
-              disabled={employerInfo.otPayableFlag !== "1"}
+              disabled={companyInfo.otPayableFlag !== "1"}
             />
           </div>
           <div className="col-md-4">
@@ -297,7 +296,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="panNum"
               name="panNum"
-              value={employerInfo.panNum}
+              value={companyInfo.panNum}
               onChange={handleChange}
             />
           </div>
@@ -311,7 +310,7 @@ const AddEmployerForm = () => {
               className="form-control"
               id="tanNum"
               name="tanNum"
-              value={employerInfo.tanNum}
+              value={companyInfo.tanNum}
               onChange={handleChange}
             />
           </div>
@@ -339,4 +338,4 @@ const AddEmployerForm = () => {
   );
 };
 
-export default AddEmployerForm;
+export default AddCompanyForm;

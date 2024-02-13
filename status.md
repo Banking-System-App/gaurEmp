@@ -6,13 +6,13 @@ issue to solve
 
 
 =======Optimizations=======
-1. Remove getEmployer and getEmployeeDetail calls from Employer and EmployeeProfiles use respective context to get the details.
+1. Remove getCompany and getEmployeeDetail calls from Company and EmployeeProfiles use respective context to get the details.
 
 
 
 
 ======Mirecals to understand==========
-1. Mr Hrituraj accessing EmployerContext to make working employeeContext.
+1. Mr Hrituraj accessing CompanyContext to make working employeeContext.
 
 
 =====bmt========

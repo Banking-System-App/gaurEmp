@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -10,19 +10,18 @@ import {
   MDBTable,
   MDBTableHead,
   MDBTableBody,
-} from 'mdb-react-ui-kit';
-import { salaryApi } from '../../database/salaryApi';
-import { useNavigate } from 'react-router-dom';
-import { useEmployerData } from '../../context/EmployerContext';
-import { useEmployeeData } from '../../context/EmployeeContext';
-import { salaryUtil } from '../../utils/SalaryUtil';
-
+} from "mdb-react-ui-kit";
+import { salaryApi } from "../../database/salaryApi";
+import { useNavigate } from "react-router-dom";
+import { useCompanyData } from "../../context/CompanyContext";
+import { useEmployeeData } from "../../context/EmployeeContext";
+import { salaryUtil } from "../../utils/SalaryUtil";
 
 export default function SalaryProcessEdit() {
-  const [employeeNumber, setEmployeeNumber] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
-  const [employeeName, setEmployeeName] = useState('');
+  const [employeeNumber, setEmployeeNumber] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [employeeName, setEmployeeName] = useState("");
   const [earning, setEarning] = useState({});
   const [earningDetails, setEarningDetails] = useState({
     basic: 0,
@@ -36,22 +35,26 @@ export default function SalaryProcessEdit() {
     incomeTax: 0,
   });
 
-  const {EmployeeDetails} = useEmployeeData()
-  const {EmployerDetails} = useEmployerData();
+  const { EmployeeDetails } = useEmployeeData();
+  const { CompanyDetails } = useCompanyData();
 
-  console.log("Employer Data at Salary Proceess page ", EmployerDetails);
+  console.log("Company Data at Salary Proceess page ", CompanyDetails);
   console.log("Employee Data at Salary Proceess page ", EmployeeDetails);
 
   useEffect(() => {
     const fetchEmployeeSalaryByEmpId = async () => {
       try {
-        await salaryApi.getSalaryStructuresByEmpId(EmployeeDetails.emp_id).then((response) => {
-          console.log("lodaaa at salary process", response[0]);
-         // setEarning((response));
-          setEarning(salaryUtil.updatedSalaryData(salaryUtil.sortedSalaryData(response)[0]))
-        })
-
-
+        await salaryApi
+          .getSalaryStructuresByEmpId(EmployeeDetails.emp_id)
+          .then((response) => {
+            console.log("lodaaa at salary process", response[0]);
+            // setEarning((response));
+            setEarning(
+              salaryUtil.updatedSalaryData(
+                salaryUtil.sortedSalaryData(response)[0]
+              )
+            );
+          });
       } catch (error) {
         console.error(error);
       }
@@ -68,7 +71,7 @@ export default function SalaryProcessEdit() {
     // Placeholder logic to fetch employee details based on employee number
     // Replace the following example with your actual API call or data fetching logic
     const fetchedEmployeeDetails = {
-      employeeName: 'John Doe',
+      employeeName: "John Doe",
       // ... other employee details
     };
     setEmployeeName(fetchedEmployeeDetails.employeeName);
@@ -95,13 +98,13 @@ export default function SalaryProcessEdit() {
   };
 
   const handleGenerateSlip = () => {
-    navigate('/generateslippdf');
+    navigate("/generateslippdf");
 
-    console.log('Generating salary slip...');
+    console.log("Generating salary slip...");
   };
 
   return (
-    <section style={{ backgroundColor: '#eee' }}>
+    <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
         <MDBRow>
           <MDBCol>
@@ -154,32 +157,16 @@ export default function SalaryProcessEdit() {
 
         <MDBRow className="mb-4">
           <MDBCol md="2">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="EL"
-            />
+            <input type="text" className="form-control" placeholder="EL" />
           </MDBCol>
           <MDBCol md="2">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="WP"
-            />
+            <input type="text" className="form-control" placeholder="WP" />
           </MDBCol>
           <MDBCol md="2">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="OD"
-            />
+            <input type="text" className="form-control" placeholder="OD" />
           </MDBCol>
           <MDBCol md="2">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="OT"
-            />
+            <input type="text" className="form-control" placeholder="OT" />
           </MDBCol>
           <MDBCol md="2">
             <MDBBtn color="success" onClick={handleSalarySubmit}>
@@ -201,12 +188,14 @@ export default function SalaryProcessEdit() {
                       </tr>
                     </MDBTableHead>
                     <MDBTableBody>
-                      {Object.entries(salaryUtil.earning(earning)).map(([category, amount], index) => (
-                        <tr key={index}>
-                          <td>{category}</td>
-                          <td>{amount}</td>
-                        </tr>
-                      ))}
+                      {Object.entries(salaryUtil.earning(earning)).map(
+                        ([category, amount], index) => (
+                          <tr key={index}>
+                            <td>{category}</td>
+                            <td>{amount}</td>
+                          </tr>
+                        )
+                      )}
                     </MDBTableBody>
                   </MDBTable>
                 </MDBCardBody>
@@ -228,12 +217,14 @@ export default function SalaryProcessEdit() {
                       </tr>
                     </MDBTableHead>
                     <MDBTableBody>
-                      {Object.entries(deductionDetails).map(([category, amount], index) => (
-                        <tr key={index}>
-                          <td>{category}</td>
-                          <td>{amount}</td>
-                        </tr>
-                      ))}
+                      {Object.entries(deductionDetails).map(
+                        ([category, amount], index) => (
+                          <tr key={index}>
+                            <td>{category}</td>
+                            <td>{amount}</td>
+                          </tr>
+                        )
+                      )}
                     </MDBTableBody>
                   </MDBTable>
                 </MDBCardBody>

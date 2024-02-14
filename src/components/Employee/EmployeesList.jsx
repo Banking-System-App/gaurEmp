@@ -7,36 +7,29 @@ import {
   MDBTableBody,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import { employeeApi } from "../../database/employeeApi";
-import {useEmployeeData} from "../../context/EmployeeContext";
-import { useEmployerData } from "../../context/EmployerContext";
+import { useEmployeeData } from "../../context/EmployeeContext";
+import { useCompanyData } from "../../context/CompanyContext";
+import employeeApis from "../../database/EmployeeAPIs";
+import { toast } from "react-toastify";
 
 export default function EmployeesList() {
+  const { CompanyDetails } = useCompanyData();
+  const { setEmployeeDataValue } = useEmployeeData();
 
-  const {EmployerDetails} = useEmployerData();
-  const {setEmployeeDataValue} = useEmployeeData()
-
-  console.log("Employer Detailwa at Employees List is ", EmployerDetails);
   const [employees, setEmployees] = useState([]);
 
-  //**********************@@@@####
-  //ye do bar chal rha hai
-  //**********************@@@@####
+  //TODO: Do war chal rha hai
   useEffect(() => {
-    const fetchEmployeesByCompanyId = async () => {
-      try {
-        await employeeApi
-          .getAllEmployeesByCompanyId(EmployerDetails.employer_id)
-          .then((response) => {
-            console.log("loding.....", response);
-            setEmployees(response);
+    employeeApis
+      .getAllEmployeesByCompanyId(CompanyDetails.company_id)
+      .then((response) => {
+        if (response === false) {
+          toast.error("Fetching Failed !", {
+            theme: "light",
+            autoClose: 1000,
           });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchEmployeesByCompanyId();
+        } else setEmployees(response.documents);
+      });
   }, []);
 
   const navigate = useNavigate();
@@ -59,7 +52,7 @@ export default function EmployeesList() {
       </MDBTableHead>
       <MDBTableBody>
         {employees.map((employee, index) => (
-          <tr key={index} onClick={()=>handleClick(employee)}>
+          <tr key={index} onClick={() => handleClick(employee)}>
             <td>
               <div className="d-flex align-items-center">
                 <img
@@ -94,4 +87,3 @@ export default function EmployeesList() {
     </MDBTable>
   );
 }
-

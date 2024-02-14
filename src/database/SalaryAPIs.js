@@ -1,14 +1,15 @@
 import { databases } from "../appWrite/appwrite";
 import { Query } from "appwrite";
+import conf from "../conf/conf";
 
-const databaseID = "656c2c4e3621c2f65000";
-const collectionIdSalaryStructure = "658b0eee2802c5d7a42c";
-const collectionIdProcessSalary = "659ee3c01f10512c7e17";
+const databaseID = conf.appwriteDatabaseId;
+const collectionIdSalaryStructure = conf.appwriteSalaryStructureCollectionId;
+const collectionIdProcessSalary = conf.appwriteFinalSalaryCollectionId;
 
-export const salaryApi = {
-  //function to create salary structure
+export class SalaryAPIs {
+  constructor() {}
 
-  createSalaryStrcture: async (
+  async createSalaryStructure(
     empId,
     empName,
     empType,
@@ -22,10 +23,10 @@ export const salaryApi = {
     otherAllowance,
     year,
     month
-  ) => {
-    console.log("Collection ID:", collectionIdSalaryStructure);
+  ) {
+    console.log("Appwrite service :: createSalaryStructure()");
     try {
-      const promise = databases.createDocument(
+      return await databases.createDocument(
         databaseID,
         collectionIdSalaryStructure,
         "",
@@ -45,16 +46,13 @@ export const salaryApi = {
           month: month,
         }
       );
-
-      const response = await promise;
-      console.log(response); // Success
     } catch (error) {
-      console.error(error); // Failure
+      console.error("Appwrite service :: createSalaryStructure() :: ", error);
+      return false;
     }
-  },
+  }
 
-  //function to add and the process the salary.
-  processSalary: async (
+  async processSalary(
     employeeName,
     employeeType,
     companyId,
@@ -90,11 +88,12 @@ export const salaryApi = {
     year,
     month,
     employeeNumber,
+    companyId,
     userId
-  ) => {
-    console.log("Collection ID:", collectionIdProcessSalary);
+  ) {
+    console.log("Appwrite service :: processSalary()");
     try {
-      const promise = databases.createDocument(
+      return await databases.createDocument(
         databaseID,
         collectionIdProcessSalary,
         "",
@@ -134,74 +133,66 @@ export const salaryApi = {
           year: year,
           month: month,
           employee_number: employeeNumber,
+          company_id: companyId,
         }
       );
-
-      const response = await promise;
-      console.log(response); // Success
     } catch (error) {
-      console.error(error); // Failure
+      console.error("Appwrite service :: processSalary() :: ", error);
+      return false;
     }
-  },
+  }
 
-  getSalaryStructure: async (empId, month, year) => {
-    console.log("getSalaryStructure API called");
+  async getSalaryStructure(empId, month, year) {
+    console.log("Appwrite service :: getSalaryStructure()");
     try {
-      const promise = databases.listDocuments(
+      return await databases.listDocuments(
         databaseID,
         collectionIdSalaryStructure,
-        [Query.equal("emp_id", empId), Query.equal("month", month)]
-        // Query.equal("year", year)]
+        [
+          Query.equal("emp_id", empId),
+          Query.equal("month", month),
+          Query.equal("year", year),
+        ]
       );
-      const response = await promise;
-      return response.documents;
     } catch (error) {
-      console.log(error); // Failure
+      console.error("Appwrite service :: getSalaryStructure() :: ", error);
+      return false;
     }
-  },
+  }
 
-  getSalaryStructuresByEmpId: async (empId) => {
-    console.log("getSalaryStructuresByEmpId API called", empId);
+  async getSalaryStructuresByEmpId(empId) {
+    console.log("Appwrite service :: getSalaryStructuresByEmpId()");
     try {
-      const promise = databases.listDocuments(
+      return await databases.listDocuments(
         databaseID,
         collectionIdSalaryStructure,
         [Query.equal("emp_id", empId)]
-        // Query.equal("year", year)]
       );
-      const response = await promise;
-      return response.documents;
     } catch (error) {
-      console.log(error); // Failure
+      console.error(
+        "Appwrite service :: getSalaryStructuresByEmpId() :: ",
+        error
+      );
+      return false;
     }
-  },
+  }
 
-  //get the salary structure by emp_id
-
-  getSalaryByEmpId: async (companyId, empId) => {
-    console.log("Backend compName = ", empId);
+  async getSalaryByEmpId(companyId, empId) {
+    console.log("Appwrite service :: getSalaryByEmpId()");
     try {
-      const promise = databases.listDocuments(
+      return await databases.listDocuments(
         databaseID,
         collectionIdProcessSalary,
-        [
-          Query.equal("emp_id, ", empId) &
-            Query.equal("company_id, ", companyId),
-        ]
+        [Query.equal("emp_id", empId), Query.equal("company_id", companyId)]
       );
-      const response = await promise;
-      if (response.error) {
-        console.error(response.error);
-        throw new Error("Failed to fetch employees.");
-      }
-      return response.documents;
     } catch (error) {
-      console.error(error);
-      throw new Error("Failed to fetch employees.");
+      console.error("Appwrite service :: getSalaryByEmpId() :: ", error);
+      return false;
     }
-  },
+  }
 
-  updateSalaryStructure: async (documentID, updatedData) => {
+  async updateSalaryStructure(documentID, updatedData) {
+    console.log("Appwrite service :: updateSalaryStructure()");
     try {
       await databases.updateDocument(
         databaseID,
@@ -209,8 +200,13 @@ export const salaryApi = {
         documentID,
         updatedData
       );
+      return true;
     } catch (error) {
-      console.error(error);
+      console.error("Appwrite service :: updateSalaryStructure() :: ", error);
+      return false;
     }
-  },
-};
+  }
+}
+
+const salaryApis = new SalaryAPIs();
+export default salaryApis;

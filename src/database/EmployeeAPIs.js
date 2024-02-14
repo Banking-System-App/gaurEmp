@@ -1,13 +1,18 @@
 import { databases } from "../appWrite/appwrite";
 import { Query } from "appwrite";
+import conf from "../conf/conf";
 
-const employeesCollectionId = "6570acd4d7b822e5c1b1";
-const databaseID = "656c2c4e3621c2f65000";
+const employeesCollectionId = conf.appwriteEmployeesCollectionId
+const databaseID = conf.appwriteDatabaseId
 
 
-export const employeeApi = {
+export class EmployeeAPIs{
 
-  createEmployee: async (
+  constructor(){
+
+  }
+
+  async createEmployee(
     empId,
     empName,
     gender,
@@ -43,10 +48,10 @@ export const employeeApi = {
     permanentAddress,
     compName,
     compId
-  ) => {
-    console.log("Collection ID:", employeesCollectionId);
+  ){
+    console.log("Appwrite service :: createEmployee() ");
     try {
-      const promise = databases.createDocument(
+      return await databases.createDocument(
         databaseID,
         employeesCollectionId,
         "",
@@ -88,61 +93,47 @@ export const employeeApi = {
             comp_id:compId
         }
       );
-
-      const response = await promise;
-      console.log(response); // Success
     } catch (error) {
-      console.error(error); // Failure
-    }
-  },
+      console.log("Appwrite service :: getCurrentUser() :: ", error);
+      return false
+  }
+  }
 
-
-getEmployeeDetail: async (companyId,empId) => {
-    console.log("companyId: empid",companyId,empId);
+  async getEmployeeDetail (companyId,empId) {
+    console.log("Appwrite service :: getEmployeeDetail() ");
     try {
-      const promise = databases.listDocuments(
+      return await databases.listDocuments(
         databaseID,
         employeesCollectionId,
         [ Query.equal("comp_id", companyId),
           Query.equal("emp_id", empId)]
       );
-      const response = await promise;
-      if (response.error) {
-        console.error(response.error);
-        throw new Error("Failed to fetch employees.");
-      }
-      return response.documents;
+      
     } catch (error) {
-      console.error(error);
-      // Handle the error as needed (e.g., show a message to the user)
-      throw new Error("Failed to fetch employees.");
+      console.log("Appwrite service :: getEmployeeDetail() :: ", error);
+      return false
     }
-  },
+  }
 
-  getAllEmployeesByCompanyId: async (compId) => {
-    console.log("getAllEmployeeByCompanyId is called ", compId);
+  async getAllEmployeesByCompanyId (compId) {
+    console.log("Appwrite service :: getAllEmployeesByCompanyId() ");
     try {
-      const promise = databases.listDocuments(
+      return await databases.listDocuments(
         databaseID,
         employeesCollectionId,
         [Query.equal("comp_id", compId)]
       );
-      const response = await promise;
-      if (response.error) {
-        console.error(response.error);
-        throw new Error("Failed to fetch employees.");
-      }
-      return response.documents;
+     
     } catch (error) {
-      console.error(error);
-      // Handle the error as needed (e.g., show a message to the user)
-      throw new Error("Failed to fetch employees.");
+      console.log("Appwrite service :: getAllEmployeesByCompanyId() :: ", error);
+      return false
     }
-  },
+  }
 
-  updateEmployeeData:async (documentId,updatedData)=>{
+  async updateEmployeeData (documentId,updatedData){
+    console.log("Appwrite service :: updateEmployeeData() ");
     try{
-      const promise=databases.updateDocument(
+      await databases.updateDocument(
         databaseID,
         employeesCollectionId,
         documentId,
@@ -150,9 +141,12 @@ getEmployeeDetail: async (companyId,empId) => {
       );
     }
     catch(error){
-      console.error(error);
-      throw new Error("Failed to update Employer data")
+      console.log("Appwrite service :: updateEmployeeData() :: ", error);
+      return false
     }
   }
 
-};
+}
+
+const employeeApis = new EmployeeAPIs();
+export default employeeApis

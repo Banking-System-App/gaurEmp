@@ -11,48 +11,46 @@ import {
   MDBBreadcrumb,
   MDBBreadcrumbItem,
 } from "mdb-react-ui-kit";
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { EmployeeUtil } from "../../utils/EmployeeUtil";
-import { useEmployeeData } from "../../context/EmployeeContext";
-import employeeApis from "../../database/EmployeeAPIs";
-import { ToastContainer, toast } from "react-toastify";
+import { CompanyUtil } from "../../utils/CompanyUtil";
+import { useCompanyData } from "../../context/CompanyContext";
+import companyApis from "../../database/CompanyAPIs";
+import { toast } from "react-toastify";
 
-export default function EmployeeProfile() {
-  const { EmployeeDetails } = useEmployeeData();
-  console.log("Employee Detail is : ", EmployeeDetails);
+export default function CompanyProfile() {
+  const { CompanyDetails } = useCompanyData();
+
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/salarystructure");
+    navigate("/addemployee");
   };
 
-  const handleSalaryProcess = () => {
-    navigate("/salaryprocess");
-    alert("salaryprocess button clicked");
+  const handleViewEmployees = () => {
+    navigate("/viewemployees");
   };
 
-  const [employee, setEmployee] = useState([]);
-
-  const [editableData, setEditableData] = useState({ ...employee[0] });
+  //call api call and set into intial data
   const [isEditMode, setIsEditMode] = useState(false);
+  const [company, setCompany] = useState([]);
+  const [editableData, setEditableData] = useState({ ...company[0] });
 
   useEffect(() => {
-    employeeApis
-      .getEmployeeDetail(EmployeeDetails.comp_id, EmployeeDetails.emp_id)
-      .then((response) => {
-        console.log("EmployeeProfile:: Employee ", response);
+    companyApis.getCompanyDetail(CompanyDetails.company_id).then((response) => {
+      console.log("CompanyProfile:: Company ", response);
 
-        if (response === false) {
-          toast.error("Loading Failed !", {
-            theme: "light",
-            autoClose: 1000,
-          });
-        } else {
-          setEmployee(response.documents);
-          setEditableData(response.documents[0]);
-        }
-      });
+      if (response === false) {
+        toast.error("Loading Failed !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      } else {
+        setCompany(response.documents[0]);
+        setEditableData(response.documents[0]);
+      }
+    });
   }, []);
 
   const handleInputChange = (label, value) => {
@@ -61,11 +59,15 @@ export default function EmployeeProfile() {
       [label]: value,
     }));
   };
+
   const handleSave = () => {
-    employeeApis
-      .updateEmployeeData(
+    console.log("Updated Data:", editableData);
+    console.log("Emp loyer id : ", company.$id);
+
+    companyApis
+      .updateCompanyData(
         editableData.$id,
-        EmployeeUtil.updatedData(editableData)
+        CompanyUtil.updatedData(editableData)
       )
       .then((response) => {
         //In case of error: False is returned from API method
@@ -79,9 +81,9 @@ export default function EmployeeProfile() {
             theme: "light",
             autoClose: 1000,
           });
-          //only when edit is successfuly saved
-          setIsEditMode(false);
         }
+
+        setIsEditMode(false);
       });
   };
 
@@ -90,8 +92,12 @@ export default function EmployeeProfile() {
     console.log("button clickeed", isEditMode);
   };
   const handleCancelEdit = () => {
-    setEditableData({ ...employee[0] });
+    setEditableData({ ...company });
     setIsEditMode(false);
+  };
+
+  const handlePaySlips = () => {
+    navigate("/generateslippdf");
   };
 
   return (
@@ -100,12 +106,7 @@ export default function EmployeeProfile() {
         <MDBRow>
           <MDBCol>
             <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
-              <MDBBtn
-                className="ms-auto m-3"
-                color="success"
-                size="lg"
-                onClick={handleSalaryProcess}
-              >
+              <MDBBtn className="ms-auto m-3" color="success" size="lg">
                 Salary Process Edit
               </MDBBtn>
               <MDBBreadcrumbItem>
@@ -117,7 +118,7 @@ export default function EmployeeProfile() {
 
         <MDBRow>
           <MDBCol lg="2">
-            <MDBCard className="mb-4">
+            <MDBCard className="mb-3">
               <MDBCardBody className="text-center">
                 <MDBCardImage
                   src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
@@ -127,24 +128,25 @@ export default function EmployeeProfile() {
                   fluid
                 />
                 <p className="text-muted mb-1">
-                  Employee Name : {EmployeeDetails.emp_name}
+                  Comapny Name: {editableData.name}
                 </p>
                 <p className="text-muted mb-4">
-                  Address: {EmployeeDetails.location}
+                  Address: {editableData.company_address}{" "}
                 </p>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
           <MDBCol lg="8">
+            <h1>Company Details</h1>
             <MDBCard className="mb-4">
               <MDBCardBody>
-                {Object.entries(EmployeeUtil.updatedData(editableData)).map(
+                {Object.entries(CompanyUtil.updatedData(editableData)).map(
                   ([label, value], index) =>
                     index % 4 === 0 && ( // Start a new row for every fourth item
                       <MDBRow key={index}>
                         <MDBCol sm="3">
                           <MDBCardText>
-                            {EmployeeUtil.changelabel[label]}
+                            {CompanyUtil.changelabel[label]}
                           </MDBCardText>
                         </MDBCol>
                         <MDBCol sm="3">
@@ -164,13 +166,13 @@ export default function EmployeeProfile() {
                           )}
                         </MDBCol>
                         {/* Render the next three key-value pairs in the same row */}
-                        {Object.entries(EmployeeUtil.updatedData(editableData))
+                        {Object.entries(CompanyUtil.updatedData(editableData))
                           .slice(index + 1, index + 4)
                           .map(([innerLabel, innerValue], innerIndex) => (
                             <React.Fragment key={innerIndex}>
                               <MDBCol sm="3">
                                 <MDBCardText>
-                                  {EmployeeUtil.changelabel[innerLabel]}
+                                  {CompanyUtil.changelabel[innerLabel]}
                                 </MDBCardText>
                               </MDBCol>
                               <MDBCol sm="3">
@@ -197,7 +199,6 @@ export default function EmployeeProfile() {
                       </MDBRow>
                     )
                 )}
-
                 {isEditMode && (
                   <>
                     <MDBBtn
@@ -225,9 +226,17 @@ export default function EmployeeProfile() {
             className="me-8 m-3"
             color="success"
             size="lg"
+            onClick={handleViewEmployees}
+          >
+            View Employees
+          </MDBBtn>
+          <MDBBtn
+            className="me-8 m-3"
+            color="success"
+            size="lg"
             onClick={handleClick}
           >
-            View Salary Structure
+            Add Employee
           </MDBBtn>
           <MDBBtn
             className="me-8 m-3"
@@ -237,9 +246,16 @@ export default function EmployeeProfile() {
           >
             Edit Details
           </MDBBtn>
+          <MDBBtn
+            className="me-8 m-3"
+            color="success"
+            onClick={handlePaySlips}
+            size="lg"
+          >
+            Generate Pay Slips
+          </MDBBtn>
         </div>
       </MDBContainer>
-      <ToastContainer />
     </section>
   );
 }

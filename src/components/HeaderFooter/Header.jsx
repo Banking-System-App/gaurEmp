@@ -10,7 +10,7 @@ const Header = () => {
 
 
     return (
-        <div className="header">
+        <div className="header position-fixed fixed-top">
             <div>
                 <Link id="header-logo" to="/">
                     LOGO

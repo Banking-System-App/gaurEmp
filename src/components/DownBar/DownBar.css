@@ -1,0 +1,7 @@
+.sticky-bottom {
+    position: fixed;
+    width: 80%;
+    bottom: 20px; /* Adjust the margin bottom as needed */
+    z-index: 1000; /* Adjust the z-index as needed */
+  }
+  

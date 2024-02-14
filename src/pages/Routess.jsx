@@ -38,7 +38,9 @@ const Routess = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route element={<PrivateRoutes />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<CompanyProvider>
+                  <CompanyList />
+                </CompanyProvider>} />
             <Route path="/addcompany" element={<AddCompanyForm />} />
             <Route
               path="/getcompany"

@@ -1,7 +1,3 @@
-
-import jsPDF from 'jspdf';
-import 'jspdf-autotable'
-
 import React, { useState, useEffect } from 'react';
 import {
   MDBContainer,
@@ -21,6 +17,7 @@ import { salaryUtil } from '../utils/SalaryUtil';
 import { useNavigate } from 'react-router-dom';
 import { useEmployerData } from '../context/EmployerContext';
 import { useEmployeeData } from '../context/EmployeeContext';
+import { pdfUtil } from '../utils/PdfUtil';
 
 
 export default function SalSheet() {
@@ -41,8 +38,8 @@ export default function SalSheet() {
     incomeTax: 0,
   });
 
-  const {EmployeeDetails} = useEmployeeData()
-  const {EmployerDetails} = useEmployerData();
+  const { EmployeeDetails } = useEmployeeData()
+  const { EmployerDetails } = useEmployerData();
 
   console.log("Employer Data at Salary Proceess page ", EmployerDetails);
   console.log("Employee Data at Salary Proceess page ", EmployeeDetails);
@@ -52,123 +49,16 @@ export default function SalSheet() {
       try {
         await salaryApi.getSalaryStructuresByEmpId(EmployeeDetails.emp_id).then((response) => {
           console.log("lodaaa at salary process", response[0]);
-         // setEarning((response));
           setEarning(salaryUtil.updatedSalaryData(salaryUtil.sortedSalaryData(response)[0]))
         })
-
-
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchEmployeeSalaryByEmpId();
   }, []);
 
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(10);
-
-    doc.setProperties({
-        title: "Salary Slip - October 2023",
-        subject: "Salary details for Ms Sneha Shah",
-        author: "CONCERTEBAR BUILDCON LLP",
-    });
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const mid = pageWidth/2;
-    const uppermargin = 20;
-    const lineSpacing = 5;
-
-    const lineNum = (linenumber) => {
-      return (uppermargin + (linenumber*lineSpacing));
-    }
-    const calculateCenterX = (text) => {
-        const fontSize = doc.internal.getFontSize();
-        const textWidth = doc.getTextWidth(text);
-        return (pageWidth - textWidth) / 2;
-    };
-
-    const companyName = "CONCERTEBAR BUILDCON LLP";
-    const companyAddress1 = "I WING.435 ROCK ENCLAVE BUILD NO 2";
-    const companyAddress2 = "opp jayice cream hindustan naka kandivali west 400067";
-
-    doc.text(companyName, calculateCenterX(companyName), lineNum(1));
-    doc.text(companyAddress1, calculateCenterX(companyAddress1), lineNum(2));
-    doc.text(companyAddress2, calculateCenterX(companyAddress2), lineNum(3));
-    
-    doc.text("Salary for the month: October 2023", 10, lineNum(5));
-    doc.text("Name    : Ms Sneha Shah", 10, lineNum(6));
-    doc.text("Emp No  : 17", mid, lineNum(6));
-    doc.text("Location: ", 10, lineNum(7));
-    doc.text("Designation: UNSKILLED", mid, lineNum(7));
-    doc.text("P F No: KDMAL1818048000/10011", 10, lineNum(8));
-    doc.text("UAN: 101430860842", mid, lineNum(8));
-    doc.text("E S I C No: ",10, lineNum(9));
-    doc.text("Days :" ,10,lineNum(10))
-    doc.text("Leave: 15.0", mid - 30, lineNum(10));
-    doc.text("WOP: 0.0", 150, lineNum(10));
-
-    const earningsData = [
-        ["Description", "Rate", "Earnings"],
-        ["Basic", 19265, 9322],
-        ["DA", 902, 436],
-        ["HRA", "", ""],
-    ];
-
-    doc.autoTable({
-      head: [earningsData[0]],
-      body: earningsData.slice(1),
-      theme: 'grid',
-      styles: {
-          fontSize: 10,
-          cellPadding: 2,
-          overflow: 'linebreak'
-      },
-      startY: lineNum(12),
-      margin: { top: 120 },
-      columnStyles: {
-          0: { cellWidth: 40 },
-          1: { cellWidth: 20, align: "right" },
-          2: { cellWidth: 25, align: "right" },
-      }
-  });
-
-  const deductionsData = [
-      ["Description", "Deductions"],
-      ["PF Contribution", 1171],
-      ["ESI Contribution", 74],
-  ];
-
-  doc.autoTable({
-      head: [deductionsData[0]],
-      body: deductionsData.slice(1),
-      theme: 'grid',
-      styles: {
-          fontSize: 10,
-          cellPadding: 2,
-          overflow: 'linebreak'
-      },
-      startY: lineNum(12),
-      margin: { left: mid, top: 120 },
-      columnStyles: {
-          0: { cellWidth: 40 },
-          1: { cellWidth: 25, align: "right" },
-      }
-  });
-
-    doc.text("Gross Earnings", 10, lineNum(20));
-    doc.text("9758", mid-30, lineNum(20), { align: "right" });
-    doc.text("Gross Deductions", mid, lineNum(20));
-    doc.text("1245", mid*2 - 30, lineNum(20), { align: "right" });
-    doc.text("Net Payable", 10, lineNum(21));
-    doc.text("8513", mid*2 -30, lineNum(21), { align: "right" });
-    doc.text("Date of Payment:", 10, lineNum(22));
-
-    doc.save("salary_slip.pdf");
-};
-
-  console.log("earnig i s ", earning);
+  console.log("earnig is ", earning);
 
   const navigate = useNavigate();
 
@@ -202,7 +92,11 @@ export default function SalSheet() {
     setDeductionDetails(fetchedSalaryDetails.deduction);
   };
 
-  
+  const generateSlip = () => {
+    pdfUtil.generatePDF(earning);
+  }
+
+
 
   return (
     <section style={{ backgroundColor: '#eee' }}>
@@ -349,7 +243,7 @@ export default function SalSheet() {
         {earningDetails.base !== 0 && deductionDetails.washing !== 0 && (
           <MDBRow className="mb-4">
             <MDBCol>
-              <MDBBtn color="success" onClick={generatePDF}>
+              <MDBBtn color="success" onClick={generateSlip}>
                 Generate Slip
               </MDBBtn>
             </MDBCol>

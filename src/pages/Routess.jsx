@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState }from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Header from '../components/HeaderFooter/Header';
@@ -22,13 +22,32 @@ import SalaryProcessEdit from '../components/Salary/SalaryProcessEdit';
 import { EmployerProvider } from '../context/EmployerContext';
 import { EmployeeProvider } from '../context/EmployeeContext';
 import SalSheet from '../pdfs/SalSheet';
+import Sidebar from '../components/HeaderFooter/Sidebar';
 
 const Routess = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
     <Router>
       <AuthProvider>
         <Header />
+        <div className="container-fluid">
+        <div className="row">
+          <div className={`col-md-3 ${sidebarOpen ? 'open' : ''}`}>
+            <button className="navbar-toggler d-md-none" type="button" onClick={toggleSidebar}>
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <Sidebar />
+          </div>
+          <div className="col-md-9">
+            {/* <Route path="/get-employees" component={GetEmployeesPage} />
+            <Route path="/add-employee" component={AddEmployeePage} /> */}
+         
+
         <Routes>
           <Route path='/Login' element={<Login />} />
           <Route path='/Signup' element={<Signup />} />
@@ -49,6 +68,9 @@ const Routess = () => {
             <Route path="" element={<userApi/>}/>
           </Route>
         </Routes>
+        </div>
+        </div>
+      </div>
       </AuthProvider>
     </Router>
   );

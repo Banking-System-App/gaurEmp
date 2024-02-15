@@ -1,16 +1,8 @@
-import React from "react";
-import {
-  MDBCol,
-  MDBContainer,
-  MDBRow,
-  MDBCard,
-  MDBCardText,
-  MDBCardBody,
-  MDBCardImage,
-  MDBBtn,
-  MDBBreadcrumb,
-  MDBBreadcrumbItem,
-} from "mdb-react-ui-kit";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -101,161 +93,59 @@ export default function CompanyProfile() {
   };
 
   return (
-    <section style={{ backgroundColor: "#eee" }}>
-      <MDBContainer className="py-5">
-        <MDBRow>
-          <MDBCol>
-            <MDBBreadcrumb className="bg-light rounded-3 p-2 mb-4">
-              <MDBBtn className="ms-auto m-3" color="success" size="lg">
-                Salary Process Edit
-              </MDBBtn>
-              <MDBBreadcrumbItem>
-                {/* <a href='#'>Home</a> */}
-              </MDBBreadcrumbItem>
-            </MDBBreadcrumb>
-          </MDBCol>
-        </MDBRow>
-
-        <MDBRow>
-          <MDBCol lg="2">
-            <MDBCard className="mb-3">
-              <MDBCardBody className="text-center">
-                <MDBCardImage
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                  alt="avatar"
-                  className="rounded-circle"
-                  style={{ width: "228px" }}
-                  fluid
-                />
-                <p className="text-muted mb-1">
-                  Comapny Name: {editableData.name}
-                </p>
-                <p className="text-muted mb-4">
-                  Address: {editableData.company_address}{" "}
-                </p>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-          <MDBCol lg="8">
-            <h1>Company Details</h1>
-            <MDBCard className="mb-4">
-              <MDBCardBody>
-                {Object.entries(CompanyUtil.updatedData(editableData)).map(
-                  ([label, value], index) =>
-                    index % 4 === 0 && ( // Start a new row for every fourth item
-                      <MDBRow key={index}>
-                        <MDBCol sm="3">
-                          <MDBCardText>
-                            {CompanyUtil.changelabel[label]}
-                          </MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="3">
-                          {isEditMode ? (
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={value}
-                              onChange={(e) =>
-                                handleInputChange(label, e.target.value)
-                              }
-                            />
-                          ) : (
-                            <MDBCardText className="text-muted">
-                              {value}
-                            </MDBCardText>
-                          )}
-                        </MDBCol>
-                        {/* Render the next three key-value pairs in the same row */}
-                        {Object.entries(CompanyUtil.updatedData(editableData))
-                          .slice(index + 1, index + 4)
-                          .map(([innerLabel, innerValue], innerIndex) => (
-                            <React.Fragment key={innerIndex}>
-                              <MDBCol sm="3">
-                                <MDBCardText>
-                                  {CompanyUtil.changelabel[innerLabel]}
-                                </MDBCardText>
-                              </MDBCol>
-                              <MDBCol sm="3">
-                                {isEditMode ? (
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    value={innerValue}
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        innerLabel,
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                ) : (
-                                  <MDBCardText className="text-muted">
-                                    {innerValue}
-                                  </MDBCardText>
-                                )}
-                              </MDBCol>
-                            </React.Fragment>
-                          ))}
-                      </MDBRow>
-                    )
+    <section>
+    <Container className="py-5">
+      <h1 className="mb-4">Company Details</h1>
+      <Row >
+        {Object.entries(CompanyUtil.updatedData(editableData)).map(([label, value], index) => (
+          <Col key={index} lg="4">
+            <Row className="mb-2 ">
+              <Col sm="6">
+                <strong>{CompanyUtil.changelabel[label]}</strong>
+              </Col>
+              <Col sm="6">
+                {isEditMode ? (
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={value}
+                    onChange={(e) => handleInputChange(label, e.target.value)}
+                  />
+                ) : (
+                  <p className="text-muted">{value}</p>
                 )}
-                {isEditMode && (
-                  <>
-                    <MDBBtn
-                      className="me-8 m-3"
-                      color="success"
-                      onClick={handleSave}
-                    >
-                      Save
-                    </MDBBtn>
-                    <MDBBtn
-                      className="me-8 m-3"
-                      color="danger"
-                      onClick={handleCancelEdit}
-                    >
-                      Cancel
-                    </MDBBtn>
-                  </>
-                )}
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-        <div className="d-flex justify-content-center mb-3">
-          <MDBBtn
-            className="me-8 m-3"
-            color="success"
-            size="lg"
-            onClick={handleViewEmployees}
-          >
-            View Employees
-          </MDBBtn>
-          <MDBBtn
-            className="me-8 m-3"
-            color="success"
-            size="lg"
-            onClick={handleClick}
-          >
-            Add Employee
-          </MDBBtn>
-          <MDBBtn
-            className="me-8 m-3"
-            color="success"
-            onClick={handleEditClick}
-            size="lg"
-          >
-            Edit Details
-          </MDBBtn>
-          <MDBBtn
-            className="me-8 m-3"
-            color="success"
-            onClick={handlePaySlips}
-            size="lg"
-          >
-            Generate Pay Slips
-          </MDBBtn>
-        </div>
-      </MDBContainer>
-    </section>
+              </Col>
+            </Row>
+          </Col>
+        ))}
+      </Row>
+      {isEditMode && (
+        <Row>
+          <Col>
+            <Button className="me-8 m-3" variant="success" onClick={handleSave}>
+              Save
+            </Button>
+            <Button className="me-8 m-3" variant="danger" onClick={handleCancelEdit}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      )}
+      <div className="d-flex justify-content-center mb-3">
+        <Button className="me-8 m-3" variant="success" size="lg" onClick={handleViewEmployees}>
+          View Employees
+        </Button>
+        <Button className="me-8 m-3" variant="success" size="lg" onClick={handleClick}>
+          Add Employee
+        </Button>
+        <Button className="me-8 m-3" variant="success" onClick={handleEditClick} size="lg">
+          Edit Details
+        </Button>
+        <Button className="me-8 m-3" variant="success" onClick={handlePaySlips} size="lg">
+          Generate Pay Slips
+        </Button>
+      </div>
+    </Container>
+  </section>
   );
 }

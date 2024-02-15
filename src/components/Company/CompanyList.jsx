@@ -12,6 +12,7 @@ import { useCompanyData } from "../../context/CompanyContext";
 
 import companyApis from "../../database/CompanyAPIs";
 import { toast } from "react-toastify";
+import DownBar from "../DownBar/DownBar";
 
 export default function CompanyList() {
   const { user } = useAuth();
@@ -42,36 +43,41 @@ export default function CompanyList() {
   }, []);
 
   return (
+    <div>
     <MDBTable align="middle" className="table table-hover">
       <MDBTableHead>
-        <tr>
-          <th scope="col">Company ID</th>
-          <th scope="col">Name</th>
+        <tr  className="text-center">
+          <th scope="col">S.N.</th>
+          <th scope="col">Company Code</th>
+          <th scope="col">Company Name</th>
           <th scope="col">Address</th>
-          <th scope="col">EMPCount</th>
         </tr>
       </MDBTableHead>
       <MDBTableBody>
-        {companys.map((emps, index) => (
+        {companys.map((comp, index) => (
           <tr
             key={index}
-            onClick={() => handleEmpDetailClick(emps)}
+            onClick={() => handleEmpDetailClick(comp)}
             style={{ cursor: "pointer" }}
+            className="text-center"
           >
             <td>
-              <p className="fw-bold mb-1">{emps.company_id}</p>
+              <p className="fw-bold mb-1">{index+1}</p>
             </td>
             <td>
-              <p className="fw-bold mb-1">{emps.name}</p>
+              <p className="fw-bold mb-1">{comp.company_code}</p>
             </td>
             <td>
-              <p className="fw-bold mb-1">{emps.company_address}</p>
+              <p className="fw-bold mb-1">{comp.name}</p>
             </td>
-            <td>Senior</td>
-            <td></td>
+            <td>
+              <p className="fw-bold mb-1">{comp.company_address}</p>
+            </td>
           </tr>
         ))}
       </MDBTableBody>
     </MDBTable>
+    <DownBar/>
+    </div>
   );
 }

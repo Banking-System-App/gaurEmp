@@ -25,7 +25,10 @@ export class CompanyAPIs {
     otRate,
     panNum,
     tanNum,
-    agentId
+   companyCode,
+    processType,
+    contactNumber,
+    agentId,
   ) {
     console.log("Appwrite service :: createCompany()");
     try {
@@ -51,6 +54,9 @@ export class CompanyAPIs {
           ot_rate: otRate,
           tan_no: tanNum,
           agent_id: agentId,
+          company_code: companyCode,
+          process_type:processType,
+          contact_no:contactNumber
         }
       );
     } catch (error) {

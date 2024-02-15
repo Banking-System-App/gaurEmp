@@ -124,11 +124,11 @@ export default function EmployeeProfile() {
           </Row>
         )}
         <div className="d-flex justify-content-center mb-3">
-          <Button className="me-8 m-3" variant="success" size="lg" onClick={""}>
-            View Salary Structure
+          <Button className="me-8 m-3" variant="success" size="lg" onClick={handleEditClick}>
+            Edit Employee
           </Button>
           <Button className="me-8 m-3" variant="success" size="lg" onClick={handleClick}>
-            Add Employee
+            Salary Structure
           </Button>
         </div>
       </Container>

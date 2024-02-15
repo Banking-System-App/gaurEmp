@@ -127,9 +127,7 @@ const Routess = () => {
             <Route path="" element={<userApi />} />
           </Route>
         </Routes>
-        </div>
-        </div>
-      </div>
+        
       </AuthProvider>
       <ToastContainer />
     </Router>

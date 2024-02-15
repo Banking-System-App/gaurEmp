@@ -337,7 +337,7 @@ export default function SalSheet() {
         {earningDetails.base !== 0 && deductionDetails.washing !== 0 && (
           <MDBRow className="mb-4">
             <MDBCol>
-              <MDBBtn color="success" onClick={generateSlip}>
+              <MDBBtn color="success" onClick={generatePDF}>
                 Generate Slip
               </MDBBtn>
             </MDBCol>

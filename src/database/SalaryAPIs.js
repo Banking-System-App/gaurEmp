@@ -26,21 +26,26 @@ export class SalaryAPIs {
   ) {
     console.log("Appwrite service :: createSalaryStructure()");
     try {
-      return await databases.createDocument(databaseID, collectionIdSalaryStructure, "", {
-        emp_id: empId,
-        emp_name: empName,
-        emp_type: empType,
-        company_id: companyId,
-        basic: basic,
-        da: da,
-        hra: hra,
-        conveyance: conveyance,
-        washing_allowance: washingAllowance,
-        medical_allowance: medicalAllowance,
-        other_allowance: otherAllowance,
-        year: year,
-        month: month,
-      });
+      return await databases.createDocument(
+        databaseID,
+        collectionIdSalaryStructure,
+        "",
+        {
+          emp_id: empId,
+          emp_name: empName,
+          emp_type: empType,
+          company_id: companyId,
+          basic: basic,
+          da: da,
+          hra: hra,
+          conveyance: conveyance,
+          washing_allowance: washingAllowance,
+          medical_allowance: medicalAllowance,
+          other_allowance: otherAllowance,
+          year: year,
+          month: month,
+        }
+      );
     } catch (error) {
       console.error("Appwrite service :: createSalaryStructure() :: ", error);
       return false;
@@ -50,7 +55,7 @@ export class SalaryAPIs {
   async processSalary(
     employeeName,
     employeeType,
-    employerId,
+    companyId,
     earnedLeave,
     wo,
     daysPaid,
@@ -88,44 +93,49 @@ export class SalaryAPIs {
   ) {
     console.log("Appwrite service :: processSalary()");
     try {
-      return await databases.createDocument(databaseID, collectionIdProcessSalary, "", {
-        employee_name: employeeName,
-        employee_type: employeeType,
-        employer_id: employerId,
-        earned_leave: earnedLeave,
-        wp: wo,
-        days_paid: daysPaid,
-        overtime_hours: overtimeHours,
-        basic: basic,
-        da: da,
-        hra: hra,
-        conveyance: conveyance,
-        washing_allowance: washingAllowance,
-        madical_allowance: medicalAllowance,
-        other_allowance: otherAllowance,
-        incentive: incentive,
-        monthly_rate: monthlyRate,
-        overtime_pay: overtimePay,
-        daily_rate: dailyRate,
-        reimbursement: reimbursement,
-        gross_earning: grossEarning,
-        total_earning: totalEarning,
-        pf_contribution: pfContribution,
-        vol_pf: volPf,
-        esi_contribution: esiContribution,
-        professional_tax: professionalTax,
-        labour_wf: labourWf,
-        income_tax: incomeTax,
-        loan_recovered: loanRecovered,
-        advanced_recovered: advancedRecovered,
-        other_deductions: otherDeductions,
-        gross: gross,
-        net_payable: netPayable,
-        year: year,
-        month: month,
-        employee_number: employeeNumber,
-        company_id: companyId,
-      });
+      return await databases.createDocument(
+        databaseID,
+        collectionIdProcessSalary,
+        "",
+        {
+          employee_name: employeeName,
+          employee_type: employeeType,
+          company_id: companyId,
+          earned_leave: earnedLeave,
+          wp: wo,
+          days_paid: daysPaid,
+          overtime_hours: overtimeHours,
+          basic: basic,
+          da: da,
+          hra: hra,
+          conveyance: conveyance,
+          washing_allowance: washingAllowance,
+          madical_allowance: medicalAllowance,
+          other_allowance: otherAllowance,
+          incentive: incentive,
+          monthly_rate: monthlyRate,
+          overtime_pay: overtimePay,
+          daily_rate: dailyRate,
+          reimbursement: reimbursement,
+          gross_earning: grossEarning,
+          total_earning: totalEarning,
+          pf_contribution: pfContribution,
+          vol_pf: volPf,
+          esi_contribution: esiContribution,
+          professional_tax: professionalTax,
+          labour_wf: labourWf,
+          income_tax: incomeTax,
+          loan_recovered: loanRecovered,
+          advanced_recovered: advancedRecovered,
+          other_deductions: otherDeductions,
+          gross: gross,
+          net_payable: netPayable,
+          year: year,
+          month: month,
+          employee_number: employeeNumber,
+          company_id: companyId,
+        }
+      );
     } catch (error) {
       console.error("Appwrite service :: processSalary() :: ", error);
       return false;
@@ -135,11 +145,15 @@ export class SalaryAPIs {
   async getSalaryStructure(empId, month, year) {
     console.log("Appwrite service :: getSalaryStructure()");
     try {
-      return await databases.listDocuments(databaseID, collectionIdSalaryStructure, [
-        Query.equal("emp_id", empId),
-        Query.equal("month", month),
-        Query.equal("year", year),
-      ]);
+      return await databases.listDocuments(
+        databaseID,
+        collectionIdSalaryStructure,
+        [
+          Query.equal("emp_id", empId),
+          Query.equal("month", month),
+          Query.equal("year", year),
+        ]
+      );
     } catch (error) {
       console.error("Appwrite service :: getSalaryStructure() :: ", error);
       return false;
@@ -149,11 +163,16 @@ export class SalaryAPIs {
   async getSalaryStructuresByEmpId(empId) {
     console.log("Appwrite service :: getSalaryStructuresByEmpId()");
     try {
-      return await databases.listDocuments(databaseID, collectionIdSalaryStructure, [
-        Query.equal("emp_id", empId),
-      ]);
+      return await databases.listDocuments(
+        databaseID,
+        collectionIdSalaryStructure,
+        [Query.equal("emp_id", empId)]
+      );
     } catch (error) {
-      console.error("Appwrite service :: getSalaryStructuresByEmpId() :: ", error);
+      console.error(
+        "Appwrite service :: getSalaryStructuresByEmpId() :: ",
+        error
+      );
       return false;
     }
   }
@@ -161,10 +180,11 @@ export class SalaryAPIs {
   async getSalaryByEmpId(companyId, empId) {
     console.log("Appwrite service :: getSalaryByEmpId()");
     try {
-      return await databases.listDocuments(databaseID, collectionIdProcessSalary, [
-        Query.equal("emp_id", empId),
-        Query.equal("company_id", companyId),
-      ]);
+      return await databases.listDocuments(
+        databaseID,
+        collectionIdProcessSalary,
+        [Query.equal("emp_id", empId), Query.equal("company_id", companyId)]
+      );
     } catch (error) {
       console.error("Appwrite service :: getSalaryByEmpId() :: ", error);
       return false;
@@ -174,7 +194,12 @@ export class SalaryAPIs {
   async updateSalaryStructure(documentID, updatedData) {
     console.log("Appwrite service :: updateSalaryStructure()");
     try {
-      await databases.updateDocument(databaseID, collectionIdSalaryStructure, documentID, updatedData);
+      await databases.updateDocument(
+        databaseID,
+        collectionIdSalaryStructure,
+        documentID,
+        updatedData
+      );
       return true;
     } catch (error) {
       console.error("Appwrite service :: updateSalaryStructure() :: ", error);

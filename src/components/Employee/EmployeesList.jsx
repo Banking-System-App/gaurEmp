@@ -7,31 +7,29 @@ import {
   MDBTableBody,
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
-import {useEmployeeData} from "../../context/EmployeeContext";
-import { useEmployerData } from "../../context/EmployerContext";
+import { useEmployeeData } from "../../context/EmployeeContext";
+import { useCompanyData } from "../../context/CompanyContext";
 import employeeApis from "../../database/EmployeeAPIs";
 import { toast } from "react-toastify";
 
 export default function EmployeesList() {
-
-  const {EmployerDetails} = useEmployerData();
-  const {setEmployeeDataValue} = useEmployeeData()
+  const { CompanyDetails } = useCompanyData();
+  const { setEmployeeDataValue } = useEmployeeData();
 
   const [employees, setEmployees] = useState([]);
 
   //TODO: Do war chal rha hai
   useEffect(() => {
     employeeApis
-          .getAllEmployeesByCompanyId(EmployerDetails.employer_id)
-          .then((response) => {
-            if (response === false) {
-              toast.error("Fetching Failed !", {
-                theme: "light",
-                autoClose: 1000,
-              });
-            } else setEmployees(response.documents);
+      .getAllEmployeesByCompanyId(CompanyDetails.company_id)
+      .then((response) => {
+        if (response === false) {
+          toast.error("Fetching Failed !", {
+            theme: "light",
+            autoClose: 1000,
           });
-   
+        } else setEmployees(response.documents);
+      });
   }, []);
 
   const navigate = useNavigate();
@@ -54,7 +52,7 @@ export default function EmployeesList() {
       </MDBTableHead>
       <MDBTableBody>
         {employees.map((employee, index) => (
-          <tr key={index} onClick={()=>handleClick(employee)}>
+          <tr key={index} onClick={() => handleClick(employee)}>
             <td>
               <div className="d-flex align-items-center">
                 <img
@@ -89,4 +87,3 @@ export default function EmployeesList() {
     </MDBTable>
   );
 }
-

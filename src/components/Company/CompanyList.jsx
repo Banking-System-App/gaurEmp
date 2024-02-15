@@ -8,28 +8,28 @@ import {
 } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/AuthContext";
-import { useEmployerData } from "../../context/EmployerContext";
+import { useCompanyData } from "../../context/CompanyContext";
 
-import employerApis from "../../database/EmployerAPIs";
+import companyApis from "../../database/CompanyAPIs";
 import { toast } from "react-toastify";
 
-export default function EmployerList() {
+export default function CompanyList() {
   const { user } = useAuth();
 
-  const { setEmployerDataValue } = useEmployerData();
+  const { setCompanyDataValue } = useCompanyData();
   const navigate = useNavigate();
 
-  const handleEmpDetailClick = (employerData) => {
-    console.log("emps data is, ", employerData);
-    setEmployerDataValue(employerData);
-    navigate("/employerprofile");
+  const handleEmpDetailClick = (companyData) => {
+    console.log("emps data is, ", companyData);
+    setCompanyDataValue(companyData);
+    navigate("/companyprofile");
   };
-  const [employers, setEmployers] = useState([]);
-  
+  const [companys, setCompanys] = useState([]);
+
   //::: TODO: Debug: Running Twice
   useEffect(() => {
-    employerApis.getAllEmployerByUserId(user.$id).then((response) => {
-      console.log("EmployerList:: List Of Employees", response);
+    companyApis.getAllCompanyByUserId(user.$id).then((response) => {
+      console.log("CompanyList:: List Of Employees", response);
 
       //In case of error: False is returned from API method
       if (response === false) {
@@ -37,36 +37,35 @@ export default function EmployerList() {
           theme: "light",
           autoClose: 1000,
         });
-      } else setEmployers(response.documents);
+      } else setCompanys(response.documents);
     });
-
   }, []);
 
   return (
     <MDBTable align="middle" className="table table-hover">
       <MDBTableHead>
         <tr>
-          <th scope="col">Employer ID</th>
+          <th scope="col">Company ID</th>
           <th scope="col">Name</th>
           <th scope="col">Address</th>
           <th scope="col">EMPCount</th>
         </tr>
       </MDBTableHead>
       <MDBTableBody>
-        {employers.map((emps, index) => (
+        {companys.map((emps, index) => (
           <tr
             key={index}
             onClick={() => handleEmpDetailClick(emps)}
             style={{ cursor: "pointer" }}
           >
             <td>
-              <p className="fw-bold mb-1">{emps.employer_id}</p>
+              <p className="fw-bold mb-1">{emps.company_id}</p>
             </td>
             <td>
               <p className="fw-bold mb-1">{emps.name}</p>
             </td>
             <td>
-              <p className="fw-bold mb-1">{emps.employer_address}</p>
+              <p className="fw-bold mb-1">{emps.company_address}</p>
             </td>
             <td>Senior</td>
             <td></td>

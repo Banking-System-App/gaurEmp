@@ -11,6 +11,7 @@ const AddCompanyForm = () => {
 
   const [companyInfo, setCompanyInfo] = useState({
     companyId: "",
+    companyCode: "",
     companyName: "",
     companyAddress: "",
     pfMemberFlag: "0",
@@ -27,6 +28,8 @@ const AddCompanyForm = () => {
     panNum: "",
     tanNum: "",
     agenId: "",
+    processType: "Direct Posting",
+    contactNumber:""
   });
 
   const handleChange = (e) => {
@@ -43,6 +46,7 @@ const AddCompanyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("companyInfo",companyInfo);
     companyApis
       .createCompany(
         companyInfo.companyId,
@@ -61,6 +65,9 @@ const AddCompanyForm = () => {
         companyInfo.otRate,
         companyInfo.panNum,
         companyInfo.tanNum,
+        companyInfo.companyCode,
+        companyInfo.processType,
+        companyInfo.contactNumber,
         user.$id
       )
       .then((response) => {
@@ -70,6 +77,7 @@ const AddCompanyForm = () => {
             autoClose: 1000,
           });
         } else {
+          console.info("response of create company",response);
           toast.success("Added Successfuly !", {
             theme: "light",
             autoClose: 1000,
@@ -115,6 +123,20 @@ const AddCompanyForm = () => {
               onChange={handleChange}
             />
           </div>
+         < div className="col-md-4">
+            <label htmlFor="companyCode" className="form-label">
+              Company Code
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="companyCode"
+              name="companyCode"
+              value={companyInfo.companyCode}
+              onChange={handleChange}
+            />
+          </div>
+
           <div className="col-md-4">
             <label htmlFor="companyAddress" className="form-label">
               Address
@@ -128,6 +150,23 @@ const AddCompanyForm = () => {
               onChange={handleChange}
             />
           </div>
+          <div className="col-md-4">
+            <label htmlFor="processType" className="form-label">
+              Process Type
+            </label>
+            <select
+              className="form-control"
+              id="processType"
+              name="processType"
+              value={companyInfo.processType}
+              onChange={handleChange}
+            >
+              <option value="Direct Posting">Direct Posting</option>
+              <option value="InDirect Posting">InDirect Posting</option>
+            </select>
+          </div>
+
+
 
           <div className="col-md-4">
             <label htmlFor="pfMemberFlag" className="form-label">
@@ -158,6 +197,7 @@ const AddCompanyForm = () => {
               disabled={companyInfo.pfMemberFlag !== "1"}
             />
           </div>
+
           <div className="col-md-4">
             <label htmlFor="group" className="form-label">
               Group
@@ -172,6 +212,9 @@ const AddCompanyForm = () => {
             />
           </div>
 
+          
+
+        
           <div className="col-md-4">
             <label htmlFor="pfLimit" className="form-label">
               PF Limit
@@ -311,6 +354,20 @@ const AddCompanyForm = () => {
               id="tanNum"
               name="tanNum"
               value={companyInfo.tanNum}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="col-md-4">
+            <label htmlFor="contactNumber" className="form-label">
+             Contact Number
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="contactNumber"
+              name="contactNumber"
+              value={companyInfo.contactNumber}
               onChange={handleChange}
             />
           </div>

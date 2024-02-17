@@ -19,7 +19,6 @@ export default function EmployeeProfile() {
 
   const handleSalaryProcess = () => {
     navigate("/salaryprocess");
-    alert("salaryprocess button clicked");
   };
 
   const [employee, setEmployee] = useState([]);
@@ -129,6 +128,9 @@ export default function EmployeeProfile() {
           </Button>
           <Button className="me-8 m-3" variant="success" size="lg" onClick={handleClick}>
             Salary Structure
+          </Button>
+          <Button className="me-8 m-3" variant="success" size="lg" onClick={handleSalaryProcess}>
+            Process salary
           </Button>
         </div>
       </Container>

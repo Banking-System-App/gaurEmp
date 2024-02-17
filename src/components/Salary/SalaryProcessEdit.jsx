@@ -1,16 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBBtn,
-  MDBCard,
-  MDBCardBody,
-  MDBCardText,
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-} from "mdb-react-ui-kit";
+import { useState, useEffect } from "react";
+import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import { salaryApi } from "../../database/salaryApi";
 import { useNavigate } from "react-router-dom";
 import { useCompanyData } from "../../context/CompanyContext";
@@ -23,23 +12,59 @@ export default function SalaryProcessEdit() {
   const [selectedYear, setSelectedYear] = useState("");
   const [employeeName, setEmployeeName] = useState("");
   const [earning, setEarning] = useState({});
-  const [earningDetails, setEarningDetails] = useState({
-    basic: 0,
-    hra: 0,
-    da: 0,
-  });
-  const [deductionDetails, setDeductionDetails] = useState({
-    washing: 0,
-    pf: 0,
-    esi: 0,
-    incomeTax: 0,
+
+  const employee = {
+    name: "John Doe",
+    designation: "Software Engineer",
+    uan: "1234567890",
+    location: "Mumbai",
+    pfNo: "ABC12345",
+    empNo: "1001",
+    companyName: "CONCERTEBAR BUILDCON LLP",
+    companyAddress:
+      "I WING.435 ROCK ENCLAVE BUILD NO 2opp jayice cream hindustan nakakandivali west 400067",
+  };
+
+  const salaryData = {
+    month: "January 2024",
+    basic: {
+      rate: 50000,
+      earnings: 50000,
+    },
+    da: {
+      rate: 10000,
+      earnings: 10000,
+    },
+    hra: {
+      rate: 15000,
+      earnings: 15000,
+    },
+    // Add more earnings objects as needed
+    deductions: {
+      pf: 2000,
+      // Add more deductions objects as needed
+    },
+    grossEarnings: 75000,
+    totalDeductions: 2000,
+    netPayable: 73000,
+  };
+
+  const [varDays, setVarDays] = useState({
+    Days: 0,
+    Leave: 0,
+    WOP: 0,
   });
 
   const { EmployeeDetails } = useEmployeeData();
   const { CompanyDetails } = useCompanyData();
 
-  console.log("Company Data at Salary Proceess page ", CompanyDetails);
-  console.log("Employee Data at Salary Proceess page ", EmployeeDetails);
+  const handleVarDays = (dataKey, data) => {
+    console.log("Change ${dataKey} ", data);
+    setVarDays((prevData) => ({
+      ...prevData,
+      [dataKey]: data,
+    }));
+  };
 
   useEffect(() => {
     const fetchEmployeeSalaryByEmpId = async () => {
@@ -63,7 +88,6 @@ export default function SalaryProcessEdit() {
     fetchEmployeeSalaryByEmpId();
   }, []);
 
-  console.log("earnig i s ", earning);
 
   const navigate = useNavigate();
 
@@ -105,15 +129,20 @@ export default function SalaryProcessEdit() {
 
   return (
     <section style={{ backgroundColor: "#eee" }}>
-      <MDBContainer className="py-5">
-        <MDBRow>
-          <MDBCol>
-            <h1 className="text-center mb-4">Salary Process Edit</h1>
-          </MDBCol>
-        </MDBRow>
+      <Container className="py-5">
+        <Row className="align-items-center">
+          <Col xs={6}>
+            <h1 className="display-6">{employee.companyName}</h1>
+            <p>{employee.companyAddress}</p>
+          </Col>
+          <Col xs={6} className="text-end">
+            <p>Salary for the month: {salaryData.month}</p>
+            <p>Emp No: {employee.empNo}</p>
+          </Col>
+        </Row>
 
-        <MDBRow className="mb-4">
-          <MDBCol md="3">
+        <Row className="mb-4">
+          <Col md="3">
             <input
               type="text"
               className="form-control"
@@ -121,8 +150,8 @@ export default function SalaryProcessEdit() {
               value={employeeNumber}
               onChange={(e) => setEmployeeNumber(e.target.value)}
             />
-          </MDBCol>
-          <MDBCol md="2">
+          </Col>
+          <Col md="2">
             <input
               type="text"
               className="form-control"
@@ -130,8 +159,8 @@ export default function SalaryProcessEdit() {
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
             />
-          </MDBCol>
-          <MDBCol md="2">
+          </Col>
+          <Col md="2">
             <input
               type="text"
               className="form-control"
@@ -139,110 +168,133 @@ export default function SalaryProcessEdit() {
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
             />
-          </MDBCol>
-          <MDBCol md="2">
-            <MDBBtn color="success" onClick={handleEmployeeSubmit}>
+          </Col>
+          <Col md="2">
+            <Button color="success" onClick={handleEmployeeSubmit}>
               Submit
-            </MDBBtn>
-          </MDBCol>
-        </MDBRow>
+            </Button>
+          </Col>
+        </Row>
 
-        {employeeName && (
-          <MDBRow className="mb-4">
-            <MDBCol>
-              <h5>Employee Name: {employeeName}</h5>
-            </MDBCol>
-          </MDBRow>
-        )}
+        <Row className="mb-4">
+          <Col md="2">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Days"
+              value={varDays.Days}
+              onChange={(e) => handleVarDays("Days", e.target.value)}
+            />
+          </Col>
+          <Col md="2">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Leave"
+              value={varDays.Leave}
+              onChange={(e) => handleVarDays("Leave", e.target.value)}
+            />
+          </Col>
+          <Col md="2">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="WOP"
+              value={varDays.WOP}
+              onChange={(e) => handleVarDays("WOP", e.target.value)}
+            />
+          </Col>
+        </Row>
 
-        <MDBRow className="mb-4">
-          <MDBCol md="2">
-            <input type="text" className="form-control" placeholder="EL" />
-          </MDBCol>
-          <MDBCol md="2">
-            <input type="text" className="form-control" placeholder="WP" />
-          </MDBCol>
-          <MDBCol md="2">
-            <input type="text" className="form-control" placeholder="OD" />
-          </MDBCol>
-          <MDBCol md="2">
-            <input type="text" className="form-control" placeholder="OT" />
-          </MDBCol>
-          <MDBCol md="2">
-            <MDBBtn color="success" onClick={handleSalarySubmit}>
-              Submit
-            </MDBBtn>
-          </MDBCol>
-        </MDBRow>
+        <div className="row">
+          <div className="col-sm-6">
+            <p>Name: {employee.name}</p>
+            <p>Designation: {employee.designation}</p>
+            <p>UAN: {employee.uan}</p>
+          </div>
+          <div className="col-sm-6">
+            <p>Emp No: {employee.empNo}</p>
+            <p>Location: {employee.location}</p>
+            <p>PF No: {employee.pfNo}</p>
+          </div>
+        </div>
 
-        {earning.basic !== 0 && (
-          <MDBRow className="mb-4">
-            <MDBCol>
-              <MDBCard>
-                <MDBCardBody>
-                  <MDBTable>
-                    <MDBTableHead>
-                      <tr>
-                        <th>Earning</th>
-                        <th>Amount</th>
-                      </tr>
-                    </MDBTableHead>
-                    <MDBTableBody>
-                      {Object.entries(salaryUtil.earning(earning)).map(
-                        ([category, amount], index) => (
-                          <tr key={index}>
-                            <td>{category}</td>
-                            <td>{amount}</td>
-                          </tr>
-                        )
-                      )}
-                    </MDBTableBody>
-                  </MDBTable>
-                </MDBCardBody>
-              </MDBCard>
-            </MDBCol>
-          </MDBRow>
-        )}
-
-        {deductionDetails.washing !== 0 && (
-          <MDBRow className="mb-4">
-            <MDBCol>
-              <MDBCard>
-                <MDBCardBody>
-                  <MDBTable>
-                    <MDBTableHead>
-                      <tr>
-                        <th>Deduction</th>
-                        <th>Amount</th>
-                      </tr>
-                    </MDBTableHead>
-                    <MDBTableBody>
-                      {Object.entries(deductionDetails).map(
-                        ([category, amount], index) => (
-                          <tr key={index}>
-                            <td>{category}</td>
-                            <td>{amount}</td>
-                          </tr>
-                        )
-                      )}
-                    </MDBTableBody>
-                  </MDBTable>
-                </MDBCardBody>
-              </MDBCard>
-            </MDBCol>
-          </MDBRow>
-        )}
-
-        {earningDetails.base !== 0 && deductionDetails.washing !== 0 && (
-          <MDBRow className="mb-4">
-            <MDBCol>
-              <MDBBtn color="success" onClick={handleGenerateSlip}>
-                Generate Slip
-              </MDBBtn>
-            </MDBCol>
-          </MDBRow>
-        )}
-      </MDBContainer>
+        <div className="row">
+          <div className="col-sm-6">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Rate</th>
+                  <th>Earnings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Basic</td>
+                  <td>{salaryData.basic.rate}</td>
+                  <td>
+                    {salaryUtil.calculateBasic(
+                      salaryData.basic.rate,
+                      varDays.Days
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>DA</td>
+                  <td>{salaryData.da.rate}</td>
+                  <td>{salaryData.da.earnings}</td>
+                </tr>
+                <tr>
+                  <td>HRA</td>
+                  <td>{salaryData.hra.rate}</td>
+                  <td>{salaryData.hra.earnings}</td>
+                </tr>
+                {/* Add more rows for other earnings as needed */}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Gross Earnings</th>
+                  <th></th>
+                  <th>{salaryData.grossEarnings}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div className="col-sm-6">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>PF Contribution</td>
+                  <td>{salaryData.deductions.pf}</td>
+                </tr>
+                {/* Add more rows for other deductions as needed */}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Gross Deductions</th>
+                  <th>{salaryData.totalDeductions}</th>
+                </tr>
+                <tr>
+                  <th>Net Payable</th>
+                  <th>{salaryData.netPayable}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12 text-end">
+            <p>Date of Payment:</p>
+          </div>
+        </div>
+      </Container>
     </section>
   );
 }

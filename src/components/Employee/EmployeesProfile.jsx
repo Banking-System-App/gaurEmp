@@ -23,7 +23,7 @@ export default function EmployeeProfile() {
 
   const [employee, setEmployee] = useState([]);
 
-  const [editableData, setEditableData] = useState({ ...employee[0] });
+const [editableData, setEditableData] = useState({ ...employee[0] });
   const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
@@ -86,30 +86,118 @@ export default function EmployeeProfile() {
   return (
     <section>
       <Container className="py-5">
-        <h1 className="mb-4">Employee Details</h1>
-        <Row>
-          {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label, value], index) => (
-            <Col key={index} sm="12" md="6" lg="4">
-              <Row className="mb-2">
-                <Col sm="6">
-                  <strong>{EmployeeUtil.changelabel[label]}</strong>
-                </Col>
-                <Col sm="6">
-                  {isEditMode ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={value}
-                      onChange={(e) => handleInputChange(label, e.target.value)}
-                    />
-                  ) : (
-                    <p className="text-muted">{value}</p>
-                  )}
-                </Col>
-              </Row>
-            </Col>
-          ))}
+      <Row className="align-items-center mb-4">
+          <Col>
+            <h1 className="mb-0">Employee Details</h1>
+          </Col>
+          <Col className="text-end">
+            <Button className="m-1" variant="outline-success" size="sm" onClick={handleEditClick}>
+              Edit Employee
+            </Button>
+            <Button className="m-1" variant="outline-success" size="sm" onClick={handleClick}>
+              Salary Structure
+            </Button>
+            <Button className="m-1" variant="outline-success" size="sm" onClick={handleSalaryProcess}>
+            Process salary
+          </Button>
+          </Col>
         </Row>
+        <hr /> 
+        <h3 >General Detail</h3>
+        <Row>
+        {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label, value], index) => {
+          //(EmployeeUtil.categorizedLabels[label][1]==="PersonalInfo")
+          if ( Object.prototype.hasOwnProperty.call(EmployeeUtil.categorizedLabels["General"], label)) { // Odd index values
+            return (
+              <Col key={index} sm="12" md="6" lg="4">
+                <Row className="mb-2">
+                  <Col sm="6">
+                    <strong>{EmployeeUtil.changelabel[label]}</strong>
+                  </Col>
+                  <Col sm="6">
+                    {isEditMode ? (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={value}
+                        onChange={(e) => handleInputChange(label, e.target.value)}
+                      />
+                    ) : (
+                      <p className="text-muted">{value}</p>
+                    )}
+                  </Col>
+                </Row>
+              </Col>
+            );
+          } else {
+            return null; // Don't render for even index values
+          }
+        })}
+      </Row>
+      <hr /> 
+      <h3>Bank Detail</h3>
+      <Row>
+        {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label, value], index) => {
+          if (Object.prototype.hasOwnProperty.call(EmployeeUtil.categorizedLabels["Bank"], label)) { // Even index values
+            return (
+              <Col key={index} sm="12" md="6" lg="4">
+                <Row className="mb-2">
+                  <Col sm="6">
+                    <strong>{EmployeeUtil.changelabel[label]}</strong>
+                  </Col>
+                  <Col sm="6">
+                    {isEditMode ? (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={value}
+                        onChange={(e) => handleInputChange(label, e.target.value)}
+                      />
+                    ) : (
+                      <p className="text-muted">{value}</p>
+                    )}
+                  </Col>
+                </Row>
+              </Col>
+            );
+          } else {
+            return null; // Don't render for odd index values
+          }
+        })}
+      </Row>
+
+      <hr /> 
+      <h3>Personal Info</h3>
+      <Row>
+        {Object.entries(EmployeeUtil.updatedData(editableData)).map(([label, value], index) => {
+          if (Object.prototype.hasOwnProperty.call(EmployeeUtil.categorizedLabels["PersonalInfo"], label)) { // Even index values
+            return (
+              <Col key={index} sm="12" md="6" lg="4">
+                <Row className="mb-2">
+                  <Col sm="6">
+                    <strong>{EmployeeUtil.changelabel[label]}</strong>
+                  </Col>
+                  <Col sm="6">
+                    {isEditMode ? (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={value}
+                        onChange={(e) => handleInputChange(label, e.target.value)}
+                      />
+                    ) : (
+                      <p className="text-muted">{value}</p>
+                    )}
+                  </Col>
+                </Row>
+              </Col>
+            );
+          } else {
+            return null; 
+          }
+        })}
+      </Row>
+
         {isEditMode && (
           <Row>
             <Col>
@@ -122,17 +210,6 @@ export default function EmployeeProfile() {
             </Col>
           </Row>
         )}
-        <div className="d-flex justify-content-center mb-3">
-          <Button className="me-8 m-3" variant="success" size="lg" onClick={handleEditClick}>
-            Edit Employee
-          </Button>
-          <Button className="me-8 m-3" variant="success" size="lg" onClick={handleClick}>
-            Salary Structure
-          </Button>
-          <Button className="me-8 m-3" variant="success" size="lg" onClick={handleSalaryProcess}>
-            Process salary
-          </Button>
-        </div>
       </Container>
     </section>
   );

@@ -4,7 +4,7 @@
 export const EmployeeUtil = {
 
 
-    updatedData(obj){
+updatedData(obj){
 
 
         // var obj1 = {a:1, b:2, c:3};
@@ -47,7 +47,7 @@ export const EmployeeUtil = {
             sos_contact,
             permanent_address,
             comp_name,
-            comp_id
+            
         } = obj;
 
         var newobj = {
@@ -85,32 +85,90 @@ export const EmployeeUtil = {
             sos_contact,
             permanent_address,
             comp_name,
-            comp_id
+            
         }
 
         return newobj;
 
     },
     changelabel : {
-        emp_id: "empId",
-        emp_name: "empName",
-        gender: "gender",
-        dob: "dob",
-        marital_status: "maritalStatus",
-        location: "location",
-        designation: "designation",
-        date_of_joining: "dateOfJoining",
-        professional_tax: "professionalTax",
+        emp_id: "Employee ID",
+        emp_name: "Employee Name",
+        gender: "Gender",
+        dob: "Date of Birth",
+        marital_status: "Marital Status",
+        location: "Location",
+        designation: "Designation",
+        date_of_joining: "Date of Joining",
+        professional_tax: "ProfessionalTax",
         intl_w_flag: "intlWFlag",
-        pf_flag: "pfFlag",
-        pf_number: "pfNum",
-        pen_flag: "penFlag",
-        d_o_member: "dateOfMember",
-        es_flag: "esFlag",
-        es_code: "esCode",
+        pf_flag: "Pf Flag",
+        pf_number: "PF Number",
+        pen_flag: "Pen Flag",
+        d_o_member: "Date of Member",
+        es_flag: "ES Flag",
+        es_code: "ES Code",
         lwf_flag: "lwfFlag",
-        dol: "dateOfLeave",
-        reason: "reason",
-        pf_10: "pf10",
-    }
+        dol: "DateOfLeave",
+        reason: "Reason",
+        pf_10: "PF10",
+        uan_num:"UAN Num",
+        aadhar:"Aadhar",
+        bank_name:"Bank",
+        account_num: "Account Number",
+        permanent_address:"Permanent Address",
+        father_name: "Father's Name",
+         husband_name: "Husband's Name",
+        local_address: "Local Address",
+        mob_num: "Mobile Number",
+        mother_maiden_name: "Mother's Maiden Name",
+        pan_num: "PAN Number",
+        payment: "Payment Type",
+        sos_contact: "SOS Contact",
+         
+
+    },
+
+
+    categorizedLabels : {
+  General: {
+    location: "Location",
+    designation: "Designation",
+    date_of_joining: "Date of Joining",
+    professional_tax: "ProfessionalTax",
+    intl_w_flag: "intlWFlag",
+    pf_flag: "Pf Flag",
+    pf_number: "PF Number",
+    pen_flag: "Pen Flag",
+    d_o_member: "Date of Member",
+    es_flag: "ES Flag",
+    es_code: "ES Code",
+    lwf_flag: "lwfFlag",
+    dol: "DateOfLeave",
+    reason: "Reason",
+    pf_10: "PF10",
+    uan_num: "UAN Num"
+  },
+  Bank: {
+    aadhar: "Aadhar",
+    bank_name: "Bank",
+    account_num: "Account Number",
+    payment: "Payment Type",
+    sos_contact: "SOS Contact"
+  },
+  PersonalInfo: {
+    emp_id: "Employee ID",
+    emp_name: "Employee Name",
+    gender: "Gender",
+    dob: "Date of Birth",
+    marital_status: "Marital Status",
+    father_name: "Father's Name",
+    husband_name: "Husband's Name",
+    mother_maiden_name: "Mother's Maiden Name",
+    local_address: "Local Address",
+    permanent_address: "Permanent Address",
+    mob_num: "Mobile Number",
+    pan_num: "PAN Number"
+  }
+}    
 }

@@ -88,7 +88,6 @@ export class SalaryAPIs {
     year,
     month,
     employeeNumber,
-    companyId,
     userId
   ) {
     console.log("Appwrite service :: processSalary()");
@@ -133,7 +132,7 @@ export class SalaryAPIs {
           year: year,
           month: month,
           employee_number: employeeNumber,
-          company_id: companyId,
+         
         }
       );
     } catch (error) {

@@ -38,7 +38,11 @@ export default function CompanyList() {
           theme: "light",
           autoClose: 1000,
         });
-      } else setCompanys(response.documents);
+      } else{
+         setCompanys(response.documents);
+         //Set the first company in compnayContext, so that company context never remain empty([])
+         setCompanyDataValue(response.documents[0])
+      }
     });
   }, []);
 

@@ -1,4 +1,6 @@
 export const salaryUtil = {
+
+  //destructuring the object here
   updatedSalaryData(obj) {
     var {
       emp_id,
@@ -107,7 +109,13 @@ export const salaryUtil = {
     return ((rate*days)/30).toFixed(2)
   },
 
-  calculateGrossEarnings() {},
+  calculateGrossEarnings(earnings) {
+    var sum=0;
+    
+    for (const property in earnings) 
+      sum+=earnings[property]
+    return sum
+  },
 
   calculateGrossDeductions() {},
 

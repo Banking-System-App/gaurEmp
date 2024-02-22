@@ -85,7 +85,7 @@ const Sidebar = () => {
               </li>
               <li>
                 <NavLink
-                  to="#"
+                  to="/bulksalaryprocess"
                   className="link-dark d-inline-flex text-decoration-none rounded"
                   >Salary of All Emp</NavLink
                 >

@@ -213,4 +213,5 @@ export const salaryApi = {
       console.error(error);
     }
   },
+
 };

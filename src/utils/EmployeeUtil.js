@@ -18,8 +18,9 @@ updatedData(obj){
             gender,
             dob,
             marital_status,
-            location,
+            
             designation,
+            location,
             date_of_joining,
             professional_tax,
             intl_w_flag,
@@ -56,8 +57,9 @@ updatedData(obj){
             gender,
             dob,
             marital_status,
-            location,
+           
             designation,
+            location,
             date_of_joining,
             professional_tax,
             intl_w_flag,
@@ -131,44 +133,46 @@ updatedData(obj){
     },
 
 
- categorizedLabels: {
-       
-          emp_id: ["Employee ID", "PersonalInfo"],
-          emp_name: ["Employee Name", "PersonalInfo"],
-          gender: ["Gender", "PersonalInfo"],
-          dob: ["Date of Birth", "PersonalInfo"],
-          marital_status: ["Marital Status", "PersonalInfo"],
-          father_name: ["Father's Name", "PersonalInfo"],
-          husband_name: ["Husband's Name", "PersonalInfo"],
-          mother_maiden_name: ["Mother's Maiden Name", "PersonalInfo"],
-          local_address: ["Local Address", "PersonalInfo"],
-          permanent_address: ["Permanent Address", "PersonalInfo"],
-          mob_num: ["Mobile Number", "PersonalInfo"],
-          pan_num: ["PAN Number", "PersonalInfo"],
-        
-          aadhar: ["Aadhar", "Bank"],
-          bank_name: ["Bank", "Bank"],
-          account_num: ["Account Number", "Bank"],
-          payment: ["Payment Type", "Bank"],
-          sos_contact: ["SOS Contact", "Bank"],
-       
-          location: ["Location", "General"],
-          designation: ["Designation", "General"],
-          date_of_joining: ["Date of Joining", "General"],
-          professional_tax: ["ProfessionalTax", "General"],
-          intl_w_flag: ["intlWFlag", "General"],
-          pf_flag: ["Pf Flag", "General"],
-          pf_number: ["PF Number", "General"],
-          pen_flag: ["Pen Flag", "General"],
-          d_o_member: ["Date of Member", "General"],
-          es_flag: ["ES Flag", "General"],
-          es_code: ["ES Code", "General"],
-          lwf_flag: ["lwfFlag", "General"],
-          dol: ["DateOfLeave", "General"],
-          reason: ["Reason", "General"],
-          pf_10: ["PF10", "General"],
-          uan_num: ["UAN Num", "General"],
-       
-      }
+    categorizedLabels : {
+        General: {
+          location: "Location",
+          designation: "Designation",
+          date_of_joining: "Date of Joining",
+          professional_tax: "ProfessionalTax",
+          intl_w_flag: "intlWFlag",
+          pf_flag: "Pf Flag",
+          pf_number: "PF Number",
+          pen_flag: "Pen Flag",
+          d_o_member: "Date of Member",
+          es_flag: "ES Flag",
+          es_code: "ES Code",
+          lwf_flag: "lwfFlag",
+          dol: "DateOfLeave",
+          reason: "Reason",
+          pf_10: "PF10",
+          uan_num: "UAN Num"
+        },
+        Bank: {
+          aadhar: "Aadhar",
+          bank_name: "Bank",
+          account_num: "Account Number",
+          payment: "Payment Type",
+          sos_contact: "SOS Contact"
+        },
+        PersonalInfo: {
+          emp_id: "Employee ID",
+          emp_name: "Employee Name",
+          gender: "Gender",
+          dob: "Date of Birth",
+          marital_status: "Marital Status",
+          father_name: "Father's Name",
+          husband_name: "Husband's Name",
+          mother_maiden_name: "Mother's Maiden Name",
+          local_address: "Local Address",
+          permanent_address: "Permanent Address",
+          mob_num: "Mobile Number",
+          pan_num: "PAN Number"
+        }
+      }    
       
 }

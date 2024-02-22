@@ -1,29 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import context from 'react-bootstrap/esm/AccordionContext';
 import { useNavigate } from 'react-router-dom';
 import { useEmployeeData } from '../../context/EmployeeContext';
+import salaryApis from '../../database/SalaryAPIs';
+import { toast } from 'react-toastify';
+import { useCompanyData } from '../../context/CompanyContext';
 
 const BulkSalaryProcess = () => {
 
   const { setEmployeeDataValue } = useEmployeeData();
   const navigate =useNavigate()
   const [selectAll, setSelectAll] = useState(false);
+  const {CompanyDetails}=useCompanyData()
 
   // State to manage employee data
   const [employees, setEmployees] = useState([
-    { id: 1, name: 'John Doe', designation: 'Software Engineer', totalDays: 20, leaves: 2, selected: false },
+    /* { id: 1, name: 'John Doe', designation: 'Software Engineer', totalDays: 20, leaves: 2, selected: false },
     { id: 2, name: 'Ram', designation: 'Software Engineer', totalDays: 21, leaves: 5, selected: false },
     { id: 3, name: 'John malik', designation: 'TA', totalDays: 23, leaves: 6, selected: false },
     { id: 4, name: 'Pappu', designation: 'Gov Emp', totalDays: 25, leaves: 4, selected: false }
-    // Add more employees as needed
-
+ */
 
   ]);
 
 
   useEffect(() => {
-    
+    /* TODO: 1. Call salry Structure
+    2. make set that in employees  
+    3. One emp can have multiple slary staurue for that we have to choose latest*/
+
+    console.log("BulkSalaryProcess :: useEffect: CompanyDetails",CompanyDetails.company_id);
+
+    salaryApis.getAllEmpSalaryStructuresByCompID(CompanyDetails.company_id).then((response) => {
+      console.log("BulkSalaryProcess :: getAllEmpSalaryStructuresByCompID: response",response);
+      if (response === false) {
+        toast.error("Fetching Failed !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      } else{
+         setEmployees(response.documents);
+      }
+    });
+
 
     
   }, []);
@@ -93,6 +113,7 @@ const handleSelectionChange = (employeeId) => {
     // Prepare data for API call
     const selectedEmployees = employees.filter(employee => employee.selected);
     // Make API call to save data
+    console.log(selectedEmployees);
   };
 
   return (
@@ -109,7 +130,8 @@ const handleSelectionChange = (employeeId) => {
           </th>
             <th>Employee Name</th>
             <th>Employee ID</th>
-            <th>Designation</th>
+            {/* <th>Employee Type</th> */}
+            <th>Employee Type</th>
             <th>Total Working Days</th>
             <th>Leaves</th>
           </tr>
@@ -124,9 +146,9 @@ const handleSelectionChange = (employeeId) => {
                   onChange={() => handleSelectionChange(employee.id)}
                 />
               </td>
-              <td>{employee.name}</td>
-              <td>{employee.id}</td>
-              <td>{employee.designation}</td>
+              <td>{employee.emp_name}</td>
+              <td>{employee.emp_id}</td>
+              <td>{employee.emp_type}</td>
               <td>
                 <Form.Control
                   type="number"

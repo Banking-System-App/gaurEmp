@@ -176,6 +176,24 @@ export class SalaryAPIs {
     }
   }
 
+
+  async getAllEmpSalaryStructuresByCompID(compId) {
+    console.log("Appwrite service :: getAllEmpSalaryStructuresByCompID()");
+    try {
+      return await databases.listDocuments(
+        databaseID,
+        collectionIdSalaryStructure,
+        [Query.equal("company_id", compId)]
+      );
+    } catch (error) {
+      console.error(
+        "Appwrite service :: getAllEmpSalaryStructuresByCompID() :: ",
+        error
+      );
+      return false;
+    }
+  }
+
   async getSalaryByEmpId(companyId, empId) {
     console.log("Appwrite service :: getSalaryByEmpId()");
     try {

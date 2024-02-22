@@ -32,7 +32,7 @@ const AddCompanyForm = () => {
     contactNumber:""
   });
 
-  const handleChange = (e) => {
+const handleChange = (e) => {
     const { name, value } = e.target;
     setCompanyInfo((prevInfo) => ({
       ...prevInfo,
@@ -179,8 +179,8 @@ const AddCompanyForm = () => {
               value={companyInfo.pfMemberFlag}
               onChange={handleChange}
             >
-              <option value="0">No</option>
-              <option value="1">Yes</option>
+              <option value="N">No</option>
+              <option value="Y">Yes</option>
             </select>
           </div>
           <div className="col-md-4">
@@ -220,7 +220,8 @@ const AddCompanyForm = () => {
               PF Limit
             </label>
             <input
-              type="text"
+             type="text"
+              pattern="[0-9]*"
               className="form-control"
               id="pfLimit"
               name="pfLimit"
@@ -239,8 +240,8 @@ const AddCompanyForm = () => {
               value={companyInfo.esMemberFlag}
               onChange={handleChange}
             >
-              <option value="0">No</option>
-              <option value="1">Yes</option>
+              <option value="N">No</option>
+              <option value="Y">Yes</option>
             </select>
           </div>
           <div className="col-md-4">
@@ -282,8 +283,8 @@ const AddCompanyForm = () => {
               value={companyInfo.lwfFlag}
               onChange={handleChange}
             >
-              <option value="0">No</option>
-              <option value="1">Yes</option>
+              <option value="N">No</option>
+              <option value="Y">Yes</option>
             </select>
           </div>
           <div className="col-md-4">

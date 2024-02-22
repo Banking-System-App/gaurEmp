@@ -18,8 +18,9 @@ updatedData(obj){
             gender,
             dob,
             marital_status,
-            location,
+            
             designation,
+            location,
             date_of_joining,
             professional_tax,
             intl_w_flag,
@@ -56,8 +57,9 @@ updatedData(obj){
             gender,
             dob,
             marital_status,
-            location,
+           
             designation,
+            location,
             date_of_joining,
             professional_tax,
             intl_w_flag,

@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Form, FormGroup, FormControl, Button } from 'react-bootstrap';
-import context from 'react-bootstrap/esm/AccordionContext';
-import { useNavigate } from 'react-router-dom';
-import { useEmployeeData } from '../../context/EmployeeContext';
-import salaryApis from '../../database/SalaryAPIs';
-import { toast } from 'react-toastify';
-import { useCompanyData } from '../../context/CompanyContext';
+import React, { useState, useEffect } from "react";
+import { Table, Form, FormGroup, FormControl, Button } from "react-bootstrap";
+import context from "react-bootstrap/esm/AccordionContext";
+import { useNavigate } from "react-router-dom";
+import { useEmployeeData } from "../../context/EmployeeContext";
+import salaryApis from "../../database/SalaryAPIs";
+import { toast } from "react-toastify";
+import { useCompanyData } from "../../context/CompanyContext";
+import { salaryUtil } from "../../utils/SalaryUtil";
+import { sharedUtil } from "../../utils/SharedUtil";
 
 const BulkSalaryProcess = () => {
-
   const { setEmployeeDataValue } = useEmployeeData();
-  const navigate =useNavigate()
+  const navigate = useNavigate();
   const [selectAll, setSelectAll] = useState(false);
-  const {CompanyDetails}=useCompanyData()
+  const { CompanyDetails } = useCompanyData();
+
+  //HashTable for fast search
+  const [existingEmpIdsInFinalSalryTable,setExistingEmpIdsInFinalSalryTable] = useState({}) 
+  // {'66': docID,'99': docID2,'101': docID6,'102': docID4} values as key, and documentID as values
+  
 
   // State to manage employee data
   const [employees, setEmployees] = useState([
@@ -21,113 +27,216 @@ const BulkSalaryProcess = () => {
     { id: 3, name: 'John malik', designation: 'TA', totalDays: 23, leaves: 6, selected: false },
     { id: 4, name: 'Pappu', designation: 'Gov Emp', totalDays: 25, leaves: 4, selected: false }
  */
-
   ]);
-
 
   useEffect(() => {
     /* TODO: 1. Call salry Structure
     2. make set that in employees  
     3. One emp can have multiple slary staurue for that we have to choose latest*/
 
-    console.log("BulkSalaryProcess :: useEffect: CompanyDetails",CompanyDetails.company_id);
+    console.log(
+      "BulkSalaryProcess :: useEffect: CompanyDetails",
+      CompanyDetails.company_id
+    );
 
-    salaryApis.getAllEmpSalaryStructuresByCompID(CompanyDetails.company_id).then((response) => {
-      console.log("BulkSalaryProcess :: getAllEmpSalaryStructuresByCompID: response",response);
-      if (response === false) {
-        toast.error("Fetching Failed !", {
-          theme: "light",
-          autoClose: 1000,
-        });
-      } else{
-         setEmployees(response.documents);
-      }
-    });
+    salaryApis
+      .getAllEmpSalaryStructuresByCompID(CompanyDetails.company_id)
+      .then((response) => {
+        console.log(
+          "BulkSalaryProcess :: getAllEmpSalaryStructuresByCompID: response",
+          response
+        );
+        if (response === false) {
+          toast.error("Fetching Failed !", {
+            theme: "light",
+            autoClose: 1000,
+          });
+        } else {
+          const originalObjects = response.documents;
+          const modifiedObjects = originalObjects.map((originalObject) => {
+            return {
+              ...originalObject,
+              totalDays: 0,
+              leaves: 0,
+              selected: false,
+            };
+          });
+          setEmployees(modifiedObjects);
+        }
+      });
 
 
-    
+      //call final salry API. 
+      salaryApis.getFinalSalariesByCompIdMonthYear(CompanyDetails.company_id,sharedUtil.getCurrentMonth(),sharedUtil.getCurrentYear())
+      .then((response)=>{
+        console.log(
+          "BulkSalaryProcess :: getFinalSalariesByCompIdMonthYear: response",
+          response
+        );
+
+        if (response === false || response.documents.length===0) {
+          //
+        } else {
+          //
+          response.documents.forEach((finalSalary)=>{
+            //if the emplyeeID is not in our HashTable then insert a pair of empID:docID
+
+            if(!existingEmpIdsInFinalSalryTable[finalSalary.employee_number] ){
+              setExistingEmpIdsInFinalSalryTable(prevState => ({
+                ...prevState,
+                [finalSalary.employee_number]: finalSalary.$id
+            }));
+            }
+          })
+        }
+
+      })
+      
   }, []);
-
-
 
   // Function to toggle selection for all employees
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    const updatedEmployees = employees.map(employee => ({
+    const updatedEmployees = employees.map((employee) => ({
       ...employee,
-      selected: !selectAll
+      selected: !selectAll,
     }));
     setEmployees(updatedEmployees);
   };
 
- // Event handler for toggling selection
-const handleSelectionChange = (employeeId) => {
-    const index = employees.findIndex(employee => employee.id === employeeId);
+  // Event handler for toggling selection
+  const handleSelectionChange = (employeeId) => {
+    const index = employees.findIndex((employee) => employee.emp_id === employeeId);
     if (index !== -1) {
       const updatedEmployees = [...employees];
-      updatedEmployees[index] = { ...updatedEmployees[index], selected: !updatedEmployees[index].selected };
+      updatedEmployees[index] = {
+        ...updatedEmployees[index],
+        selected: !updatedEmployees[index].selected,
+      };
       setEmployees(updatedEmployees);
     }
   };
-  
+
   // Event handler for editing working days
   const handleWorkingDaysChange = (employeeId, value) => {
-    const index = employees.findIndex(employee => employee.id === employeeId);
+    const index = employees.findIndex((employee) => employee.id === employeeId);
     if (index !== -1) {
       const updatedEmployees = [...employees];
-      updatedEmployees[index] = { ...updatedEmployees[index], totalDays: parseInt(value, 10) };
+      updatedEmployees[index] = {
+        ...updatedEmployees[index],
+        totalDays: parseInt(value, 10),
+      };
       setEmployees(updatedEmployees);
     }
   };
-  
+
   // Event handler for editing leaves
   const handleLeavesChange = (employeeId, value) => {
-    const index = employees.findIndex(employee => employee.id === employeeId);
+    const index = employees.findIndex((employee) => employee.id === employeeId);
     if (index !== -1) {
       const updatedEmployees = [...employees];
-      updatedEmployees[index] = { ...updatedEmployees[index], leaves: parseInt(value, 10) };
+      updatedEmployees[index] = {
+        ...updatedEmployees[index],
+        leaves: parseInt(value, 10),
+      };
       setEmployees(updatedEmployees);
     }
   };
 
   //Event handler for a row click : Salary process for a single emp should open
 
-  const handleEmployeeRowClick=(event, employeeId)=>{
+  const handleEmployeeRowClick = (event, employeeId) => {
     // handling the double click only
     if (event.detail === 2) {
-        /* 1. Set the emp context
+      /* 1. Set the emp context
         2. Navigating to /salaryprocess
         3. check on that file , we shlud be using the emp context to populate CompanyDetails */
 
-
-        console.log('double click');
-        /* setEmployeeDataValue(Employee);
+      console.log("double click");
+      /* setEmployeeDataValue(Employee);
         navigate("/employeeprofile"); */
-      }
-  }
+    }
+  };
 
-  
+  const createDocinBulk = async () => {
+    let documents = employees;
+
+    let promises = [];
+
+    console.time("insertdocuments");
+
+    //run loop for selected employees only
+    for (let i = 0; i < documents.length && documents[i].selected; i++) {
+      //calculate the final salary object
+      let finalSalary = salaryUtil.prepareFinalSalaryObjectEmployee(
+        documents[i]
+      );
+
+      /* if finalSalry of any employee already exist then update that
+      other wise insert */
+      let createdDocument;
+      
+      if(existingEmpIdsInFinalSalryTable[documents[i].emp_id]){
+        createdDocument = salaryApis.updateFinalSalary(existingEmpIdsInFinalSalryTable[documents[i].emp_id],finalSalary);
+      }else{
+        createdDocument = salaryApis.processSalary(finalSalary);
+      }
+      // let createdDocument = salaryApis.processSalary(finalSalary);
+      promises.push(createdDocument);
+
+      if (i % 1000 == 0)
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+
+    Promise.all(promises).then((res) => {
+        console.timeEnd("insertdocuments");
+        console.log("promises::",res);
+
+        if(res[0]===false){
+
+        toast.error("Opps, Failed!", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      }else{
+        toast.success("Holla done !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      }
+
+      }).catch((e) => {
+        toast.error(" Failed !", {
+          theme: "light",
+          autoClose: 1000,
+        });
+      });
+  };
 
   // Event handler for submitting data
   const handleSubmit = () => {
-    // Prepare data for API call
-    const selectedEmployees = employees.filter(employee => employee.selected);
-    // Make API call to save data
-    console.log(selectedEmployees);
+
+
+    // const selectedEmployees = employees.filter((employee) => employee.selected);
+    // console.log(selectedEmployees);
+
+    /* TODO: Final salry object should be here. */
+    createDocinBulk();
+    
   };
 
   return (
     <div>
-      <Table striped bordered hover >
+      <Table striped bordered hover>
         <thead>
           <tr>
-          <th>
-            <input
-              type="checkbox"
-              checked={selectAll}
-              onChange={handleSelectAll}
-            />
-          </th>
+            <th>
+              <input
+                type="checkbox"
+                checked={selectAll}
+                onChange={handleSelectAll}
+              />
+            </th>
             <th>Employee Name</th>
             <th>Employee ID</th>
             {/* <th>Employee Type</th> */}
@@ -137,13 +246,13 @@ const handleSelectionChange = (employeeId) => {
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee) => (
-            <tr key={employee.id}>
-            <td>
+          {employees.map((employee,index) => (
+            <tr key={index}>
+              <td>
                 <Form.Check
                   type="checkbox"
                   checked={employee.selected}
-                  onChange={() => handleSelectionChange(employee.id)}
+                  onChange={() => handleSelectionChange(employee.emp_id)}
                 />
               </td>
               <td>{employee.emp_name}</td>
@@ -153,14 +262,18 @@ const handleSelectionChange = (employeeId) => {
                 <Form.Control
                   type="number"
                   value={employee.totalDays}
-                  onChange={(e) => handleWorkingDaysChange(employee.id, e.target.value)}
+                  onChange={(e) =>
+                    handleWorkingDaysChange(employee.id, e.target.value)
+                  }
                 />
               </td>
               <td>
                 <Form.Control
                   type="number"
                   value={employee.leaves}
-                  onChange={(e) => handleLeavesChange(employee.id, e.target.value)}
+                  onChange={(e) =>
+                    handleLeavesChange(employee.id, e.target.value)
+                  }
                 />
               </td>
             </tr>

@@ -1,5 +1,6 @@
-export const salaryUtil = {
+import { sharedUtil } from "./SharedUtil";
 
+export const salaryUtil = {
   //destructuring the object here
   updatedSalaryData(obj) {
     var {
@@ -95,29 +96,189 @@ export const salaryUtil = {
     return newobj;
   },
 
-  calculateDA(rate,days) {
-    return ((rate*days)/30).toFixed(2)
+  calculateDA(rate, days) {
+    return ((rate * days) / 30).toFixed(2);
   },
 
   calculatePF() {},
 
-  calculateBasic(rate,days) {
-    return ((rate*days)/30).toFixed(2)
+  calculateBasic(rate, days) {
+    return ((rate * days) / 30).toFixed(2);
   },
 
-  calculateHRA(rate,days) {
-    return ((rate*days)/30).toFixed(2)
+  calculateHRA(rate, days) {
+    return ((rate * days) / 30).toFixed(2);
   },
 
   calculateGrossEarnings(earnings) {
-    var sum=0;
-    
-    for (const property in earnings) 
-      sum+=earnings[property]
-    return sum
+    var sum = 0;
+
+    for (const property in earnings) sum += earnings[property];
+    return sum;
   },
 
   calculateGrossDeductions() {},
 
   calculateNetPayable() {},
+
+  prepareFinalSalaryObjectEmployee(employee) {
+    const finalSal = {
+      /*   employeeName: employee.emp_name,
+      employeeType: "employee.emp_type",
+      companyId: employee.company_id,
+      earnedLeave: "0",
+      wo: "0", // assuming this refers to "wp"
+      daysPaid: "0",
+      overtimeHours: "0",
+      basic: this.calculateBasic(30,30),
+      da: this.calculateDA(30,30),
+      hra: this.calculateHRA(30,30),
+      conveyance: "0",
+      washingAllowance: "0",
+      medicalAllowance: "0",
+      otherAllowance: "0",
+      incentive: "0",
+      monthlyRate: "0",
+      overtimePay: "0",
+      dailyRate: "0",
+      reimbursement: "0",
+      grossEarning: this.calculateGrossEarnings([30,30,30]).toString,
+      totalEarning: "0",
+      pfContribution: "0",
+      volPf: "0",
+      esiContribution: "0",
+      professionalTax: "0",
+      labourWf: "0", // assuming this refers to "labour_wf"
+      incomeTax: "0",
+      loanRecovered: "0",
+      advancedRecovered: "0",
+      otherDeductions: "0",
+      gross: "0",
+      netPayable: "0",
+      year: "0",
+      month: "0",
+      employeeNumber: employee.emp_id, */
+
+      employee_name: employee.emp_name,
+      employee_type: "0",
+      company_id: employee.company_id,
+      earned_leave: "0",
+      wp: "0",
+      days_paid: "0",
+      overtime_hours: "0",
+      basic: this.calculateBasic(30, 30),
+      da: this.calculateDA(30, 30),
+      hra: this.calculateHRA(30, 30),
+      conveyance: "0",
+      washing_allowance: "0",
+      madical_allowance: "0",
+      other_allowance: "0",
+      incentive: "0",
+      monthly_rate: "0",
+      overtime_pay: "0",
+      daily_rate: "0",
+      reimbursement: "0",
+      gross_earning: this.calculateGrossEarnings([30, 30, 30]).toString(),
+      total_earning: "0",
+      pf_contribution: "0",
+      vol_pf: "0",
+      esi_contribution: "0",
+      professional_tax: "0",
+      labour_wf: "0",
+      income_tax: "0",
+      loan_recovered: "0",
+      advanced_recovered: "0",
+      other_deductions: "0",
+      gross: "0",
+      net_payable: "0",
+      year: sharedUtil.getCurrentYear(),
+      month: sharedUtil.getCurrentMonth(),
+      employee_number: employee.emp_id,
+    };
+
+    return finalSal;
+  },
 };
+
+//The object we are getting from API: SalaryStructure
+/* 
+const SalaryStructure  = {
+  basic: 1800,
+  company_id: "987",
+  conveyance: 3,
+  da: 8,
+  emp_id: "12",
+  emp_name: "Adbhishek",
+  emp_type: null,
+  hra: 6,
+  medical_allowance: 367,
+  month: "January",
+  other_allowance: 13,
+  washing_allowance: 128,
+  year: "2024",
+};
+ */
+
+//The Object we have to render
+
+/* 
+const originalObject = {
+  basic: 1800,
+  company_id: "987",
+  conveyance: 3,
+  da: 8,
+  emp_id: "12",
+  emp_name: "Adbhishek",
+  emp_type: null,
+  hra: 6,
+  medical_allowance: 367,
+  month: "January",
+  other_allowance: 13,
+  washing_allowance: 128,
+  year: "2024",
+  totalDays: 21, 
+  leaves: 5, 
+  selected: false
+};
+ */
+
+//The object we have to send to the API : FinalSalary
+/* 
+{
+  "employee_name": "0",
+  "employee_type": "0",
+  "earned_leave": "0",
+  "wp": "0",
+  "days_paid": "0",
+  "overtime_hours": "0",
+  "basic": "0",
+  "da": "0",
+  "hra": "0",
+  "conveyance": "0",
+  "washing_allowance": "0",
+  "madical_allowance": "0",
+  "other_allowance": "0",
+  "incentive": "0",
+  "monthly_rate": "0",
+  "overtime_pay": "0",
+  "daily_rate": "0",
+  "reimburshment": "0",
+  "gross_earning": "0",
+  "total_earning": "0",
+  "pf_contribution": "0",
+  "vol_pf": "0",
+  "esi_contribution": "0",
+  "professional_tax": "0",
+  "labour_wf": "0",
+  "income_tax": "0",
+  "loan_recovered": "0",
+  "advanced_recovered": "0",
+  "other_deductions": "0",
+  "gross": "0",
+  "net_payable": "0",
+  "year": "0",
+  "month": "0",
+  "employee_number": "0",
+  "company_id": "0"
+}
+*/

@@ -22,10 +22,7 @@ const BulkSalaryProcess = () => {
 
   // State to manage employee data
   const [employees, setEmployees] = useState([
-    /* { id: 1, name: 'John Doe', designation: 'Software Engineer', totalDays: 20, leaves: 2, selected: false },
-    { id: 2, name: 'Ram', designation: 'Software Engineer', totalDays: 21, leaves: 5, selected: false },
-    { id: 3, name: 'John malik', designation: 'TA', totalDays: 23, leaves: 6, selected: false },
-    { id: 4, name: 'Pappu', designation: 'Gov Emp', totalDays: 25, leaves: 4, selected: false }
+    /* { id: 1, name: 'John Doe', designation: 'Software Engineer', totalDays: 20, leaves: 2, selected: false }
  */
   ]);
 
@@ -33,11 +30,6 @@ const BulkSalaryProcess = () => {
     /* TODO: 1. Call salry Structure
     2. make set that in employees  
     3. One emp can have multiple slary staurue for that we have to choose latest*/
-
-    console.log(
-      "BulkSalaryProcess :: useEffect: CompanyDetails",
-      CompanyDetails.company_id
-    );
 
     salaryApis
       .getAllEmpSalaryStructuresByCompID(CompanyDetails.company_id)
@@ -65,32 +57,7 @@ const BulkSalaryProcess = () => {
         }
       });
 
-
-      //call final salry API. 
-      salaryApis.getFinalSalariesByCompIdMonthYear(CompanyDetails.company_id,sharedUtil.getCurrentMonth(),sharedUtil.getCurrentYear())
-      .then((response)=>{
-        console.log(
-          "BulkSalaryProcess :: getFinalSalariesByCompIdMonthYear: response",
-          response
-        );
-
-        if (response === false || response.documents.length===0) {
-          //
-        } else {
-          //
-          response.documents.forEach((finalSalary)=>{
-            //if the emplyeeID is not in our HashTable then insert a pair of empID:docID
-
-            if(!existingEmpIdsInFinalSalryTable[finalSalary.employee_number] ){
-              setExistingEmpIdsInFinalSalryTable(prevState => ({
-                ...prevState,
-                [finalSalary.employee_number]: finalSalary.$id
-            }));
-            }
-          })
-        }
-
-      })
+      getExistingFinalSalaries();
       
   }, []);
 
@@ -158,6 +125,31 @@ const BulkSalaryProcess = () => {
     }
   };
 
+  const getExistingFinalSalaries=()=>{
+     //call final salry API. 
+     salaryApis.getFinalSalariesByCompIdMonthYear(CompanyDetails.company_id,sharedUtil.getCurrentMonth(),sharedUtil.getCurrentYear())
+     .then((response)=>{
+       console.log(
+         "BulkSalaryProcess :: getFinalSalariesByCompIdMonthYear: response",
+         response
+       );
+
+       if (response !== false && response.documents.length!==0) {
+         response.documents.forEach((finalSalary)=>{
+           //if the emplyeeID is not in our HashTable then insert a pair of empID:docID
+
+           if(!existingEmpIdsInFinalSalryTable[finalSalary.employee_number] ){
+             setExistingEmpIdsInFinalSalryTable(prevState => ({
+               ...prevState,
+               [finalSalary.employee_number]: finalSalary.$id
+           }));
+           }
+         })
+       } 
+
+     })
+  }
+
   const createDocinBulk = async () => {
     let documents = employees;
 
@@ -203,6 +195,9 @@ const BulkSalaryProcess = () => {
           theme: "light",
           autoClose: 1000,
         });
+
+        //get The updates list of finalSalaries
+        getExistingFinalSalaries()
       }
 
       }).catch((e) => {
@@ -214,8 +209,8 @@ const BulkSalaryProcess = () => {
   };
 
   // Event handler for submitting data
-  const handleSubmit = () => {
-
+  const handleSubmit = (e) => {
+  e.preventDefault()
 
     // const selectedEmployees = employees.filter((employee) => employee.selected);
     // console.log(selectedEmployees);

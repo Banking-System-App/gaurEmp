@@ -25,6 +25,7 @@ import SalSheet from "../pdfs/SalSheet";
 
 import "../components/HeaderFooter/Sidebar.css"; // Import your custom CSS file for styling
 import { ToastContainer } from "react-toastify";
+import BulkSalaryProcess from "../components/Salary/BulkSalaryProcess";
 
 const Routess = () => {
   return (
@@ -112,6 +113,16 @@ const Routess = () => {
                 <CompanyProvider>
                   <EmployeeProvider>
                     <SalaryProcessEdit />
+                  </EmployeeProvider>
+                </CompanyProvider>
+              }
+            />
+            <Route
+              path="/bulksalaryprocess"
+              element={
+                <CompanyProvider>
+                  <EmployeeProvider>
+                    <BulkSalaryProcess />
                   </EmployeeProvider>
                 </CompanyProvider>
               }

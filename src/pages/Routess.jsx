@@ -21,7 +21,6 @@ import AddSalaryStructure from "../components/Salary/AddSalaryStructure";
 import SalaryProcessEdit from "../components/Salary/SalaryProcessEdit";
 import { CompanyProvider } from "../context/CompanyContext";
 import { EmployeeProvider } from "../context/EmployeeContext";
-import SalSheet from "../pdfs/SalSheet";
 
 import "../components/HeaderFooter/Sidebar.css"; // Import your custom CSS file for styling
 import { ToastContainer } from "react-toastify";
@@ -132,7 +131,7 @@ const Routess = () => {
               element={
                 <CompanyProvider>
                   <EmployeeProvider>
-                    <SalSheet />
+                    <Home />
                   </EmployeeProvider>
                 </CompanyProvider>
               }

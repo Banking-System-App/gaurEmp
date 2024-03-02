@@ -131,4 +131,150 @@ export const pdfUtil = {
     doc.save("salary_slip.pdf");
   },
 
+
+  generatePDF1(employees) {
+
+
+   /*  employees is a array of following object
+    {
+  advanced_recovered: "0",
+  basic: "30.00",
+  company_id: "987",
+  conveyance: "0",
+  da: "30.00",
+  daily_rate: "0",
+  days_paid: "0",
+  earned_leave: "0",
+  employee_name: "Adbhishek",
+  employee_number: "12",
+  employee_type: "0",
+  esi_contribution: "0",
+  gross: "0",
+  gross_earning: "90",
+  hra: "30.00",
+  incentive: "0",
+  income_tax: "0",
+  labour_wf: "0",
+  loan_recovered: "0",
+  madical_allowance: "0",
+  month: "February",
+  monthly_rate: "0",
+  net_payable: "0",
+  other_allowance: "0",
+  other_deductions: "0",
+  overtime_hours: "0",
+  overtime_pay: "0",
+  pf_contribution: "0",
+  professional_tax: "0",
+  reimbursement: "0",
+  total_earning: "0",
+  vol_pf: "0",
+  washing_allowance: "0",
+  wp: "0",
+  year: "2024"
+}
+ */
+  const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 10;
+    const columnWidth = (pageWidth - 3 * margin) / 2;
+    const rowHeight = 10;
+    
+    // Iterate over employees in batches of two
+    for (let i = 0; i < employees.length; i += 2) {
+        doc.addPage();
+        const startX = margin;
+        let startY = margin;
+
+        // Iterate over each pair of employees
+        for (let j = i; j < Math.min(i + 2, employees.length); j++) {
+
+          
+
+
+
+            const employee = employees[j];
+            console.log("pdfUtil::emplyeeSalry", employee);
+            const earningsData = this.calculateEarningsData(employee);
+            const deductionsData = this.calculateDeductionsData(employee);
+
+
+            // Print employee details and salary table
+            doc.text(`Employee Name: ${employee.employee_name}`, startX, startY);
+            startY += rowHeight;
+            doc.text(`Employee ID: ${employee.employee_number}`, startX, startY);
+            startY += rowHeight;
+
+            doc.autoTable({
+                head: [earningsData[0]],
+                body: earningsData.slice(1),
+                startY: startY + rowHeight,
+                margin: { left: startX, top: startY + 2 * rowHeight },
+                columnStyles: {
+                    0: { cellWidth: columnWidth * 0.5 },
+                    1: { cellWidth: columnWidth * 0.25, align: 'right' },
+                    2: { cellWidth: columnWidth * 0.25, align: 'right' },
+                }
+            });
+
+            doc.autoTable({
+                head: [deductionsData[0]],
+                body: deductionsData.slice(1),
+                startY: startY + rowHeight,
+                margin: { left: startX + columnWidth, top: startY + 2 * rowHeight },
+                columnStyles: {
+                  0: { cellWidth: columnWidth * 0.5 },
+                    1: { cellWidth: columnWidth * 0.25, align: 'right' },
+                    // 2: { cellWidth: columnWidth * 0.25, align: 'right' },
+                }
+            });
+
+            startY += Math.max(doc.previousAutoTable.finalY, 30) + rowHeight;
+        }
+    }
+
+    doc.save('salary_slip.pdf');
+},
+
+  calculateEarningsData(EmployeesSalary) {
+    // Calculate earnings data for the employee
+
+    const Days = EmployeesSalary.days_paid;
+    const basicEarning = (EmployeesSalary.basic)
+    const daEarning = (EmployeesSalary.da)
+    const hraEarning = (EmployeesSalary.hra)
+
+    return [
+      ["Description", "Rate", "Earnings"],
+      ["Basic", EmployeesSalary.basic, basicEarning],
+      ["DA", EmployeesSalary.da, daEarning],
+      ["HRA", EmployeesSalary.hra, hraEarning],
+      ["Medical Allowance", EmployeesSalary.medical_allowance, ""],
+      ["Washing Allowance", EmployeesSalary.washing_allowance, ""],
+      ["Other Allowance", EmployeesSalary.other_allowance, ""]
+    ];
+   
+},
+
+calculateDeductionsData(EmployeesSalary) {
+    // Calculate deductions data for the employee
+
+    const Days = EmployeesSalary.days_paid;
+    const basicEarning = (EmployeesSalary.basic)
+    const pfContribution = (EmployeesSalary.pf_contribution)
+    const esiContribution = 0;
+
+    return [
+      ["Description", "Deductions"],
+      ["PF Contribution", pfContribution],
+      ["ESI Contribution", esiContribution],
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""]
+    ];
+}
+
+
 }

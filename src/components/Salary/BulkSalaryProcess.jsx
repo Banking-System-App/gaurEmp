@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useCompanyData } from "../../context/CompanyContext";
 import { salaryUtil } from "../../utils/SalaryUtil";
 import { sharedUtil } from "../../utils/SharedUtil";
+import { pdfUtil } from "../../utils/PdfUtil";
 
 const BulkSalaryProcess = () => {
   const { setEmployeeDataValue } = useEmployeeData();
@@ -25,6 +26,9 @@ const BulkSalaryProcess = () => {
     /* { id: 1, name: 'John Doe', designation: 'Software Engineer', totalDays: 20, leaves: 2, selected: false }
  */
   ]);
+
+  const [existingFinalSalaries,setExistingFinalSalaries] = useState([{}]) 
+
 
   useEffect(() => {
     /* TODO: 1. Call salry Structure
@@ -74,6 +78,8 @@ const BulkSalaryProcess = () => {
   // Event handler for toggling selection
   const handleSelectionChange = (employeeId) => {
     const index = employees.findIndex((employee) => employee.emp_id === employeeId);
+    console.log("handleSelectionChange::index",index);
+
     if (index !== -1) {
       const updatedEmployees = [...employees];
       updatedEmployees[index] = {
@@ -86,7 +92,8 @@ const BulkSalaryProcess = () => {
 
   // Event handler for editing working days
   const handleWorkingDaysChange = (employeeId, value) => {
-    const index = employees.findIndex((employee) => employee.id === employeeId);
+    const index = employees.findIndex((employee) => employee.emp_id === employeeId);
+    console.log("handleWorkingDaysChange::index",index);
     if (index !== -1) {
       const updatedEmployees = [...employees];
       updatedEmployees[index] = {
@@ -99,7 +106,7 @@ const BulkSalaryProcess = () => {
 
   // Event handler for editing leaves
   const handleLeavesChange = (employeeId, value) => {
-    const index = employees.findIndex((employee) => employee.id === employeeId);
+    const index = employees.findIndex((employee) => employee.emp_id === employeeId);
     if (index !== -1) {
       const updatedEmployees = [...employees];
       updatedEmployees[index] = {
@@ -135,6 +142,8 @@ const BulkSalaryProcess = () => {
        );
 
        if (response !== false && response.documents.length!==0) {
+
+        setExistingFinalSalaries(response.documents)
          response.documents.forEach((finalSalary)=>{
            //if the emplyeeID is not in our HashTable then insert a pair of empID:docID
 
@@ -220,6 +229,12 @@ const BulkSalaryProcess = () => {
     
   };
 
+  const handleGenearteSlips = (e)=>{
+    e.preventDefault()
+    pdfUtil.generatePDF1(existingFinalSalaries)
+
+  }
+
   return (
     <div>
       <Table striped bordered hover>
@@ -258,7 +273,7 @@ const BulkSalaryProcess = () => {
                   type="number"
                   value={employee.totalDays}
                   onChange={(e) =>
-                    handleWorkingDaysChange(employee.id, e.target.value)
+                    handleWorkingDaysChange(employee.emp_id, e.target.value)
                   }
                 />
               </td>
@@ -267,7 +282,7 @@ const BulkSalaryProcess = () => {
                   type="number"
                   value={employee.leaves}
                   onChange={(e) =>
-                    handleLeavesChange(employee.id, e.target.value)
+                    handleLeavesChange(employee.emp_id, e.target.value)
                   }
                 />
               </td>
@@ -276,6 +291,7 @@ const BulkSalaryProcess = () => {
         </tbody>
       </Table>
       <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleGenearteSlips}>generate slip</Button>
     </div>
   );
 };

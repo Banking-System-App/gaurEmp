@@ -42,7 +42,7 @@ function EmployeeSalaryStructure() {
   const fetchEmployeeSalaryByEmpId = async () => {
     try {
       await salaryApi
-        .getSalaryStructuresByEmpId(EmployeeDetails.emp_id)
+        .getSalaryStructuresByEmpId(EmployeeDetails.emp_id, CompanyDetails.company_id)
         .then((response) => {
           console.log("", response[0]);
           setSalaryStructures(response);

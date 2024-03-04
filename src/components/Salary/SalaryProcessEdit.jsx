@@ -80,7 +80,7 @@ export default function SalaryProcessEdit() {
 
   useEffect(() => {
     salaryApis
-      .getSalaryStructuresByEmpId(EmployeeDetails.emp_id)
+      .getSalaryStructuresByEmpId(EmployeeDetails.emp_id, CompanyDetails.company_id)
       .then((response) => {
         console.log("SalaryProcessEdit:: SalaryStructure ", response);
         if (response === false) {

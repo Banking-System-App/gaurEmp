@@ -9,6 +9,7 @@ import { useCompanyData } from "../../context/CompanyContext";
 import { salaryUtil } from "../../utils/SalaryUtil";
 import { sharedUtil } from "../../utils/SharedUtil";
 import { pdfUtil } from "../../utils/PdfUtil";
+import employeeApis from "../../database/EmployeeAPIs";
 
 const BulkSalaryProcess = () => {
   const { setEmployeeDataValue } = useEmployeeData();
@@ -117,20 +118,6 @@ const BulkSalaryProcess = () => {
     }
   };
 
-  //Event handler for a row click : Salary process for a single emp should open
-
-  const handleEmployeeRowClick = (event, employeeId) => {
-    // handling the double click only
-    if (event.detail === 2) {
-      /* 1. Set the emp context
-        2. Navigating to /salaryprocess
-        3. check on that file , we shlud be using the emp context to populate CompanyDetails */
-
-      console.log("double click");
-      /* setEmployeeDataValue(Employee);
-        navigate("/employeeprofile"); */
-    }
-  };
 
   const getExistingFinalSalaries=()=>{
      //call final salry API. 
@@ -217,6 +204,32 @@ const BulkSalaryProcess = () => {
       });
   };
 
+  const handleEmployeeRowClick = (event, employeeId) => {
+    // handling the double click only
+    if (event.detail === 2) {
+      /* 1. Set the emp context
+        2. Navigating to /salaryprocess
+        3. check on that file , we shlud be using the emp context to populate CompanyDetails */
+
+      console.log("double click");
+      console.log("BulkSalaryProcess::comapny ID, employeeID",CompanyDetails.company_id,employeeId);
+      employeeApis
+      .getEmployeeDetail( CompanyDetails.company_id,employeeId)
+      .then((response) => {
+        console.log("BulkSalaryProcess:: getEmployeeDetail ", response);
+        if (response === false || response.documents.length===0) {
+          toast.error("Failed !", {
+            theme: "light",
+            autoClose: 1000,
+          });
+        } else {
+          setEmployeeDataValue(response.documents[0]);
+          navigate("/salaryprocess");
+        }
+      });
+    }
+  };
+
   // Event handler for submitting data
   const handleSubmit = (e) => {
   e.preventDefault()
@@ -257,7 +270,9 @@ const BulkSalaryProcess = () => {
         </thead>
         <tbody>
           {employees.map((employee,index) => (
-            <tr key={index}>
+            <tr key={index}
+            onClick={(e) =>
+                    handleEmployeeRowClick(e,employee.emp_id)}>
               <td>
                 <Form.Check
                   type="checkbox"

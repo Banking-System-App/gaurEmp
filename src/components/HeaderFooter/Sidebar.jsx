@@ -20,7 +20,7 @@ const Sidebar = () => {
   };
 
   return (
-    <main className="d-flex flex-nowrap">
+    <main className="d-flex flex-wrap">
       <div className="flex-shrink-0 p-3 bg-white" style={{ width: 280 }}>
         <a
           href="/"
@@ -45,6 +45,14 @@ const Sidebar = () => {
                     to="/getcompany"
                     className="link-dark d-inline-flex text-decoration-none rounded"
                   >
+                    Company List
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/addcompany"
+                    className="link-dark d-inline-flex text-decoration-none rounded"
+                  >
                     Add Company
                   </NavLink>
                 </li>
@@ -64,18 +72,18 @@ const Sidebar = () => {
               <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
                   <NavLink
-                    to="#"
+                    to="/viewemployees"
                     className="link-dark d-inline-flex text-decoration-none rounded"
                   >
-                    Add Employee
+                    Employee List
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    to="#"
+                    to="/addemployee"
                     className="link-dark d-inline-flex text-decoration-none rounded"
                   >
-                    Edit Employee
+                    Add Employee
                   </NavLink>
                 </li>
               </ul>
@@ -94,26 +102,10 @@ const Sidebar = () => {
               <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
                   <NavLink
-                    to="#"
-                    className="link-dark d-inline-flex text-decoration-none rounded"
-                  >
-                    Get Salary
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
                     to="/bulksalaryprocess"
                     className="link-dark d-inline-flex text-decoration-none rounded"
                   >
-                    Salary of All Emp
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/salaryprocess"
-                    className="link-dark d-inline-flex text-decoration-none rounded"
-                  >
-                    Generate Slip
+                    All Emp Salaries
                   </NavLink>
                 </li>
               </ul>
@@ -133,18 +125,10 @@ const Sidebar = () => {
               <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <li>
                   <NavLink
-                    to="#"
+                    to="/profile"
                     className="link-dark d-inline-flex text-decoration-none rounded"
                   >
                     Profile
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="#"
-                    className="link-dark d-inline-flex text-decoration-none rounded"
-                  >
-                    Settings
                   </NavLink>
                 </li>
                 <li>
@@ -160,9 +144,8 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
-
-      <div className="b-example-divider b-example-vr"></div>
-
+      <div className="b-example-divider b-example-vr d-md-none"></div>{" "}
+      {/* Hide the divider on small screens */}
       <BasicModal
         show={showLogoutModal}
         handleClose={handleCloseLogoutModal}

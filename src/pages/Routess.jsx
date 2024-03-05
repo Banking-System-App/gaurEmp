@@ -127,7 +127,7 @@ const Routess = () => {
               }
             />
             <Route
-              path="/generateslippdf"
+              path="/profile"
               element={
                 <CompanyProvider>
                   <EmployeeProvider>

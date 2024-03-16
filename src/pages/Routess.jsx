@@ -21,7 +21,6 @@ import AddSalaryStructure from "../components/Salary/AddSalaryStructure";
 import SalaryProcessEdit from "../components/Salary/SalaryProcessEdit";
 import { CompanyProvider } from "../context/CompanyContext";
 import { EmployeeProvider } from "../context/EmployeeContext";
-import SalSheet from "../pdfs/SalSheet";
 
 import "../components/HeaderFooter/Sidebar.css"; // Import your custom CSS file for styling
 import { ToastContainer } from "react-toastify";
@@ -130,11 +129,11 @@ const Routess = () => {
               }
             />
             <Route
-              path="/generateslippdf"
+              path="/profile"
               element={
                 <CompanyProvider>
                   <EmployeeProvider>
-                    <SalSheet />
+                    <Home />
                   </EmployeeProvider>
                 </CompanyProvider>
               }
@@ -142,6 +141,7 @@ const Routess = () => {
             <Route path="" element={<userApi />} />
           </Route>
         </Routes>
+        
       </AuthProvider>
       <ToastContainer />
    </Router>

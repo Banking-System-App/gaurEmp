@@ -53,6 +53,7 @@ export class SalaryAPIs {
   }
 
   async processSalary(
+   /*  {
     employeeName,
     employeeType,
     companyId,
@@ -89,6 +90,8 @@ export class SalaryAPIs {
     month,
     employeeNumber,
     userId
+    } */
+    finalSalary
   ) {
     console.log("Appwrite service :: processSalary()");
     try {
@@ -96,7 +99,8 @@ export class SalaryAPIs {
         databaseID,
         collectionIdProcessSalary,
         "",
-        {
+        finalSalary
+        /* {
           employee_name: employeeName,
           employee_type: employeeType,
           company_id: companyId,
@@ -133,7 +137,7 @@ export class SalaryAPIs {
           month: month,
           employee_number: employeeNumber,
          
-        }
+        } */
       );
     } catch (error) {
       console.error("Appwrite service :: processSalary() :: ", error);
@@ -159,17 +163,35 @@ export class SalaryAPIs {
     }
   }
 
-  async getSalaryStructuresByEmpId(empId) {
+  async getSalaryStructuresByEmpId(empId,compId) {
     console.log("Appwrite service :: getSalaryStructuresByEmpId()");
     try {
       return await databases.listDocuments(
         databaseID,
         collectionIdSalaryStructure,
-        [Query.equal("emp_id", empId)]
+        [Query.equal("emp_id", empId),Query.equal("company_id", compId)]
       );
     } catch (error) {
       console.error(
         "Appwrite service :: getSalaryStructuresByEmpId() :: ",
+        error
+      );
+      return false;
+    }
+  }
+
+
+  async getAllEmpSalaryStructuresByCompID(compId) {
+    console.log("Appwrite service :: getAllEmpSalaryStructuresByCompID()");
+    try {
+      return await databases.listDocuments(
+        databaseID,
+        collectionIdSalaryStructure,
+        [Query.equal("company_id", compId)]
+      );
+    } catch (error) {
+      console.error(
+        "Appwrite service :: getAllEmpSalaryStructuresByCompID() :: ",
         error
       );
       return false;
@@ -190,6 +212,20 @@ export class SalaryAPIs {
     }
   }
 
+  async getFinalSalariesByCompIdMonthYear(companyId,month,year) {
+    console.log("Appwrite service :: getFinalSalariesByCompIdMonthYear()");
+    try {
+      return await databases.listDocuments(
+        databaseID,
+        collectionIdProcessSalary,
+        [Query.equal("company_id", companyId),Query.equal("month", month),Query.equal("year", year)]
+      );
+    } catch (error) {
+      console.error("Appwrite service :: getFinalSalariesByCompIdMonthYear() :: ", error);
+      return false;
+    }
+  }
+
   async updateSalaryStructure(documentID, updatedData) {
     console.log("Appwrite service :: updateSalaryStructure()");
     try {
@@ -202,6 +238,23 @@ export class SalaryAPIs {
       return true;
     } catch (error) {
       console.error("Appwrite service :: updateSalaryStructure() :: ", error);
+      return false;
+    }
+  }
+
+
+  async updateFinalSalary(documentID, updatedData) {
+    console.log("Appwrite service :: updateFinalSalary()");
+    try {
+      await databases.updateDocument(
+        databaseID,
+        collectionIdProcessSalary,
+        documentID,
+        updatedData
+      );
+      return true;
+    } catch (error) {
+      console.error("Appwrite service :: updateFinalSalary() :: ", error);
       return false;
     }
   }

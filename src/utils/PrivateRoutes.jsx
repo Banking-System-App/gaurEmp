@@ -1,21 +1,31 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { Container, Row, Col } from 'react-bootstrap';
 import { useAuth } from "./AuthContext";
 import Sidebar from "../components/HeaderFooter/Sidebar";
 
 const PrivateRoutes = () => {
-  const { user } = useAuth(); // Replace with your authentication logic
+  const { user } = useAuth();
+  const location = useLocation();
+
+  // Define the endpoints where you want to hide the sidebar
+  const hideSidebarEndpoints = ["/getcompany", "/"];
+
+  // Check if the current location matches any of the endpoints to hide the sidebar
+  const shouldShowSidebar = !hideSidebarEndpoints.includes(location.pathname);
 
   return user ? (
-    <div className="container-fluid" style={{ marginTop: "90px" }}>
-      <div className="row">
-        <div className="col-md-3 h-100 position-fixed">
-          <Sidebar />
-        </div>
-        <div className="col-md-9 offset-md-3">
+    <Container fluid style={{ marginTop: '90px' }}>
+      <Row>
+        {shouldShowSidebar && (
+          <Col md={3} className="position-fixed">
+            <Sidebar />
+          </Col>
+        )}
+        <Col md={shouldShowSidebar ? 9 : 12} className={shouldShowSidebar ? "offset-md-3" : ""}>
           <Outlet />
-        </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   ) : (
     <Navigate to="/login" />
   );

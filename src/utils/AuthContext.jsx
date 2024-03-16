@@ -1,98 +1,90 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { account, ID } from "../appWrite/appwrite";
-import { userApi } from "../pages/userApi";
+// AuthProvider.js
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { account, ID } from '../appWrite/appwrite';
+import { userApi } from '../pages/userApi';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(false);
-
-  //ye sala loop bna rha tha
-
-  useEffect(() => {
-    console.log("use Effect loop");
-    checkUserStatus();
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  //Logic to login user
+  useEffect(() => {
+    checkUserStatus();
+  }, []);
+
   const loginUser = async (userInfo) => {
-    console.log("login loop check");
     setLoading(true);
     try {
-      let response = await account.createEmailSession(
-        userInfo.email,
-        userInfo.password
-      );
+      await account.createEmailSession(userInfo.email, userInfo.password);
       let accountDetails = await account.get();
       setUser(accountDetails);
+      localStorage.setItem('user', JSON.stringify(accountDetails));
+      console.log("login user context accountDetails",accountDetails);
     } catch (error) {
       console.error(error);
     }
     setLoading(false);
   };
-  //logout part
+
   const logoutUser = () => {
-    console.log("logout loop");
     account.deleteSession("current");
     setUser(null);
+    localStorage.removeItem('user');
+    //TODO: remove companydetail , employee detail;
+    localStorage.removeItem('companydetail');
+    localStorage.removeItem('employeedetail');
+
   };
 
-  //logic to register user
   const registerUser = async (userInfo) => {
-    console.log("register loop");
-
     setLoading(true);
-
     try {
-      let response = await account.create(
-        ID.unique(),
-        userInfo.email,
-        userInfo.password,
-        userInfo.name
-      );
+      await account.create(ID.unique(), userInfo.email, userInfo.password, userInfo.name);
       await account.createEmailSession(userInfo.email, userInfo.password);
       let accountDetails = await account.get();
       setUser(accountDetails);
-
+      localStorage.setItem('user', JSON.stringify(accountDetails));
       await userApi.addUser(userInfo.name, userInfo.email, accountDetails.$id);
     } catch (error) {
       console.error(error);
     }
-
     setLoading(false);
   };
 
-  //logic to check the status of the user
   const checkUserStatus = async () => {
-    console.log("chek user status loop");
-    if (user == false) {
+    if (!user) {
       try {
         let accountDetails = await account.get();
         setUser(accountDetails);
+        localStorage.setItem('user', JSON.stringify(accountDetails));
       } catch (error) {
-        console.log("chek user status Error");
+        console.log("check user status Error");
+        localStorage.removeItem('user');
       }
     }
     setLoading(false);
   };
 
-  const contextData = {
+  const contextValue = {
     user,
+    loading,
     loginUser,
     logoutUser,
     registerUser,
     checkUserStatus,
   };
+
   return (
-    <AuthContext.Provider value={contextData}>
+    <AuthContext.Provider value={contextValue}>
       {loading ? <p>Loading....</p> : children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export default AuthContext;

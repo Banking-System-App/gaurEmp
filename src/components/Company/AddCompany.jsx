@@ -33,11 +33,24 @@ const AddCompanyForm = () => {
   });
 
 const handleChange = (e) => {
+    // const { name, value } = e.target;
+    // setCompanyInfo((prevInfo) => ({
+    //   ...prevInfo,
+    //   [name]: value,
+    // }));
     const { name, value } = e.target;
-    setCompanyInfo((prevInfo) => ({
-      ...prevInfo,
-      [name]: value,
-    }));
+    if (name === "contactNumber" && /^[1-9]\d*$/.test(value)) {
+      setCompanyInfo((prevInfo) => ({
+          ...prevInfo,
+          [name]: value,
+      }));
+  } else {
+      // For other input fields or non-integer values, update state normally
+      setCompanyInfo((prevInfo) => ({
+          ...prevInfo,
+          [name]: value,
+      }));
+  }
   };
 
   const handleCancel = () => {
@@ -165,9 +178,6 @@ const handleChange = (e) => {
               <option value="InDirect Posting">InDirect Posting</option>
             </select>
           </div>
-
-
-
           <div className="col-md-4">
             <label htmlFor="pfMemberFlag" className="form-label">
               PF MemberFlag
@@ -220,8 +230,8 @@ const handleChange = (e) => {
               PF Limit
             </label>
             <input
-             type="text"
-              pattern="[0-9]*"
+             type="number"
+          
               className="form-control"
               id="pfLimit"
               name="pfLimit"
@@ -322,7 +332,7 @@ const handleChange = (e) => {
               OT Rate
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="otRate"
               name="otRate"
@@ -364,10 +374,11 @@ const handleChange = (e) => {
              Contact Number
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="contactNumber"
               name="contactNumber"
+           
               value={companyInfo.contactNumber}
               onChange={handleChange}
             />

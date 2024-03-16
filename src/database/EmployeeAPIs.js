@@ -146,7 +146,24 @@ export class EmployeeAPIs{
     }
   }
 
+  async deleteEmployeeData(documentId,employeesCollectionId){
+    console.log("Appwrite service :: deleteEmployeeData()");
+    try{
+      await databases.deleteDocument(
+        documentId,
+        employeesCollectionId,
+        documentId
+      );
+
+    }
+  
+  catch(error){
+    console.log("Appwrite service ::deleteEmployeeData :: ", error);
+  }
+
 }
+}
+
 
 const employeeApis = new EmployeeAPIs();
 export default employeeApis

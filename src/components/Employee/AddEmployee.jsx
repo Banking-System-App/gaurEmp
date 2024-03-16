@@ -95,8 +95,8 @@ export default function AddEmployeeForm() {
         employeeInfo.localAddress,
         employeeInfo.sosContact,
         employeeInfo.permanentAddress,
-        employeeInfo.compName,
-        employeeInfo.compId,
+        // employeeInfo.compName,
+        // employeeInfo.compId,
         CompanyDetails.name,
         CompanyDetails.company_id
       )
@@ -251,7 +251,7 @@ export default function AddEmployeeForm() {
               P Tax
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="pTax"
               name="pTax"
@@ -445,7 +445,7 @@ export default function AddEmployeeForm() {
               Aadhar Number
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="aadharNumber"
               name="aadharNumber"
@@ -471,7 +471,7 @@ export default function AddEmployeeForm() {
               Mobile No
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="mobileNo"
               name="mobileNo"
@@ -485,7 +485,7 @@ export default function AddEmployeeForm() {
               Payment
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="payment"
               name="payment"
@@ -511,7 +511,7 @@ export default function AddEmployeeForm() {
               Account
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="account"
               name="account"
@@ -578,7 +578,7 @@ export default function AddEmployeeForm() {
               SOS Contact
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               id="sosContact"
               name="sosContact"

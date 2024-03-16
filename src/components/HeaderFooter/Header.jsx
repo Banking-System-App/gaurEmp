@@ -10,7 +10,7 @@ const Header = () => {
 
 
     return (
-        <div className="header position-fixed fixed-top">
+        <div className="header position-fixed fixed-top" >
             <div>
                 <Link id="header-logo" to="/">
                     LOGO
@@ -32,10 +32,6 @@ const Header = () => {
                         <NavLink to="/contact" className="header--link">
                             Contact US
                         </NavLink>
-
-                        <button onClick={logoutUser} className="btn">
-                            Logout
-                        </button>
                     </>
                 ) : (
 

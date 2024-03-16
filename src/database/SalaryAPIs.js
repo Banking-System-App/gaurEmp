@@ -163,13 +163,13 @@ export class SalaryAPIs {
     }
   }
 
-  async getSalaryStructuresByEmpId(empId) {
+  async getSalaryStructuresByEmpId(empId,compId) {
     console.log("Appwrite service :: getSalaryStructuresByEmpId()");
     try {
       return await databases.listDocuments(
         databaseID,
         collectionIdSalaryStructure,
-        [Query.equal("emp_id", empId)]
+        [Query.equal("emp_id", empId),Query.equal("company_id", compId)]
       );
     } catch (error) {
       console.error(

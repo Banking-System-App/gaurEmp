@@ -17,6 +17,12 @@ export default function CompanyList() {
   const { user } = useAuth();
   const { setCompanyDataValue } = useCompanyData();
   const navigate = useNavigate();
+
+  const handleEmpDetailClick = (companyData) => {
+    console.log("emps data is, ", companyData);
+    setCompanyDataValue(companyData);
+    navigate("/companyprofile");
+  };
   const [companys, setCompanys] = useState([]);
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -94,11 +100,33 @@ export default function CompanyList() {
     }
   };
 
-  const handleEmpDetailClick = (companyData) => {
-    setCompanyDataValue(companyData);
-    navigate("/companyprofile");
-  };
+ 
 
+  useEffect(() => {
+    // Enable delete button if any checkbox is selected
+    setIsDeleteEnabled(selectedRows.length > 0);
+  }, [selectedRows]);
+
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+      setSearchInput(value);
+      if (value.length > 0) {
+        
+         console.log("companys[0].company_code)",companys);
+        const filtered = companys.filter((company) =>
+       
+          company.company_id.includes(value.toLowerCase()) ||
+          company.company_code.toLowerCase().includes(value.toLowerCase().toString()) // Assuming emp_id is a number, convert to string for comparison
+        );
+        console.log("filtered ",filtered)
+        setFilteredCompany(filtered);
+       
+      } else {
+        // If search input is cleared, show all employees again
+        setFilteredCompany(companys);
+      }
+   };
   return (
     <div>
       {!showCheckboxes && (

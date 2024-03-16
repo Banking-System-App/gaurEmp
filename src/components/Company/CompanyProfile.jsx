@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 
 export default function CompanyProfile() {
   const { CompanyDetails } = useCompanyData();
+ 
 
   const navigate = useNavigate();
 
@@ -95,30 +96,76 @@ export default function CompanyProfile() {
   return (
     <section>
     <Container className="py-5">
+
       <h1 className="mb-4">Company Details</h1>
+      <hr /> 
+        <h3 >General Detail</h3>
       <Row >
-        {Object.entries(CompanyUtil.updatedData(editableData)).map(([label, value], index) => (
-          <Col key={index} lg="4">
-            <Row className="mb-2 ">
-              <Col sm="6">
-                <strong>{CompanyUtil.changelabel[label]}</strong>
+      {Object.entries(CompanyUtil.updatedData(editableData)).map(([label, value], index) => {
+          //(EmployeeUtil.categorizedLabels[label][1]==="PersonalInfo")
+          if ( Object.prototype.hasOwnProperty.call(CompanyUtil.categorizedLabels["GeneralDetail"], label)) { // Odd index values
+            return (
+              <Col key={index} sm="12" md="6" lg="4">
+                <Row className="mb-2">
+                  <Col sm="6">
+                    <strong>{CompanyUtil.changelabel[label]}</strong>
+                  </Col>
+                  <Col sm="6">
+                    {isEditMode ? (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={value}
+                        onChange={(e) => handleInputChange(label, e.target.value)}
+                      />
+                    ) : (
+                      <p className="text-muted">{value}</p>
+                    )}
+                  </Col>
+                </Row>
               </Col>
-              <Col sm="6">
-                {isEditMode ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={value}
-                    onChange={(e) => handleInputChange(label, e.target.value)}
-                  />
-                ) : (
-                  <p className="text-muted">{value}</p>
-                )}
-              </Col>
-            </Row>
-          </Col>
-        ))}
+            );
+          } else {
+            return null; // Don't render for even index values
+          }
+        }
+        )
+        }
       </Row>
+      <hr />
+      <h3>Compliance</h3>
+      <Row>
+        {Object.entries(CompanyUtil.updatedData(editableData)).map(([label, value], index) => {
+          if (Object.prototype.hasOwnProperty.call(CompanyUtil.categorizedLabels["Compliance"], label)) { // Even index values
+            return (
+              <Col key={index} sm="12" md="6" lg="4">
+                <Row className="mb-2">
+                  <Col sm="6">
+                    <strong>{CompanyUtil.changelabel[label]}</strong>
+                  </Col>
+                  <Col sm="6">
+                    {isEditMode ? (
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={value}
+                        onChange={(e) => handleInputChange(label, e.target.value)}
+                      />
+                    ) : (
+                      <p className="text-muted">{value}</p>
+                    )}
+                  </Col>
+                </Row>
+              </Col>
+            );
+          } else {
+            return null; // Don't render for odd index values
+          }
+        })}
+      </Row>
+      
+
+
       {isEditMode && (
         <Row>
           <Col>

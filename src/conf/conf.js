@@ -17,6 +17,9 @@ const conf = {
   appwriteEmployeesCollectionId: String(
     import.meta.env.VITE_APPWRITE_EMPLOYEES_COLLECTION_ID
   ),
+  appwriteContactCollectionId: String(
+    import.meta.env.VITE_APPWRITE_CONTACT_COLLECTION_ID
+  ),
 };
 
 export default conf;

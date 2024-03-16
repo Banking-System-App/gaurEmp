@@ -120,9 +120,19 @@ export default function AddEmployeeForm() {
       });
   };
 
+  const handleAddSalaryStructure = () => {
+    navigate('/addsalarystructure');
+  }
+
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <div className="container py-5">
+
+        <button>Add Employee Detail</button> 
+        <button onClick={handleAddSalaryStructure}>Add Salary Structure</button>
+        <p>To add salary structures later, update them from the employee list.</p>
+
+
         <h1 className="text-center mb-4">Add Employee</h1>
 
         <form className="row g-3">
